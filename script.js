@@ -9,6 +9,20 @@ const supabaseClient = window.supabase.createClient(
 
 console.log("Supabase client connected!");
 
+supabaseClient.auth.getSession().then(function(result) {
+
+    console.log(
+        "CURRENT SESSION:",
+        result.data.session
+    );
+
+    console.log(
+        "SESSION ERROR:",
+        result.error
+    );
+
+});
+
 async function checkSupabaseRole() {
 
     const {
