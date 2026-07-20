@@ -1,0 +1,669 @@
+/* =====================================================
+   G-FORCEPLAYS ADMIN DASHBOARD
+===================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f7fb;
+    color: #1f2937;
+    min-height: 100vh;
+}
+
+
+/* =====================================================
+   ADMIN HEADER
+===================================================== */
+
+header {
+    width: 100%;
+
+    background: #111827;
+    color: white;
+
+    padding: 18px 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    box-shadow:
+        0 4px 15px
+        rgba(0, 0, 0, 0.15);
+
+    position: sticky;
+    top: 0;
+
+    z-index: 1000;
+}
+
+header h1 {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+nav a {
+    color: white;
+
+    text-decoration: none;
+
+    padding: 10px 16px;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    transition: 0.2s ease;
+}
+
+nav a:hover {
+    background: #374151;
+}
+
+
+/* =====================================================
+   LOGOUT BUTTON
+===================================================== */
+
+#logoutBtn {
+    background: #dc2626;
+
+    color: white;
+
+    border: none;
+
+    padding: 10px 18px;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+#logoutBtn:hover {
+    background: #b91c1c;
+
+    transform:
+        translateY(-2px);
+}
+
+
+/* =====================================================
+   MAIN ADMIN DASHBOARD
+===================================================== */
+
+#adminDashboard {
+    width: 100%;
+
+    max-width: 1400px;
+
+    margin: 0 auto;
+
+    padding: 45px 30px 80px;
+}
+
+#adminDashboard > h2 {
+    font-size: 32px;
+
+    font-weight: 700;
+
+    color: #111827;
+
+    margin-bottom: 35px;
+}
+
+
+/* =====================================================
+   ADMIN SECTIONS
+===================================================== */
+
+#addProductSection,
+#editProductSection,
+#adminProductsSection {
+    background: white;
+
+    border:
+        1px solid #e5e7eb;
+
+    border-radius: 16px;
+
+    padding: 30px;
+
+    margin-bottom: 30px;
+
+    box-shadow:
+        0 8px 25px
+        rgba(0, 0, 0, 0.05);
+}
+
+#addProductSection h3,
+#editProductSection h3,
+#adminProductsSection h3 {
+    font-size: 20px;
+
+    color: #111827;
+
+    margin-bottom: 25px;
+}
+
+
+/* =====================================================
+   ADD PRODUCT FORM
+===================================================== */
+
+#addProductForm {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 15px;
+}
+
+
+/* =====================================================
+   EDIT PRODUCT FORM
+===================================================== */
+
+#editProductForm {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 15px;
+}
+
+
+/* =====================================================
+   INPUTS AND SELECTS
+===================================================== */
+
+#addProductForm input,
+#addProductForm select,
+#editProductForm input,
+#editProductForm select {
+    width: 100%;
+
+    height: 48px;
+
+    padding:
+        0 15px;
+
+    border:
+        1px solid #d1d5db;
+
+    border-radius: 9px;
+
+    background: #f9fafb;
+
+    color: #111827;
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition:
+        border 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+#addProductForm input:focus,
+#addProductForm select:focus,
+#editProductForm input:focus,
+#editProductForm select:focus {
+    border-color:
+        #2563eb;
+
+    background: white;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(37, 99, 235, 0.1);
+}
+
+
+/* =====================================================
+   FILE INPUT
+===================================================== */
+
+#productImage,
+#editProductImage {
+    padding:
+        12px 15px;
+
+    cursor: pointer;
+}
+
+
+/* =====================================================
+   ADD PRODUCT BUTTON
+===================================================== */
+
+#addProductForm button {
+    height: 48px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background: #2563eb;
+
+    color: white;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+#addProductForm button:hover {
+    background: #1d4ed8;
+
+    transform:
+        translateY(-2px);
+}
+
+
+/* =====================================================
+   EDIT PRODUCT BUTTONS
+===================================================== */
+
+#editProductForm button {
+    height: 48px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+#editProductForm button[type="submit"] {
+    background: #16a34a;
+
+    color: white;
+}
+
+#editProductForm button[type="submit"]:hover {
+    background: #15803d;
+
+    transform:
+        translateY(-2px);
+}
+
+#cancelEditBtn {
+    background: #64748b;
+
+    color: white;
+}
+
+#cancelEditBtn:hover {
+    background: #475569;
+
+    transform:
+        translateY(-2px);
+}
+
+
+/* =====================================================
+   STATUS MESSAGES
+===================================================== */
+
+#productStatus,
+#editProductStatus {
+    margin-top: 18px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+}
+
+
+/* =====================================================
+   PRODUCT LIST
+===================================================== */
+
+#adminProductList {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fill,
+            minmax(180px, 1fr)
+        );
+
+    gap: 20px;
+}
+
+
+/* =====================================================
+   PRODUCT CARD
+===================================================== */
+
+.admin-product-card {
+    background: #ffffff;
+
+    border:
+        1px solid #e5e7eb;
+
+    border-radius: 14px;
+
+    padding: 15px;
+
+    text-align: center;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.admin-product-card:hover {
+    transform:
+        translateY(-4px);
+
+    box-shadow:
+        0 10px 25px
+        rgba(0, 0, 0, 0.08);
+}
+
+
+/* =====================================================
+   PRODUCT IMAGE
+   SMALL IMAGE DISPLAY
+===================================================== */
+
+.admin-product-card img {
+    width: 100%;
+
+    height: 70px;
+
+    object-fit: contain;
+
+    display: block;
+
+    margin:
+        0 auto 12px;
+}
+
+
+/* =====================================================
+   PRODUCT NAME
+===================================================== */
+
+.admin-product-card h3 {
+    font-size: 15px;
+
+    font-weight: 700;
+
+    color: #111827;
+
+    margin-bottom: 8px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+/* =====================================================
+   PRODUCT DETAILS
+===================================================== */
+
+.admin-product-card p {
+    font-size: 12px;
+
+    color: #64748b;
+
+    margin:
+        5px 0;
+}
+
+
+/* =====================================================
+   EDIT BUTTON
+===================================================== */
+
+.editProductBtn {
+    background:
+        #eff6ff;
+
+    color:
+        #2563eb;
+
+    border:
+        none;
+
+    padding:
+        8px 12px;
+
+    border-radius:
+        7px;
+
+    font-size:
+        12px;
+
+    font-weight:
+        600;
+
+    cursor:
+        pointer;
+
+    margin-top:
+        8px;
+
+    transition:
+        0.2s ease;
+}
+
+.editProductBtn:hover {
+    background:
+        #dbeafe;
+
+    transform:
+        translateY(-2px);
+}
+
+
+/* =====================================================
+   DELETE BUTTON
+===================================================== */
+
+.deleteProductBtn {
+    background:
+        #fef2f2;
+
+    color:
+        #dc2626;
+
+    border:
+        none;
+
+    padding:
+        8px 12px;
+
+    border-radius:
+        7px;
+
+    font-size:
+        12px;
+
+    font-weight:
+        600;
+
+    cursor:
+        pointer;
+
+    margin-top:
+        8px;
+
+    transition:
+        0.2s ease;
+}
+
+.deleteProductBtn:hover {
+    background:
+        #fee2e2;
+
+    transform:
+        translateY(-2px);
+}
+
+
+/* =====================================================
+   RESPONSIVE - TABLET
+===================================================== */
+
+@media (max-width: 800px) {
+
+    header {
+        padding:
+            16px 20px;
+    }
+
+    header h1 {
+        font-size:
+            20px;
+    }
+
+    #adminDashboard {
+        padding:
+            30px 20px 60px;
+    }
+
+    #addProductForm,
+    #editProductForm {
+        grid-template-columns:
+            1fr;
+    }
+
+    #adminProductList {
+        grid-template-columns:
+            repeat(
+                3,
+                1fr
+            );
+    }
+
+}
+
+
+/* =====================================================
+   RESPONSIVE - MOBILE
+===================================================== */
+
+@media (max-width: 500px) {
+
+    header {
+        flex-direction:
+            column;
+
+        gap:
+            15px;
+
+        text-align:
+            center;
+    }
+
+    nav {
+        width:
+            100%;
+
+        justify-content:
+            center;
+    }
+
+    #adminDashboard {
+        padding:
+            25px 12px 50px;
+    }
+
+    #adminDashboard > h2 {
+        font-size:
+            25px;
+
+        text-align:
+            center;
+    }
+
+    #addProductSection,
+    #editProductSection,
+    #adminProductsSection {
+        padding:
+            20px 15px;
+    }
+
+    #adminProductList {
+        grid-template-columns:
+            repeat(
+                2,
+                1fr
+            );
+
+        gap:
+            10px;
+    }
+
+    .admin-product-card {
+        padding:
+            10px;
+    }
+
+    .admin-product-card img {
+        height:
+            55px;
+    }
+
+    .admin-product-card h3 {
+        font-size:
+            13px;
+    }
+
+    .admin-product-card p {
+        font-size:
+            11px;
+    }
+
+    .editProductBtn,
+    .deleteProductBtn {
+        padding:
+            6px 8px;
+
+        font-size:
+            10px;
+    }
+
+}

@@ -31,6 +31,12 @@ async function loadProducts() {
 
     console.log("Products loaded:", data);
 
+console.log("Number of products:", data.length);
+
+if (data.length === 0) {
+    console.warn("No products were returned from Supabase.");
+}
+
     const productContainer =
         document.getElementById("productContainer");
 

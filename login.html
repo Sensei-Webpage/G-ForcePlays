@@ -12,9 +12,17 @@
 
     <title>G-ForcePlays Admin Login</title>
 
+    <!-- Favicon -->
+    <link
+        rel="icon"
+        type="image/png"
+        href="images/G-Force Plays.png"
+    >
+
+    <!-- Login CSS -->
     <link
         rel="stylesheet"
-        href="style.css"
+        href="login.css"
     >
 
 </head>
@@ -22,64 +30,132 @@
 
 <body>
 
+    <!-- ==========================
+         LOGIN PAGE
+    =========================== -->
+
     <main id="loginPage">
 
+
+        <!-- LOGO -->
+
+        <img
+            src="images/G-Force Plays.png"
+            alt="G-ForcePlays Logo"
+            class="login-logo"
+        >
+
+
+        <!-- TITLE -->
+
         <h1>
-            G-ForcePlays Admin
+            G-ForcePlays
         </h1>
+
 
         <h2>
             Admin Login
         </h2>
 
 
+        <p class="login-description">
+            Sign in to access your admin dashboard.
+        </p>
+
+
+        <!-- ==========================
+             LOGIN FORM
+        =========================== -->
+
         <form id="loginForm">
 
-            <input
-                type="email"
-                id="loginEmail"
-                placeholder="Email Address"
-                required
+
+            <!-- EMAIL -->
+
+            <div class="form-group">
+
+                <label for="loginEmail">
+                    Email Address
+                </label>
+
+                <input
+                    type="email"
+                    id="loginEmail"
+                    placeholder="Enter your email"
+                    required
+                >
+
+            </div>
+
+
+            <!-- PASSWORD -->
+
+            <div class="form-group">
+
+                <label for="loginPassword">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="loginPassword"
+                    placeholder="Enter your password"
+                    required
+                >
+
+            </div>
+
+
+            <!-- LOGIN BUTTON -->
+
+            <button
+                type="submit"
+                id="loginButton"
             >
-
-
-            <input
-                type="password"
-                id="loginPassword"
-                placeholder="Password"
-                required
-            >
-
-
-            <button type="submit">
-                Login
+                Login to Admin
             </button>
+
 
         </form>
 
 
+        <!-- LOGIN STATUS -->
+
         <p id="loginStatus"></p>
 
 
-        <a href="index.html">
-            Back to Store
+        <!-- ==========================
+             BACK TO STORE
+        =========================== -->
+
+        <a
+            href="index.html"
+            class="store-link"
+        >
+            ← Back to Store
         </a>
+
 
     </main>
 
 
-    <!-- SUPABASE -->
+    <!-- ==========================
+         SUPABASE
+    =========================== -->
 
     <script
         src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
     ></script>
 
 
-    <!-- LOGIN SCRIPT -->
+    <!-- ==========================
+         LOGIN JAVASCRIPT
+    =========================== -->
 
     <script
         src="login.js"
     ></script>
+
 
 </body>
 
