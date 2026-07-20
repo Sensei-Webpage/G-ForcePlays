@@ -7,6 +7,20 @@ const supabaseClient = window.supabase.createClient(
     SUPABASE_KEY
 );
 
+supabaseClient.rpc("get_my_role").then(function(result) {
+
+    console.log(
+        "DATABASE ROLE:",
+        result.data
+    );
+
+    console.log(
+        "ROLE ERROR:",
+        result.error
+    );
+
+});
+
 console.log("Supabase client connected!");
 
 supabaseClient.auth.getSession().then(function(result) {
@@ -22,6 +36,13 @@ supabaseClient.auth.getSession().then(function(result) {
     );
 
 });
+
+const { data, error } = await supabaseClient.rpc(
+    "get_my_role"
+);
+
+console.log("DATABASE ROLE:", data);
+console.log("ROLE ERROR:", error);
 
 async function checkSupabaseRole() {
 
