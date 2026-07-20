@@ -9,6 +9,20 @@ const supabaseClient = window.supabase.createClient(
 
 console.log("Supabase client connected!");
 
+async function checkSupabaseRole() {
+
+    const {
+        data,
+        error
+    } = await supabaseClient.auth.getSession();
+
+    console.log("CURRENT SESSION:", data.session);
+    console.log("SESSION ERROR:", error);
+
+}
+
+checkSupabaseRole();
+
 // ==========================
 // LOAD PRODUCTS FROM SUPABASE
 // ==========================
