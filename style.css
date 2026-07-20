@@ -657,3 +657,303 @@ footer{
     }
 
 }
+
+/* ==========================
+   CONTACT SECTION
+========================== */
+
+#contact {
+    padding: 60px 20px;
+    text-align: center;
+}
+
+#contact h2 {
+    margin-bottom: 20px;
+}
+
+#contact p {
+    margin: 8px 0;
+}
+
+
+/* CONTACT FORM */
+
+#contactForm {
+    max-width: 600px;
+    margin: 30px auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+
+/* INPUTS */
+
+#contactForm input,
+#contactForm textarea {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+
+/* MESSAGE BOX */
+
+#contactForm textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+
+/* SEND BUTTON */
+
+#contactForm button {
+    padding: 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: #222;
+    color: white;
+    transition: 0.3s;
+}
+
+
+#contactForm button:hover {
+    opacity: 0.8;
+}
+
+
+/* CONTACT STATUS */
+
+#contactStatus {
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+/* ==========================
+   SHOPPING CART
+========================== */
+
+#cartSection {
+    max-width: 900px;
+    margin: 60px auto;
+    padding: 35px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+#cartSection > h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 28px;
+}
+
+#cartItems {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 18px 20px;
+    background: #f7f7f7;
+    border-radius: 10px;
+    border: 1px solid #e5e5e5;
+}
+
+.cart-item h3 {
+    margin: 0;
+    flex: 1;
+    font-size: 17px;
+}
+
+.cart-item p {
+    margin: 0;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.removeBtn {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    background: #dc3545;
+    color: white;
+    cursor: pointer;
+}
+
+#cartSection > h3 {
+    text-align: right;
+    font-size: 22px;
+    margin: 25px 0;
+}
+
+#cartTotal {
+    font-size: 26px;
+    font-weight: bold;
+}
+
+#checkoutBtn {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    background: #007bff;
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#checkoutFormContainer {
+    margin-top: 35px;
+    padding: 30px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border: 1px solid #e2e2e2;
+}
+
+#checkoutFormContainer h2 {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+#checkoutForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#checkoutForm input,
+#checkoutForm textarea {
+    width: 100%;
+    padding: 14px 16px;
+    box-sizing: border-box;
+    border: 1px solid #d5d5d5;
+    border-radius: 8px;
+    background: white;
+    font-size: 15px;
+    font-family: inherit;
+}
+
+#checkoutForm textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+#checkoutForm button[type="submit"] {
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    background: #28a745;
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#checkoutStatus {
+    text-align: center;
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+/* DARK MODE */
+
+body.dark #cartSection {
+    background: #1e1e1e;
+    color: white;
+}
+
+body.dark .cart-item {
+    background: #2a2a2a;
+    border-color: #444;
+}
+
+body.dark #checkoutFormContainer {
+    background: #252525;
+    border-color: #444;
+}
+
+body.dark #checkoutForm input,
+body.dark #checkoutForm textarea {
+    background: #333;
+    color: white;
+    border-color: #555;
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    #cartSection {
+        margin: 30px 15px;
+        padding: 20px;
+    }
+
+    .cart-item {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+    }
+
+    #cartSection > h3 {
+        text-align: center;
+    }
+
+    #checkoutFormContainer {
+        padding: 20px;
+    }
+
+}
+
+/* ==========================
+   CATEGORY FILTERS
+========================== */
+
+.category-filters {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px 0 30px;
+}
+
+.categoryBtn {
+    padding: 10px 20px;
+    border: 1px solid #007bff;
+    border-radius: 25px;
+    background: white;
+    color: #007bff;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.categoryBtn:hover {
+    background: #007bff;
+    color: white;
+}
+
+.categoryBtn.active {
+    background: #007bff;
+    color: white;
+}
+
+.product-category {
+    font-size: 14px;
+    color: #777;
+    margin: 5px 0;
+}
