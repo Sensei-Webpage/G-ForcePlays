@@ -837,17 +837,18 @@ shoppingCart.forEach(function(product) {
     // Check order error
     if (orderError) {
 
-        console.error(
-            "Order error:",
-            orderError
-        );
+    console.error(
+        "Order error:",
+        orderError
+    );
 
-        checkoutStatus.innerHTML =
-            "Something went wrong while placing your order.";
+    checkoutStatus.innerHTML =
+        "Order Error: " +
+        orderError.message;
 
-        return;
+    return;
 
-    }
+}
 
 
     // ==========================
