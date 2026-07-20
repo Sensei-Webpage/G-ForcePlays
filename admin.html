@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>G-ForcePlays Admin</title>
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="images/G-Force Plays.png"
+    >
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+    <!-- ADMIN HEADER -->
+
+    <header>
+
+        <h1>
+            G-ForcePlays Admin
+        </h1>
+
+        <nav>
+
+            <a href="index.html">
+                Back to Store
+            </a>
+
+            <button id="logoutBtn">
+    Logout
+</button>
+
+        </nav>
+
+    </header>
+
+
+    <!-- ADMIN DASHBOARD -->
+
+    <main id="adminDashboard">
+
+        <h2>
+            Product Management
+        </h2>
+
+
+        <!-- ADD PRODUCT FORM -->
+
+        <section id="addProductSection">
+
+            <h3>
+                Add New Product
+            </h3>
+
+
+            <form id="addProductForm">
+
+    <input
+        type="text"
+        id="productName"
+        placeholder="Product Name"
+        required
+    >
+
+    <input
+        type="number"
+        id="productPrice"
+        placeholder="Price"
+        required
+    >
+
+    <select
+        id="productCategory"
+        required
+    >
+
+        <option value="">
+            Select Category
+        </option>
+
+        <option value="Laptops">
+            Laptops
+        </option>
+
+        <option value="Desktop PCs">
+            Desktop PCs
+        </option>
+
+        <option value="Accessories">
+            Accessories
+        </option>
+
+    </select>
+
+    <input
+        type="file"
+        id="productImage"
+        accept="image/*"
+        required
+    >
+
+    <button
+        type="submit"
+    >
+        Add Product
+    </button>
+
+</form>
+
+
+            <p id="productStatus"></p>
+
+        </section>
+
+        <!-- EDIT PRODUCT FORM -->
+
+<section id="editProductSection">
+
+    <h3>
+        Edit Product
+    </h3>
+
+
+   <form id="editProductForm">
+
+    <input
+        type="hidden"
+        id="editProductId"
+    >
+
+    <input
+        type="text"
+        id="editProductName"
+        placeholder="Product Name"
+        required
+    >
+
+    <input
+        type="number"
+        id="editProductPrice"
+        placeholder="Price"
+        required
+    >
+
+    <select
+        id="editProductCategory"
+        required
+    >
+
+        <option value="">
+            Select Category
+        </option>
+
+        <option value="Laptops">
+            Laptops
+        </option>
+
+        <option value="Desktop PCs">
+            Desktop PCs
+        </option>
+
+        <option value="Accessories">
+            Accessories
+        </option>
+
+    </select>
+
+    <input
+        type="file"
+        id="editProductImage"
+        accept="image/*"
+    >
+
+    <button
+        type="submit"
+    >
+        Save Changes
+    </button>
+
+    <button
+        type="button"
+        id="cancelEditBtn"
+    >
+        Cancel
+    </button>
+
+</form>
+
+
+    <p id="editProductStatus"></p>
+
+</section>
+
+
+        <!-- PRODUCT LIST -->
+
+        <section id="adminProductsSection">
+
+            <h3>
+                Current Products
+            </h3>
+
+
+            <div
+                id="adminProductList"
+            >
+
+                <!-- Products loaded here -->
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- SUPABASE -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ></script>
+
+
+    <!-- ADMIN SCRIPT -->
+
+    <script
+        src="admin.js"
+    ></script>
+
+</body>
+
+</html>
