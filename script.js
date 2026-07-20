@@ -837,10 +837,11 @@ shoppingCart.forEach(function(product) {
     // Check order error
     if (orderError) {
 
-    console.error(
-        "Order error:",
-        orderError
-    );
+    console.error("ORDER ERROR FULL:", orderError);
+    console.error("ORDER ERROR MESSAGE:", orderError.message);
+    console.error("ORDER ERROR DETAILS:", orderError.details);
+    console.error("ORDER ERROR HINT:", orderError.hint);
+    console.error("ORDER ERROR CODE:", orderError.code);
 
     checkoutStatus.innerHTML =
         "Order Error: " +
