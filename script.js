@@ -95,7 +95,7 @@ const becomeSellerLink =
 
 
 // ==================================================
-// DEFAULT ACCOUNT STATE
+// SHOW LOGGED OUT MENU
 // ==================================================
 
 function showLoggedOutMenu() {
@@ -118,7 +118,7 @@ function showLoggedOutMenu() {
 
 
 // ==================================================
-// SHOW LOGGED IN ACCOUNT
+// SHOW LOGGED IN MENU
 // ==================================================
 
 function showLoggedInMenu() {
@@ -141,10 +141,20 @@ function showLoggedInMenu() {
 
 
 // ==================================================
-// RESET ROLE LINKS
+// UPDATE ROLE-BASED MENU
 // ==================================================
 
-function resetRoleLinks() {
+function updateRoleLinks(role) {
+
+    console.log(
+        "Updating menu for role:",
+        role
+    );
+
+
+    // ==================================================
+    // HIDE ALL ROLE-SPECIFIC LINKS FIRST
+    // ==================================================
 
     if (sellerDashboardLink) {
 
@@ -153,12 +163,196 @@ function resetRoleLinks() {
 
     }
 
+
     if (adminDashboardLink) {
 
         adminDashboardLink.style.display =
             "none";
 
     }
+
+
+    if (becomeSellerLink) {
+
+        becomeSellerLink.style.display =
+            "none";
+
+    }
+
+
+    // ==================================================
+    // ADMIN
+    // ADMIN CAN SEE:
+    //
+    // My Account
+    // My Orders
+    // Seller Dashboard
+    // Admin Dashboard
+    // Logout
+    // ==================================================
+
+    if (
+        role === "admin"
+    ) {
+
+        console.log(
+            "ADMIN ROLE DETECTED"
+        );
+
+
+        // SHOW SELLER DASHBOARD
+
+        if (sellerDashboardLink) {
+
+            sellerDashboardLink.style.display =
+                "block";
+
+            console.log(
+                "Seller Dashboard shown for admin."
+            );
+
+        }
+
+
+        // SHOW ADMIN DASHBOARD
+
+        if (adminDashboardLink) {
+
+            adminDashboardLink.style.display =
+                "block";
+
+            console.log(
+                "Admin Dashboard shown."
+            );
+
+        }
+
+
+        // ADMIN DOES NOT NEED
+        // BECOME A SELLER
+
+        if (becomeSellerLink) {
+
+            becomeSellerLink.style.display =
+                "none";
+
+        }
+
+
+        return;
+
+    }
+
+
+    // ==================================================
+    // SELLER
+    // SELLER CAN SEE:
+    //
+    // My Account
+    // My Orders
+    // Seller Dashboard
+    // Logout
+    // ==================================================
+
+    if (
+        role === "seller"
+    ) {
+
+        console.log(
+            "SELLER ROLE DETECTED"
+        );
+
+
+        if (sellerDashboardLink) {
+
+            sellerDashboardLink.style.display =
+                "block";
+
+            console.log(
+                "Seller Dashboard shown."
+            );
+
+        }
+
+
+        if (adminDashboardLink) {
+
+            adminDashboardLink.style.display =
+                "none";
+
+        }
+
+
+        if (becomeSellerLink) {
+
+            becomeSellerLink.style.display =
+                "none";
+
+        }
+
+
+        return;
+
+    }
+
+
+    // ==================================================
+    // CUSTOMER
+    // CUSTOMER CAN SEE:
+    //
+    // My Account
+    // My Orders
+    // Become a Seller
+    // Logout
+    // ==================================================
+
+    if (
+        role === "customer"
+    ) {
+
+        console.log(
+            "CUSTOMER ROLE DETECTED"
+        );
+
+
+        if (sellerDashboardLink) {
+
+            sellerDashboardLink.style.display =
+                "none";
+
+        }
+
+
+        if (adminDashboardLink) {
+
+            adminDashboardLink.style.display =
+                "none";
+
+        }
+
+
+        if (becomeSellerLink) {
+
+            becomeSellerLink.style.display =
+                "block";
+
+        }
+
+
+        return;
+
+    }
+
+
+    // ==================================================
+    // UNKNOWN ROLE
+    // DEFAULT TO CUSTOMER
+    // ==================================================
+
+    console.log(
+        "Unknown role. Defaulting to customer."
+    );
+
 
     if (becomeSellerLink) {
 
@@ -177,7 +371,9 @@ function resetRoleLinks() {
 async function loadProducts() {
 
     const productContainer =
-        document.getElementById("productContainer");
+        document.getElementById(
+            "productContainer"
+        );
 
 
     if (!productContainer) {
@@ -249,7 +445,9 @@ async function loadProducts() {
         function(product) {
 
             const card =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
 
             card.className =
@@ -360,7 +558,9 @@ document.addEventListener(
 
 
         const card =
-            event.target.closest(".card");
+            event.target.closest(
+                ".card"
+            );
 
 
         if (!card) {
@@ -396,7 +596,8 @@ document.addEventListener(
 
                     return String(
                         product.id
-                    ) === String(
+                    ) ===
+                    String(
                         productId
                     );
 
@@ -520,7 +721,9 @@ function displayCart() {
 
 
             const item =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
 
             item.className =
@@ -705,7 +908,9 @@ document.addEventListener(
 // ==================================================
 
 const darkButton =
-    document.getElementById("darkModeBtn");
+    document.getElementById(
+        "darkModeBtn"
+    );
 
 
 if (darkButton) {
@@ -729,11 +934,15 @@ if (darkButton) {
 // ==================================================
 
 const shopButton =
-    document.getElementById("shopNowBtn");
+    document.getElementById(
+        "shopNowBtn"
+    );
 
 
 const productsSection =
-    document.getElementById("products");
+    document.getElementById(
+        "products"
+    );
 
 
 if (
@@ -763,7 +972,9 @@ if (
 // ==================================================
 
 const searchBox =
-    document.getElementById("searchBox");
+    document.getElementById(
+        "searchBox"
+    );
 
 
 const categoryButtons =
@@ -921,19 +1132,27 @@ categoryButtons.forEach(
 // ==================================================
 
 const slides =
-    document.querySelectorAll(".slide");
+    document.querySelectorAll(
+        ".slide"
+    );
 
 
 const dots =
-    document.querySelectorAll(".dot");
+    document.querySelectorAll(
+        ".dot"
+    );
 
 
 const nextButton =
-    document.querySelector(".nextBtn");
+    document.querySelector(
+        ".nextBtn"
+    );
 
 
 const prevButton =
-    document.querySelector(".prevBtn");
+    document.querySelector(
+        ".prevBtn"
+    );
 
 
 let currentSlide =
@@ -1324,7 +1543,9 @@ if (checkoutForm) {
                 "Processing your order...";
 
 
+            // ==================================================
             // SAVE ORDER
+            // ==================================================
 
             const {
                 data: order,
@@ -1376,7 +1597,9 @@ if (checkoutForm) {
             }
 
 
+            // ==================================================
             // CREATE ORDER ITEMS
+            // ==================================================
 
             const orderItems =
                 shoppingCart.map(
@@ -1405,7 +1628,9 @@ if (checkoutForm) {
                 );
 
 
+            // ==================================================
             // SAVE ORDER ITEMS
+            // ==================================================
 
             const {
                 error: itemsError
@@ -1434,7 +1659,9 @@ if (checkoutForm) {
             }
 
 
+            // ==================================================
             // SUCCESS
+            // ==================================================
 
             checkoutStatus.textContent =
                 "Order placed successfully! Thank you for your purchase.";
@@ -1483,8 +1710,6 @@ async function checkUserSession() {
 
         showLoggedOutMenu();
 
-        resetRoleLinks();
-
         return;
 
     }
@@ -1507,8 +1732,6 @@ async function checkUserSession() {
 
         showLoggedOutMenu();
 
-        resetRoleLinks();
-
         return;
 
     }
@@ -1529,8 +1752,6 @@ async function checkUserSession() {
 
 
     showLoggedInMenu();
-
-    resetRoleLinks();
 
 
     if (accountName) {
@@ -1584,10 +1805,22 @@ async function checkUserSession() {
             "No profile found for user."
         );
 
+
+        // Default to customer
+
+        updateRoleLinks(
+            "customer"
+        );
+
+
         return;
 
     }
 
+
+    // ==================================================
+    // USER PROFILE FOUND
+    // ==================================================
 
     console.log(
         "User profile:",
@@ -1611,7 +1844,7 @@ async function checkUserSession() {
 
 
     // ==================================================
-    // GET ROLE
+    // GET USER ROLE
     // ==================================================
 
     const role =
@@ -1630,104 +1863,12 @@ async function checkUserSession() {
 
 
     // ==================================================
-    // ADMIN
-    // ADMIN CAN SEE:
-    // - MY ORDERS
-    // - ADMIN DASHBOARD
-    // - SELLER DASHBOARD
+    // UPDATE MENU BASED ON ROLE
     // ==================================================
 
-    if (
-        role === "admin"
-    ) {
-
-        console.log(
-            "Admin access granted."
-        );
-
-
-        if (adminDashboardLink) {
-
-            adminDashboardLink.style.display =
-                "block";
-
-        }
-
-
-        if (sellerDashboardLink) {
-
-            sellerDashboardLink.style.display =
-                "block";
-
-        }
-
-
-        if (becomeSellerLink) {
-
-            becomeSellerLink.style.display =
-                "none";
-
-        }
-
-    }
-
-
-    // ==================================================
-    // SELLER
-    // SELLER CAN SEE:
-    // - MY ORDERS
-    // - SELLER DASHBOARD
-    // ==================================================
-
-    else if (
-        role === "seller"
-    ) {
-
-        console.log(
-            "Seller access granted."
-        );
-
-
-        if (sellerDashboardLink) {
-
-            sellerDashboardLink.style.display =
-                "block";
-
-        }
-
-
-        if (becomeSellerLink) {
-
-            becomeSellerLink.style.display =
-                "none";
-
-        }
-
-    }
-
-
-    // ==================================================
-    // CUSTOMER
-    // CUSTOMER CAN SEE:
-    // - MY ORDERS
-    // - BECOME A SELLER
-    // ==================================================
-
-    else {
-
-        console.log(
-            "Customer access."
-        );
-
-
-        if (becomeSellerLink) {
-
-            becomeSellerLink.style.display =
-                "block";
-
-        }
-
-    }
+    updateRoleLinks(
+        role
+    );
 
 }
 
@@ -1828,8 +1969,6 @@ if (logoutBtn) {
 
             showLoggedOutMenu();
 
-            resetRoleLinks();
-
 
             if (accountDropdown) {
 
@@ -1871,8 +2010,6 @@ supabaseClient.auth.onAuthStateChange(
 
             showLoggedOutMenu();
 
-            resetRoleLinks();
-
         }
 
     }
@@ -1884,8 +2021,6 @@ supabaseClient.auth.onAuthStateChange(
 // ==================================================
 
 showLoggedOutMenu();
-
-resetRoleLinks();
 
 checkUserSession();
 
