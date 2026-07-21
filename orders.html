@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>My Orders - G-ForcePlays</title>
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="images/G-Force Plays.png"
+    >
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+    <!-- HEADER -->
+
+    <header>
+
+        <h1>
+            G-ForcePlays
+        </h1>
+
+        <nav>
+
+            <a href="index.html">
+                Back to Store
+            </a>
+
+            <button id="logoutBtn">
+                Logout
+            </button>
+
+        </nav>
+
+    </header>
+
+
+    <!-- MY ORDERS -->
+
+    <main id="myOrdersPage">
+
+        <h2>
+            My Orders
+        </h2>
+
+
+        <p id="ordersStatus">
+            Loading your orders...
+        </p>
+
+
+        <div id="myOrdersList">
+
+            <!-- Orders will appear here -->
+
+        </div>
+
+    </main>
+
+
+    <!-- SUPABASE -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="orders.js"></script>
+
+</body>
+
+</html>

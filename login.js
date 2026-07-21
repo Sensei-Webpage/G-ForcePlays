@@ -14,64 +14,72 @@ const supabaseClient =
         SUPABASE_KEY
     );
 
+console.log("Supabase login connected!");
+
 
 // ==========================
 // LOGIN FORM
 // ==========================
 
-let loginForm =
-    document.getElementById(
-        "loginForm"
-    );
+const loginForm =
+    document.getElementById("loginForm");
 
-let loginStatus =
-    document.getElementById(
-        "loginStatus"
-    );
+const loginStatus =
+    document.getElementById("loginStatus");
 
+
+// ==========================
+// LOGIN
+// ==========================
 
 loginForm.addEventListener(
     "submit",
     async function(event) {
 
-        // Stop page refresh
         event.preventDefault();
 
 
         // Get email
-        let email =
-            document.getElementById(
-                "loginEmail"
-            ).value;
+
+        const email =
+            document
+                .getElementById("loginEmail")
+                .value
+                .trim();
 
 
         // Get password
-        let password =
-            document.getElementById(
-                "loginPassword"
-            ).value;
+
+        const password =
+            document
+                .getElementById("loginPassword")
+                .value;
 
 
         // Show status
+
         loginStatus.innerHTML =
             "Logging in...";
 
 
-        // Login with Supabase
+        // ==========================
+        // SUPABASE LOGIN
+        // ==========================
 
         const {
             data,
             error
-        } = await supabaseClient.auth.signInWithPassword({
+        } =
+            await supabaseClient.auth.signInWithPassword({
 
-            email: email,
+                email: email,
 
-            password: password
+                password: password
 
-        });
+            });
 
 
-        // Check error
+        // Check login error
 
         if (error) {
 
@@ -80,25 +88,94 @@ loginForm.addEventListener(
                 error
             );
 
-
             loginStatus.innerHTML =
-                "Invalid email or password.";
+                error.message;
 
             return;
 
         }
 
 
-        // Login successful
+        console.log(
+            "User logged in:",
+            data.user
+        );
 
-        loginStatus.innerHTML =
-            "Login successful!";
+
+        // ==========================
+        // GET USER PROFILE
+        // ==========================
+
+        const {
+            data: profile,
+            error: profileError
+        } =
+            await supabaseClient
+                .from("profiles")
+                .select("role")
+                .eq("id", data.user.id)
+                .single();
 
 
-        // Go to admin dashboard
+        // Check profile error
 
-        window.location.href =
-            "admin.html";
+        if (profileError) {
 
-    }
-);
+            console.error(
+                "Profile error:",
+                profileError
+            );
+
+            loginStatus.innerHTML =
+                "Login successful, but your account profile could not be found.";
+
+            return;
+
+        }
+
+
+        // Get role
+
+        const userRole = profile.role;
+
+console.log("PROFILE:", profile);
+console.log("USER ROLE:", userRole);
+
+alert("Your role is: " + userRole);
+
+
+// ==========================
+// REDIRECT BY ROLE
+// ==========================
+
+console.log("FINAL USER ROLE:", userRole);
+
+if (userRole === "admin") {
+
+    console.log(
+        "Admin detected. Redirecting to admin dashboard..."
+    );
+
+    window.location.href = "admin.html";
+
+}
+else if (userRole === "seller") {
+
+    console.log(
+        "Seller detected. Redirecting to seller dashboard..."
+    );
+
+    window.location.href = "seller.html";
+
+}
+else {
+
+    console.log(
+        "Customer detected. Redirecting to store..."
+    );
+
+    window.location.href = "index.html";
+
+}
+
+});

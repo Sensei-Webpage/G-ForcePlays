@@ -1,0 +1,168 @@
+/* ==========================
+   GENERAL
+========================== */
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    color: #333;
+}
+
+
+/* ==========================
+   HEADER
+========================== */
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: #222;
+    color: white;
+}
+
+
+header nav {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+
+header a {
+    color: white;
+    text-decoration: none;
+}
+
+
+header button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    background: #dc3545;
+    color: white;
+    cursor: pointer;
+}
+
+
+/* ==========================
+   DASHBOARD
+========================== */
+
+#sellerDashboard {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+
+#sellerDashboard h2 {
+    margin-bottom: 10px;
+}
+
+
+/* ==========================
+   ORDER CARD
+========================== */
+
+.seller-order-card {
+    background: white;
+    margin-top: 25px;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+
+/* ==========================
+   ORDER HEADER
+========================== */
+
+.seller-order-header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 15px;
+}
+
+
+/* ==========================
+   CUSTOMER
+========================== */
+
+.seller-customer-info {
+    margin-top: 20px;
+}
+
+
+/* ==========================
+   PRODUCTS
+========================== */
+
+.seller-order-products {
+    margin-top: 20px;
+}
+
+
+.seller-order-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    margin-top: 8px;
+    background: #f5f5f5;
+    border-radius: 6px;
+}
+
+
+/* ==========================
+   TOTAL
+========================== */
+
+.seller-order-total {
+    margin-top: 20px;
+    font-size: 20px;
+}
+
+
+/* ==========================
+   STATUS
+========================== */
+
+.seller-order-status {
+    margin-top: 20px;
+}
+
+
+.sellerStatusSelect {
+    padding: 8px 12px;
+    margin-left: 10px;
+    border-radius: 6px;
+}
+
+
+/* ==========================
+   MOBILE
+========================== */
+
+@media (max-width: 768px) {
+
+    header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+
+    .seller-order-header {
+        flex-direction: column;
+    }
+
+
+    .seller-order-item {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+}

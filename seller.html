@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>G-ForcePlays Seller Dashboard</title>
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="images/G-Force Plays.png"
+    >
+
+    <link
+        rel="stylesheet"
+        href="seller.css"
+    >
+
+</head>
+
+
+<body>
+
+    <!-- SELLER HEADER -->
+
+    <header>
+
+        <h1>
+            G-ForcePlays Seller Dashboard
+        </h1>
+
+        <nav>
+
+            <a href="index.html">
+                Back to Store
+            </a>
+
+            <button id="logoutBtn">
+                Logout
+            </button>
+
+        </nav>
+
+    </header>
+
+
+    <!-- SELLER DASHBOARD -->
+
+    <main id="sellerDashboard">
+
+        <h2>
+            Customer Orders
+        </h2>
+
+
+        <p id="sellerStatus">
+            Loading orders...
+        </p>
+
+
+        <section id="sellerOrderList">
+
+            <!-- Orders will appear here -->
+
+        </section>
+
+    </main>
+
+
+    <!-- SUPABASE -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="seller.js"></script>
+
+</body>
+
+</html>

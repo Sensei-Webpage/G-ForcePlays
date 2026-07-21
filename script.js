@@ -18,7 +18,37 @@ console.log("Supabase client connected!");
 
 
 // ==========================
-// LOAD PRODUCTS FROM SUPABASE
+// SHOPPING CART
+// ==========================
+
+let shoppingCart = [];
+
+
+// ==========================
+// DOM ELEMENTS
+// ==========================
+
+const cart =
+    document.getElementById("cartCount");
+
+const cartItems =
+    document.getElementById("cartItems");
+
+const cartTotal =
+    document.getElementById("cartTotal");
+
+const checkoutBtn =
+    document.getElementById("checkoutBtn");
+
+const cartBtn =
+    document.getElementById("cartBtn");
+
+const cartSection =
+    document.getElementById("cartSection");
+
+
+// ==========================
+// LOAD PRODUCTS
 // ==========================
 
 async function loadProducts() {
@@ -29,15 +59,10 @@ async function loadProducts() {
     } = await supabaseClient
         .from("products")
         .select("*")
-        .order(
-            "id",
-            {
-                ascending: true
-            }
-        );
+        .order("id", {
+            ascending: true
+        });
 
-
-    // Check for error
 
     if (error) {
 
@@ -51,29 +76,11 @@ async function loadProducts() {
     }
 
 
-    // Console information
-
     console.log(
         "Products loaded:",
         data
     );
 
-    console.log(
-        "Number of products:",
-        data.length
-    );
-
-
-    if (data.length === 0) {
-
-        console.warn(
-            "No products were returned from Supabase."
-        );
-
-    }
-
-
-    // Get product container
 
     const productContainer =
         document.getElementById(
@@ -81,49 +88,51 @@ async function loadProducts() {
         );
 
 
-    // Clear existing products
-
     productContainer.innerHTML = "";
 
 
-    // Create product cards
+    if (
+        !data ||
+        data.length === 0
+    ) {
+
+        productContainer.innerHTML =
+            "<p>No products available.</p>";
+
+        return;
+
+    }
+
 
     data.forEach(
         function(product) {
 
-
             const card =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
 
             card.className =
                 "card";
 
 
-            // Store category
-
             card.dataset.category =
-                product.category;
+                product.category || "";
 
-
-            // Product HTML
 
             card.innerHTML = `
 
                 <img
-                    src="${product.image_url}"
-                    alt="${product.name}"
+                    src="${product.image_url || ""}"
+                    alt="${product.name || "Product"}"
                 >
 
                 <h3>
-                    ${product.name}
+                    ${product.name || "Unnamed Product"}
                 </h3>
 
                 <p>
                     ₱${Number(
-                        product.price
+                        product.price || 0
                     ).toLocaleString()}
                 </p>
 
@@ -137,8 +146,6 @@ async function loadProducts() {
             `;
 
 
-            // Add card to container
-
             productContainer.appendChild(
                 card
             );
@@ -146,69 +153,25 @@ async function loadProducts() {
         }
     );
 
+
+    filterProducts();
+
 }
 
 
-// Load products
-
 loadProducts();
-
-
-// ==========================
-// SHOPPING CART
-// ==========================
-
-// Stores products added to cart
-
-let shoppingCart = [];
-
-
-// Get cart elements
-
-let cart =
-    document.getElementById(
-        "cartCount"
-    );
-
-let cartItems =
-    document.getElementById(
-        "cartItems"
-    );
-
-let cartTotal =
-    document.getElementById(
-        "cartTotal"
-    );
-
-let checkoutBtn =
-    document.getElementById(
-        "checkoutBtn"
-    );
 
 
 // ==========================
 // CART BUTTON
 // ==========================
 
-let cartBtn =
-    document.getElementById(
-        "cartBtn"
-    );
-
-let cartSection =
-    document.getElementById(
-        "cartSection"
-    );
-
-
 cartBtn.addEventListener(
     "click",
     function() {
 
         cartSection.scrollIntoView({
-
             behavior: "smooth"
-
         });
 
     }
@@ -216,121 +179,92 @@ cartBtn.addEventListener(
 
 
 // ==========================
-// ADD PRODUCT TO CART
+// ADD TO CART
 // ==========================
 
 document.addEventListener(
     "click",
     function(event) {
 
-
-        // Check if Add to Cart button
-
         if (
-            event.target.classList.contains(
+            !event.target.classList.contains(
                 "buyBtn"
             )
         ) {
 
-
-            // Get product ID
-
-            let productId =
-                event.target.dataset.id;
-
-
-            // Get product card
-
-            let card =
-                event.target.parentElement;
-
-
-            // Get product name
-
-            let productName =
-                card.querySelector(
-                    "h3"
-                ).innerHTML;
-
-
-            // Get product price text
-
-            let productPriceText =
-                card.querySelector(
-                    "p"
-                ).innerHTML;
-
-
-            // Convert price to number
-
-            let productPrice =
-                Number(
-
-                    productPriceText
-                        .replace(
-                            "₱",
-                            ""
-                        )
-                        .replace(
-                            /,/g,
-                            ""
-                        )
-
-                );
-
-
-            // Check if product already exists
-
-            let existingProduct =
-                shoppingCart.find(
-                    function(product) {
-
-                        return product.id ==
-                            productId;
-
-                    }
-                );
-
-
-            // If product exists
-
-            if (
-                existingProduct
-            ) {
-
-                existingProduct.quantity++;
-
-            }
-
-
-            // If product is new
-
-            else {
-
-                shoppingCart.push({
-
-                    id:
-                        productId,
-
-                    name:
-                        productName,
-
-                    price:
-                        productPrice,
-
-                    quantity:
-                        1
-
-                });
-
-            }
-
-
-            // Update cart
-
-            displayCart();
+            return;
 
         }
+
+
+        const productId =
+            event.target.dataset.id;
+
+
+        const card =
+            event.target.closest(".card");
+
+
+        const productName =
+            card.querySelector(
+                "h3"
+            ).textContent.trim();
+
+
+        const productPriceText =
+            card.querySelector(
+                "p"
+            ).textContent;
+
+
+        const productPrice =
+            Number(
+                productPriceText
+                    .replace("₱", "")
+                    .replace(/,/g, "")
+                    .trim()
+            );
+
+
+        const existingProduct =
+            shoppingCart.find(
+                function(product) {
+
+                    return product.id ==
+                        productId;
+
+                }
+            );
+
+
+        if (existingProduct) {
+
+            existingProduct.quantity++;
+
+        }
+
+        else {
+
+            shoppingCart.push({
+
+                id:
+                    productId,
+
+                name:
+                    productName,
+
+                price:
+                    productPrice,
+
+                quantity:
+                    1
+
+            });
+
+        }
+
+
+        displayCart();
 
     }
 );
@@ -342,11 +276,7 @@ document.addEventListener(
 
 function displayCart() {
 
-
-    // Calculate total quantity
-
-    let totalQuantity =
-        0;
+    let totalQuantity = 0;
 
 
     shoppingCart.forEach(
@@ -359,23 +289,18 @@ function displayCart() {
     );
 
 
-    // Update cart count
-
-    cart.innerHTML =
+    cart.textContent =
         totalQuantity;
 
 
-    // Check if cart is empty
-
     if (
-        shoppingCart.length ===
-        0
+        shoppingCart.length === 0
     ) {
 
         cartItems.innerHTML =
             "<p>Your cart is empty.</p>";
 
-        cartTotal.innerHTML =
+        cartTotal.textContent =
             "0";
 
         return;
@@ -383,19 +308,12 @@ function displayCart() {
     }
 
 
-    // Clear current cart
-
     cartItems.innerHTML =
         "";
 
 
-    // Total price
+    let totalPrice = 0;
 
-    let totalPrice =
-        0;
-
-
-    // Display each product
 
     shoppingCart.forEach(
         function(
@@ -403,23 +321,16 @@ function displayCart() {
             index
         ) {
 
-
-            // Calculate product total
-
-            let productTotal =
+            const productTotal =
                 product.price *
                 product.quantity;
 
-
-            // Add to total
 
             totalPrice +=
                 productTotal;
 
 
-            // Create cart item
-
-            let item =
+            const item =
                 document.createElement(
                     "div"
                 );
@@ -428,8 +339,6 @@ function displayCart() {
             item.className =
                 "cart-item";
 
-
-            // Cart item HTML
 
             item.innerHTML = `
 
@@ -441,9 +350,7 @@ function displayCart() {
                     ₱${productTotal.toLocaleString()}
                 </p>
 
-                <div
-                    class="quantity-controls"
-                >
+                <div class="quantity-controls">
 
                     <button
                         class="quantityBtn"
@@ -477,8 +384,6 @@ function displayCart() {
             `;
 
 
-            // Add item
-
             cartItems.appendChild(
                 item
             );
@@ -487,24 +392,22 @@ function displayCart() {
     );
 
 
-    // Display total
-
-    cartTotal.innerHTML =
+    cartTotal.textContent =
         totalPrice.toLocaleString();
 
 }
 
 
+displayCart();
+
+
 // ==========================
-// CART QUANTITY CONTROLS
+// CART QUANTITY / REMOVE
 // ==========================
 
 document.addEventListener(
     "click",
     function(event) {
-
-
-        // Increase / decrease quantity
 
         if (
             event.target.classList.contains(
@@ -512,26 +415,18 @@ document.addEventListener(
             )
         ) {
 
-
-            // Get index
-
-            let index =
+            const index =
                 Number(
                     event.target.dataset.index
                 );
 
 
-            // Get action
-
-            let action =
+            const action =
                 event.target.dataset.action;
 
 
-            // Increase
-
             if (
-                action ===
-                "increase"
+                action === "increase"
             ) {
 
                 shoppingCart[
@@ -541,19 +436,14 @@ document.addEventListener(
             }
 
 
-            // Decrease
-
             if (
-                action ===
-                "decrease"
+                action === "decrease"
             ) {
 
                 shoppingCart[
                     index
                 ].quantity--;
 
-
-                // Remove if zero
 
                 if (
                     shoppingCart[
@@ -571,16 +461,10 @@ document.addEventListener(
             }
 
 
-            // Update cart
-
             displayCart();
 
         }
 
-
-        // ==========================
-        // REMOVE PRODUCT
-        // ==========================
 
         if (
             event.target.classList.contains(
@@ -588,24 +472,17 @@ document.addEventListener(
             )
         ) {
 
-
-            // Get index
-
-            let index =
+            const index =
                 Number(
                     event.target.dataset.index
                 );
 
-
-            // Remove product
 
             shoppingCart.splice(
                 index,
                 1
             );
 
-
-            // Update cart
 
             displayCart();
 
@@ -616,17 +493,10 @@ document.addEventListener(
 
 
 // ==========================
-// INITIAL CART DISPLAY
-// ==========================
-
-displayCart();
-
-
-// ==========================
 // DARK MODE
 // ==========================
 
-let darkButton =
+const darkButton =
     document.getElementById(
         "darkModeBtn"
     );
@@ -645,15 +515,16 @@ darkButton.addEventListener(
 
 
 // ==========================
-// SMOOTH SCROLL
+// SHOP NOW
 // ==========================
 
-let shopButton =
+const shopButton =
     document.getElementById(
         "shopNowBtn"
     );
 
-let products =
+
+const products =
     document.getElementById(
         "products"
     );
@@ -664,10 +535,7 @@ shopButton.addEventListener(
     function() {
 
         products.scrollIntoView({
-
-            behavior:
-                "smooth"
-
+            behavior: "smooth"
         });
 
     }
@@ -678,93 +546,66 @@ shopButton.addEventListener(
 // SEARCH + CATEGORY FILTER
 // ==========================
 
-let searchBox =
+const searchBox =
     document.getElementById(
         "searchBox"
     );
 
 
-let categoryButtons =
+const categoryButtons =
     document.querySelectorAll(
         ".categoryBtn"
     );
 
 
-// Selected category
-
 let selectedCategory =
     "All";
 
 
-// ==========================
-// FILTER PRODUCTS
-// ==========================
-
 function filterProducts() {
 
-
-    // Get search text
-
-    let search =
+    const search =
         searchBox.value
             .toLowerCase()
             .trim();
 
 
-    // Get cards
-
-    let cards =
+    const cards =
         document.querySelectorAll(
             ".card"
         );
 
 
-    // Check each card
-
     cards.forEach(
         function(card) {
 
-
-            // Get product name
-
-            let productName =
+            const productName =
                 card.querySelector(
                     "h3"
                 )
-                .innerHTML
+                .textContent
                 .toLowerCase()
                 .trim();
 
 
-            // Get category
+            const productCategory =
+                (
+                    card.dataset.category ||
+                    ""
+                )
+                .trim();
 
-            let productCategory =
-                card.dataset.category
-                    .trim();
 
-
-            // Search match
-
-            let matchesSearch =
+            const matchesSearch =
                 productName.includes(
                     search
                 );
 
 
-            // Category match
+            const matchesCategory =
+                selectedCategory === "All" ||
+                productCategory === selectedCategory;
 
-            let matchesCategory =
-
-                selectedCategory ===
-                    "All"
-
-                ||
-
-                productCategory ===
-                    selectedCategory;
-
-
-            // Show or hide
 
             if (
                 matchesSearch &&
@@ -789,40 +630,22 @@ function filterProducts() {
 }
 
 
-// ==========================
-// SEARCH PRODUCTS
-// ==========================
-
 searchBox.addEventListener(
-    "keyup",
-    function() {
-
-        filterProducts();
-
-    }
+    "input",
+    filterProducts
 );
 
 
-// ==========================
-// CATEGORY BUTTONS
-// ==========================
-
 categoryButtons.forEach(
     function(button) {
-
 
         button.addEventListener(
             "click",
             function() {
 
-
-                // Update category
-
                 selectedCategory =
                     button.dataset.category;
 
-
-                // Remove active
 
                 categoryButtons.forEach(
                     function(btn) {
@@ -835,14 +658,10 @@ categoryButtons.forEach(
                 );
 
 
-                // Add active
-
                 button.classList.add(
                     "active"
                 );
 
-
-                // Filter
 
                 filterProducts();
 
@@ -857,44 +676,34 @@ categoryButtons.forEach(
 // BANNER SLIDESHOW
 // ==========================
 
-let slides =
+const slides =
     document.querySelectorAll(
         ".slide"
     );
 
 
-let dots =
+const dots =
     document.querySelectorAll(
         ".dot"
     );
 
 
-let nextButton =
+const nextButton =
     document.querySelector(
         ".nextBtn"
     );
 
 
-let prevButton =
+const prevButton =
     document.querySelector(
         ".prevBtn"
     );
 
 
-let currentSlide =
-    0;
+let currentSlide = 0;
 
 
-// ==========================
-// SHOW SLIDE
-// ==========================
-
-function showSlide(
-    index
-) {
-
-
-    // Remove active slides
+function showSlide(index) {
 
     slides.forEach(
         function(slide) {
@@ -907,8 +716,6 @@ function showSlide(
     );
 
 
-    // Remove active dots
-
     dots.forEach(
         function(dot) {
 
@@ -920,34 +727,21 @@ function showSlide(
     );
 
 
-    // Activate slide
-
-    slides[
-        index
-    ].classList.add(
+    slides[index].classList.add(
         "active"
     );
 
 
-    // Activate dot
-
-    dots[
-        index
-    ].classList.add(
+    dots[index].classList.add(
         "active"
     );
 
 }
 
 
-// ==========================
-// NEXT BUTTON
-// ==========================
-
 nextButton.addEventListener(
     "click",
     function() {
-
 
         currentSlide++;
 
@@ -957,8 +751,7 @@ nextButton.addEventListener(
             slides.length
         ) {
 
-            currentSlide =
-                0;
+            currentSlide = 0;
 
         }
 
@@ -971,14 +764,9 @@ nextButton.addEventListener(
 );
 
 
-// ==========================
-// PREVIOUS BUTTON
-// ==========================
-
 prevButton.addEventListener(
     "click",
     function() {
-
 
         currentSlide--;
 
@@ -988,8 +776,7 @@ prevButton.addEventListener(
         ) {
 
             currentSlide =
-                slides.length -
-                1;
+                slides.length - 1;
 
         }
 
@@ -1002,21 +789,15 @@ prevButton.addEventListener(
 );
 
 
-// ==========================
-// DOT BUTTONS
-// ==========================
-
 dots.forEach(
     function(
         dot,
         index
     ) {
 
-
         dot.addEventListener(
             "click",
             function() {
-
 
                 currentSlide =
                     index;
@@ -1033,13 +814,8 @@ dots.forEach(
 );
 
 
-// ==========================
-// AUTOMATIC SLIDESHOW
-// ==========================
-
 setInterval(
     function() {
-
 
         currentSlide++;
 
@@ -1049,8 +825,7 @@ setInterval(
             slides.length
         ) {
 
-            currentSlide =
-                0;
+            currentSlide = 0;
 
         }
 
@@ -1058,7 +833,6 @@ setInterval(
         showSlide(
             currentSlide
         );
-
 
     },
     5000
@@ -1069,13 +843,13 @@ setInterval(
 // CONTACT FORM
 // ==========================
 
-let contactForm =
+const contactForm =
     document.getElementById(
         "contactForm"
     );
 
 
-let contactStatus =
+const contactStatus =
     document.getElementById(
         "contactStatus"
     );
@@ -1085,70 +859,45 @@ contactForm.addEventListener(
     "submit",
     async function(event) {
 
-
-        // Prevent refresh
-
         event.preventDefault();
 
 
-        // Get values
-
-        let name =
+        const name =
             document.getElementById(
                 "contactName"
-            ).value;
+            ).value.trim();
 
 
-        let email =
+        const email =
             document.getElementById(
                 "contactEmail"
-            ).value;
+            ).value.trim();
 
 
-        let message =
+        const message =
             document.getElementById(
                 "contactMessage"
-            ).value;
+            ).value.trim();
 
 
-        // Status
-
-        contactStatus.innerHTML =
+        contactStatus.textContent =
             "Sending message...";
 
-
-        // Insert contact
 
         const {
             error
         } = await supabaseClient
-            .from(
-                "contacts"
-            )
+            .from("contacts")
             .insert([
-
                 {
-
-                    name:
-                        name,
-
-                    email:
-                        email,
-
-                    message:
-                        message
-
+                    name: name,
+                    email: email,
+                    message: message
                 }
-
             ]);
 
 
-        // Check error
-
-        if (
-            error
-        ) {
-
+        if (error) {
 
             console.error(
                 "Contact form error:",
@@ -1156,7 +905,7 @@ contactForm.addEventListener(
             );
 
 
-            contactStatus.innerHTML =
+            contactStatus.textContent =
                 "Something went wrong. Please try again.";
 
 
@@ -1165,13 +914,9 @@ contactForm.addEventListener(
         }
 
 
-        // Success
-
-        contactStatus.innerHTML =
+        contactStatus.textContent =
             "Message sent successfully!";
 
-
-        // Reset
 
         contactForm.reset();
 
@@ -1180,10 +925,10 @@ contactForm.addEventListener(
 
 
 // ==========================
-// CHECKOUT FORM DISPLAY
+// CHECKOUT FORM
 // ==========================
 
-let checkoutFormContainer =
+const checkoutFormContainer =
     document.getElementById(
         "checkoutFormContainer"
     );
@@ -1193,12 +938,8 @@ checkoutBtn.addEventListener(
     "click",
     function() {
 
-
-        // Check empty cart
-
         if (
-            shoppingCart.length ===
-            0
+            shoppingCart.length === 0
         ) {
 
             alert(
@@ -1210,19 +951,12 @@ checkoutBtn.addEventListener(
         }
 
 
-        // Show checkout form
-
         checkoutFormContainer.style.display =
             "block";
 
 
-        // Scroll
-
         checkoutFormContainer.scrollIntoView({
-
-            behavior:
-                "smooth"
-
+            behavior: "smooth"
         });
 
     }
@@ -1233,13 +967,13 @@ checkoutBtn.addEventListener(
 // PLACE ORDER
 // ==========================
 
-let checkoutForm =
+const checkoutForm =
     document.getElementById(
         "checkoutForm"
     );
 
 
-let checkoutStatus =
+const checkoutStatus =
     document.getElementById(
         "checkoutStatus"
     );
@@ -1249,20 +983,14 @@ checkoutForm.addEventListener(
     "submit",
     async function(event) {
 
-
-        // Prevent refresh
-
         event.preventDefault();
 
 
-        // Check cart
-
         if (
-            shoppingCart.length ===
-            0
+            shoppingCart.length === 0
         ) {
 
-            checkoutStatus.innerHTML =
+            checkoutStatus.textContent =
                 "Your cart is empty.";
 
             return;
@@ -1270,40 +998,31 @@ checkoutForm.addEventListener(
         }
 
 
-        // ==========================
-        // GET CUSTOMER INFORMATION
-        // ==========================
-
-        let customerName =
+        const customerName =
             document.getElementById(
                 "customerName"
-            ).value;
+            ).value.trim();
 
 
-        let customerEmail =
+        const customerEmail =
             document.getElementById(
                 "customerEmail"
-            ).value;
+            ).value.trim();
 
 
-        let customerPhone =
+        const customerPhone =
             document.getElementById(
                 "customerPhone"
-            ).value;
+            ).value.trim();
 
 
-        let customerAddress =
+        const customerAddress =
             document.getElementById(
                 "customerAddress"
-            ).value;
+            ).value.trim();
 
 
-        // ==========================
-        // CALCULATE TOTAL
-        // ==========================
-
-        let totalAmount =
-            0;
+        let totalAmount = 0;
 
 
         shoppingCart.forEach(
@@ -1317,29 +1036,17 @@ checkoutForm.addEventListener(
         );
 
 
-        // ==========================
-        // SHOW PROCESSING
-        // ==========================
-
-        checkoutStatus.innerHTML =
+        checkoutStatus.textContent =
             "Processing your order...";
 
-
-        // ==========================
-        // SAVE ORDER
-        // ==========================
 
         const {
             data: order,
             error: orderError
         } = await supabaseClient
-            .from(
-                "orders"
-            )
+            .from("orders")
             .insert([
-
                 {
-
                     customer_name:
                         customerName,
 
@@ -1354,54 +1061,21 @@ checkoutForm.addEventListener(
 
                     total_amount:
                         totalAmount
-
                 }
-
             ])
             .select()
             .single();
 
 
-        // ==========================
-        // CHECK ORDER ERROR
-        // ==========================
-
-        if (
-            orderError
-        ) {
-
+        if (orderError) {
 
             console.error(
-                "ORDER ERROR FULL:",
+                "ORDER ERROR:",
                 orderError
             );
 
 
-            console.error(
-                "ORDER ERROR MESSAGE:",
-                orderError.message
-            );
-
-
-            console.error(
-                "ORDER ERROR DETAILS:",
-                orderError.details
-            );
-
-
-            console.error(
-                "ORDER ERROR HINT:",
-                orderError.hint
-            );
-
-
-            console.error(
-                "ORDER ERROR CODE:",
-                orderError.code
-            );
-
-
-            checkoutStatus.innerHTML =
+            checkoutStatus.textContent =
                 "Order Error: " +
                 orderError.message;
 
@@ -1411,14 +1085,9 @@ checkoutForm.addEventListener(
         }
 
 
-        // ==========================
-        // SAVE ORDER ITEMS
-        // ==========================
-
-        let orderItems =
+        const orderItems =
             shoppingCart.map(
                 function(product) {
-
 
                     return {
 
@@ -1446,22 +1115,13 @@ checkoutForm.addEventListener(
         const {
             error: itemsError
         } = await supabaseClient
-            .from(
-                "order_items"
-            )
+            .from("order_items")
             .insert(
                 orderItems
             );
 
 
-        // ==========================
-        // CHECK ORDER ITEMS ERROR
-        // ==========================
-
-        if (
-            itemsError
-        ) {
-
+        if (itemsError) {
 
             console.error(
                 "Order items error:",
@@ -1469,7 +1129,7 @@ checkoutForm.addEventListener(
             );
 
 
-            checkoutStatus.innerHTML =
+            checkoutStatus.textContent =
                 "Order was created, but there was a problem saving the products.";
 
 
@@ -1478,28 +1138,459 @@ checkoutForm.addEventListener(
         }
 
 
-        // ==========================
-        // SUCCESS
-        // ==========================
-
-        checkoutStatus.innerHTML =
+        checkoutStatus.textContent =
             "Order placed successfully! Thank you for your purchase.";
 
 
-        // Clear cart
+        shoppingCart = [];
 
-        shoppingCart =
-            [];
-
-
-        // Update cart
 
         displayCart();
 
-
-        // Reset form
 
         checkoutForm.reset();
 
     }
 );
+
+
+// ==================================================
+// USER AUTHENTICATION
+// ==================================================
+
+const loggedOutMenu =
+    document.getElementById(
+        "loggedOutMenu"
+    );
+
+
+const loggedInMenu =
+    document.getElementById(
+        "loggedInMenu"
+    );
+
+
+const accountBtn =
+    document.getElementById(
+        "accountBtn"
+    );
+
+
+const accountName =
+    document.getElementById(
+        "accountName"
+    );
+
+
+const accountDropdown =
+    document.getElementById(
+        "accountDropdown"
+    );
+
+
+const logoutBtn =
+    document.getElementById(
+        "logoutBtn"
+    );
+
+
+// ==================================================
+// CHECK USER SESSION
+// ==================================================
+
+async function checkUserSession() {
+
+    console.log(
+        "Checking user session..."
+    );
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient.auth.getSession();
+
+
+    if (error) {
+
+        console.error(
+            "Session error:",
+            error
+        );
+
+        return;
+
+    }
+
+
+    const session =
+        data.session;
+
+
+    // ==============================================
+    // USER IS LOGGED OUT
+    // ==============================================
+
+    if (!session) {
+
+        console.log(
+            "No active user session."
+        );
+
+
+        loggedOutMenu.style.display =
+            "flex";
+
+
+        loggedInMenu.style.display =
+            "none";
+
+
+        return;
+
+    }
+
+
+    // ==============================================
+    // USER IS LOGGED IN
+    // ==============================================
+
+    const user =
+        session.user;
+
+
+    console.log(
+        "CURRENT SESSION:",
+        session
+    );
+
+
+    console.log(
+        "CURRENT USER:",
+        user
+    );
+
+
+    // ==============================================
+    // GET USER PROFILE
+    // ==============================================
+
+    const {
+        data: profile,
+        error: profileError
+    } =
+        await supabaseClient
+            .from("profiles")
+            .select("*")
+            .eq(
+                "id",
+                user.id
+            )
+            .maybeSingle();
+
+
+    // ==============================================
+    // PROFILE NOT FOUND
+    // ==============================================
+
+    if (profileError) {
+
+        console.error(
+            "Profile error:",
+            profileError
+        );
+
+    }
+
+
+    // ==============================================
+    // SHOW LOGGED-IN MENU
+    // ==============================================
+
+    loggedOutMenu.style.display =
+        "none";
+
+
+    loggedInMenu.style.display =
+        "block";
+
+
+    // ==============================================
+    // SHOW USER NAME
+    // ==============================================
+
+    if (
+        profile &&
+        profile.full_name
+    ) {
+
+        accountName.textContent =
+            profile.full_name;
+
+    }
+
+    else {
+
+        accountName.textContent =
+            user.email;
+
+    }
+
+
+    console.log(
+        "USER PROFILE:",
+        profile
+    );
+
+
+    // ==============================================
+    // USER ROLE
+    // ==============================================
+
+    const userRole =
+        profile?.role || "customer";
+
+
+    console.log(
+        "CURRENT USER ROLE:",
+        userRole
+    );
+
+
+    // ==============================================
+    // REMOVE OLD ROLE LINKS
+    // ==============================================
+
+    const oldSellerLink =
+        document.getElementById(
+            "sellerDashboardLink"
+        );
+
+
+    const oldAdminLink =
+        document.getElementById(
+            "adminDashboardLink"
+        );
+
+
+    if (oldSellerLink) {
+
+        oldSellerLink.remove();
+
+    }
+
+
+    if (oldAdminLink) {
+
+        oldAdminLink.remove();
+
+    }
+
+
+    // ==============================================
+    // SELLER ACCOUNT
+    // ==============================================
+
+    if (
+        userRole === "seller"
+    ) {
+
+        const sellerLink =
+            document.createElement(
+                "a"
+            );
+
+
+        sellerLink.id =
+            "sellerDashboardLink";
+
+
+        sellerLink.href =
+            "seller-dashboard.html";
+
+
+        sellerLink.textContent =
+            "Seller Dashboard";
+
+
+        accountDropdown.insertBefore(
+            sellerLink,
+            logoutBtn
+        );
+
+    }
+
+
+    // ==============================================
+    // ADMIN ACCOUNT
+    // ==============================================
+
+    if (
+        userRole === "admin"
+    ) {
+
+        const adminLink =
+            document.createElement(
+                "a"
+            );
+
+
+        adminLink.id =
+            "adminDashboardLink";
+
+
+        adminLink.href =
+            "admin-dashboard.html";
+
+
+        adminLink.textContent =
+            "Admin Dashboard";
+
+
+        accountDropdown.insertBefore(
+            adminLink,
+            logoutBtn
+        );
+
+    }
+
+}
+
+
+// ==================================================
+// ACCOUNT DROPDOWN
+// ==================================================
+
+accountBtn.addEventListener(
+    "click",
+    function(event) {
+
+        event.stopPropagation();
+
+
+        accountDropdown.classList.toggle(
+            "show"
+        );
+
+    }
+);
+
+
+// ==================================================
+// CLOSE ACCOUNT DROPDOWN
+// ==================================================
+
+document.addEventListener(
+    "click",
+    function(event) {
+
+        if (
+            !event.target.closest(
+                "#accountArea"
+            )
+        ) {
+
+            accountDropdown.classList.remove(
+                "show"
+            );
+
+        }
+
+    }
+);
+
+
+// ==================================================
+// LOGOUT
+// ==================================================
+
+logoutBtn.addEventListener(
+    "click",
+    async function() {
+
+        console.log(
+            "Logging out..."
+        );
+
+
+        const {
+            error
+        } =
+            await supabaseClient.auth.signOut();
+
+
+        if (error) {
+
+            console.error(
+                "Logout error:",
+                error
+            );
+
+
+            alert(
+                "Logout failed: " +
+                error.message
+            );
+
+
+            return;
+
+        }
+
+
+        console.log(
+            "Logout successful."
+        );
+
+
+        window.location.href =
+            "index.html";
+
+    }
+);
+
+
+// ==================================================
+// AUTH STATE LISTENER
+// ==================================================
+
+supabaseClient.auth.onAuthStateChange(
+    function(
+        event,
+        session
+    ) {
+
+        console.log(
+            "Auth state changed:",
+            event,
+            session
+        );
+
+
+        if (session) {
+
+            checkUserSession();
+
+        }
+
+        else {
+
+            loggedOutMenu.style.display =
+                "flex";
+
+
+            loggedInMenu.style.display =
+                "none";
+
+        }
+
+    }
+);
+
+
+// ==================================================
+// INITIAL SESSION CHECK
+// ==================================================
+
+checkUserSession();

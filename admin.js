@@ -14,22 +14,29 @@ const supabaseClient =
         SUPABASE_KEY
     );
 
-    // ==========================
-// CHECK ADMIN LOGIN
+console.log("Admin Supabase connected!");
+
+
+// ==========================
+// ADMIN ACCESS PROTECTION
 // ==========================
 
-async function checkAdminLogin() {
+async function checkAdminAccess() {
 
     const {
         data,
         error
-    } = await supabaseClient.auth.getUser();
+    } = await supabaseClient.auth.getSession();
 
 
-    if (
-        error ||
-        !data.user
-    ) {
+    // Session error
+
+    if (error) {
+
+        console.error(
+            "Session error:",
+            error
+        );
 
         window.location.href =
             "login.html";
@@ -38,12 +45,105 @@ async function checkAdminLogin() {
 
     }
 
+
+    const session =
+        data.session;
+
+
+    // ==========================
+    // NOT LOGGED IN
+    // ==========================
+
+    if (!session) {
+
+        alert(
+            "You must log in to access the admin dashboard."
+        );
+
+        window.location.href =
+            "login.html";
+
+        return;
+
+    }
+
+
+    // ==========================
+    // GET USER PROFILE
+    // ==========================
+
+    const {
+        data: profile,
+        error: profileError
+    } =
+        await supabaseClient
+            .from("profiles")
+            .select("role")
+            .eq(
+                "id",
+                session.user.id
+            )
+            .single();
+
+
+    // Profile error
+
+    if (profileError) {
+
+        console.error(
+            "Profile error:",
+            profileError
+        );
+
+        alert(
+            "Your account profile could not be found."
+        );
+
+        window.location.href =
+            "index.html";
+
+        return;
+
+    }
+
+
+    // ==========================
+    // CHECK ADMIN ROLE
+    // ==========================
+
+    if (
+        profile.role !==
+        "admin"
+    ) {
+
+        alert(
+            "Access denied. Admins only."
+        );
+
+        window.location.href =
+            "index.html";
+
+        return;
+
+    }
+
+
+    // ==========================
+    // ADMIN VERIFIED
+    // ==========================
+
+    console.log(
+        "Admin access granted."
+    );
+
+
+    // Load products only after
+    // admin is verified
+
+    loadAdminProducts();
+
 }
 
-
-// Check login
-
-checkAdminLogin();
 
 // ==========================
 // LOAD PRODUCTS
@@ -77,19 +177,37 @@ async function loadAdminProducts() {
     }
 
 
-    let productList =
+    const productList =
         document.getElementById(
             "adminProductList"
         );
 
 
-    productList.innerHTML = "";
+    productList.innerHTML =
+        "";
 
+
+    // Check if no products
+
+    if (
+        !data ||
+        data.length === 0
+    ) {
+
+        productList.innerHTML =
+            "<p>No products found.</p>";
+
+        return;
+
+    }
+
+
+    // Display products
 
     data.forEach(
         function(product) {
 
-            let productCard =
+            const productCard =
                 document.createElement(
                     "div"
                 );
@@ -122,18 +240,18 @@ async function loadAdminProducts() {
                 </p>
 
                 <button
-    class="editProductBtn"
-    data-id="${product.id}"
->
-    Edit
-</button>
+                    class="editProductBtn"
+                    data-id="${product.id}"
+                >
+                    Edit
+                </button>
 
-<button
-    class="deleteProductBtn"
-    data-id="${product.id}"
->
-    Delete
-</button>
+                <button
+                    class="deleteProductBtn"
+                    data-id="${product.id}"
+                >
+                    Delete
+                </button>
 
             `;
 
@@ -148,15 +266,11 @@ async function loadAdminProducts() {
 }
 
 
-// Load products
-loadAdminProducts();
-
-
 // ==========================
 // ADD PRODUCT
 // ==========================
 
-let addProductForm =
+const addProductForm =
     document.getElementById(
         "addProductForm"
     );
@@ -166,22 +280,18 @@ addProductForm.addEventListener(
     "submit",
     async function(event) {
 
-        // Prevent page refresh
-
         event.preventDefault();
 
 
-        // ==========================
-        // GET PRODUCT INFORMATION
-        // ==========================
+        // Get product information
 
-        let name =
+        const name =
             document.getElementById(
                 "productName"
-            ).value;
+            ).value.trim();
 
 
-        let price =
+        const price =
             Number(
                 document.getElementById(
                     "productPrice"
@@ -189,23 +299,21 @@ addProductForm.addEventListener(
             );
 
 
-        let category =
+        const category =
             document.getElementById(
                 "productCategory"
             ).value;
 
 
-        // ==========================
-        // GET IMAGE FILE
-        // ==========================
+        // Get image
 
-        let imageFile =
+        const imageFile =
             document.getElementById(
                 "productImage"
             ).files[0];
 
 
-        // Check if image was selected
+        // Check image
 
         if (!imageFile) {
 
@@ -219,9 +327,7 @@ addProductForm.addEventListener(
         }
 
 
-        // ==========================
-        // SHOW UPLOADING MESSAGE
-        // ==========================
+        // Show status
 
         document.getElementById(
             "productStatus"
@@ -233,7 +339,7 @@ addProductForm.addEventListener(
         // CREATE UNIQUE FILE NAME
         // ==========================
 
-        let fileName =
+        const fileName =
             Date.now() +
             "_" +
             imageFile.name;
@@ -245,16 +351,17 @@ addProductForm.addEventListener(
 
         const {
             error: uploadError
-        } = await supabaseClient
-            .storage
-            .from("product-images")
-            .upload(
-                fileName,
-                imageFile
-            );
+        } =
+            await supabaseClient
+                .storage
+                .from("product-images")
+                .upload(
+                    fileName,
+                    imageFile
+                );
 
 
-        // Check upload error
+        // Upload error
 
         if (uploadError) {
 
@@ -263,13 +370,11 @@ addProductForm.addEventListener(
                 uploadError
             );
 
-
             document.getElementById(
                 "productStatus"
             ).innerHTML =
                 "Image upload failed: " +
                 uploadError.message;
-
 
             return;
 
@@ -277,25 +382,26 @@ addProductForm.addEventListener(
 
 
         // ==========================
-        // GET IMAGE URL
+        // GET PUBLIC IMAGE URL
         // ==========================
 
         const {
             data: imageData
-        } = supabaseClient
-            .storage
-            .from("product-images")
-            .getPublicUrl(
-                fileName
-            );
+        } =
+            supabaseClient
+                .storage
+                .from("product-images")
+                .getPublicUrl(
+                    fileName
+                );
 
 
-        let imageUrl =
+        const imageUrl =
             imageData.publicUrl;
 
 
         // ==========================
-        // SAVE PRODUCT TO DATABASE
+        // SAVE PRODUCT
         // ==========================
 
         document.getElementById(
@@ -306,28 +412,31 @@ addProductForm.addEventListener(
 
         const {
             error
-        } = await supabaseClient
-            .from("products")
-            .insert([
+        } =
+            await supabaseClient
+                .from("products")
+                .insert([
 
-                {
+                    {
 
-                    name: name,
+                        name:
+                            name,
 
-                    price: price,
+                        price:
+                            price,
 
-                    category: category,
+                        category:
+                            category,
 
-                    image_url: imageUrl
+                        image_url:
+                            imageUrl
 
-                }
+                    }
 
-            ]);
+                ]);
 
 
-        // ==========================
-        // CHECK DATABASE ERROR
-        // ==========================
+        // Database error
 
         if (error) {
 
@@ -336,13 +445,11 @@ addProductForm.addEventListener(
                 error
             );
 
-
             document.getElementById(
-    "productStatus"
-).innerHTML =
-    "Error adding product: " +
-    error.message;
-
+                "productStatus"
+            ).innerHTML =
+                "Error adding product: " +
+                error.message;
 
             return;
 
@@ -359,9 +466,343 @@ addProductForm.addEventListener(
             "Product added successfully!";
 
 
-        // Clear form
-
         addProductForm.reset();
+
+
+        // Reload product list
+
+        loadAdminProducts();
+
+    }
+);
+
+
+// ==========================
+// EDIT PRODUCT
+// ==========================
+
+document.addEventListener(
+    "click",
+    async function(event) {
+
+        if (
+            !event.target.classList.contains(
+                "editProductBtn"
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        const productId =
+            event.target.dataset.id;
+
+
+        // Get product
+
+        const {
+            data: product,
+            error
+        } =
+            await supabaseClient
+                .from("products")
+                .select("*")
+                .eq(
+                    "id",
+                    productId
+                )
+                .single();
+
+
+        if (error) {
+
+            console.error(
+                "Error loading product:",
+                error
+            );
+
+            return;
+
+        }
+
+
+        // Fill edit form
+
+        document.getElementById(
+            "editProductId"
+        ).value =
+            product.id;
+
+
+        document.getElementById(
+            "editProductName"
+        ).value =
+            product.name;
+
+
+        document.getElementById(
+            "editProductPrice"
+        ).value =
+            product.price;
+
+
+        document.getElementById(
+            "editProductCategory"
+        ).value =
+            product.category;
+
+
+        // IMPORTANT:
+        // Do NOT set value of file input
+
+
+        // Scroll to edit section
+
+        document
+            .getElementById(
+                "editProductSection"
+            )
+            .scrollIntoView({
+
+                behavior:
+                    "smooth"
+
+            });
+
+    }
+);
+
+
+// ==========================
+// SAVE EDITED PRODUCT
+// ==========================
+
+const editProductForm =
+    document.getElementById(
+        "editProductForm"
+    );
+
+
+editProductForm.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+
+        // Get product ID
+
+        const productId =
+            document.getElementById(
+                "editProductId"
+            ).value;
+
+
+        // Get values
+
+        const name =
+            document.getElementById(
+                "editProductName"
+            ).value.trim();
+
+
+        const price =
+            Number(
+                document.getElementById(
+                    "editProductPrice"
+                ).value
+            );
+
+
+        const category =
+            document.getElementById(
+                "editProductCategory"
+            ).value;
+
+
+        // Get optional new image
+
+        const imageFile =
+            document.getElementById(
+                "editProductImage"
+            ).files[0];
+
+
+        const editStatus =
+            document.getElementById(
+                "editProductStatus"
+            );
+
+
+        editStatus.innerHTML =
+            "Updating product...";
+
+
+        // ==========================
+        // UPDATE WITHOUT IMAGE
+        // ==========================
+
+        if (!imageFile) {
+
+            const {
+                error
+            } =
+                await supabaseClient
+                    .from("products")
+                    .update({
+
+                        name:
+                            name,
+
+                        price:
+                            price,
+
+                        category:
+                            category
+
+                    })
+                    .eq(
+                        "id",
+                        productId
+                    );
+
+
+            if (error) {
+
+                console.error(
+                    "Update product error:",
+                    error
+                );
+
+                editStatus.innerHTML =
+                    "Error updating product: " +
+                    error.message;
+
+                return;
+
+            }
+
+        }
+
+
+        // ==========================
+        // UPDATE WITH NEW IMAGE
+        // ==========================
+
+        else {
+
+            editStatus.innerHTML =
+                "Uploading new image...";
+
+
+            const fileName =
+                Date.now() +
+                "_" +
+                imageFile.name;
+
+
+            const {
+                error: uploadError
+            } =
+                await supabaseClient
+                    .storage
+                    .from("product-images")
+                    .upload(
+                        fileName,
+                        imageFile
+                    );
+
+
+            if (uploadError) {
+
+                console.error(
+                    "Image upload error:",
+                    uploadError
+                );
+
+                editStatus.innerHTML =
+                    "Image upload failed: " +
+                    uploadError.message;
+
+                return;
+
+            }
+
+
+            // Get new image URL
+
+            const {
+                data: imageData
+            } =
+                supabaseClient
+                    .storage
+                    .from("product-images")
+                    .getPublicUrl(
+                        fileName
+                    );
+
+
+            const imageUrl =
+                imageData.publicUrl;
+
+
+            // Update product
+
+            const {
+                error
+            } =
+                await supabaseClient
+                    .from("products")
+                    .update({
+
+                        name:
+                            name,
+
+                        price:
+                            price,
+
+                        category:
+                            category,
+
+                        image_url:
+                            imageUrl
+
+                    })
+                    .eq(
+                        "id",
+                        productId
+                    );
+
+
+            if (error) {
+
+                console.error(
+                    "Update product error:",
+                    error
+                );
+
+                editStatus.innerHTML =
+                    "Error updating product: " +
+                    error.message;
+
+                return;
+
+            }
+
+        }
+
+
+        // ==========================
+        // SUCCESS
+        // ==========================
+
+        editStatus.innerHTML =
+            "Product updated successfully!";
+
+
+        editProductForm.reset();
 
 
         // Reload products
@@ -381,35 +822,51 @@ document.addEventListener(
     async function(event) {
 
         if (
-            event.target.classList.contains(
+            !event.target.classList.contains(
                 "deleteProductBtn"
             )
         ) {
 
-            let productId =
-                event.target.dataset.id;
+            return;
+
+        }
 
 
-            // Confirm deletion
-
-            let confirmDelete =
-                confirm(
-                    "Are you sure you want to delete this product?"
-                );
+        const productId =
+            event.target.dataset.id;
 
 
-            if (!confirmDelete) {
+        // Confirm deletion
 
-                return;
+        const confirmDelete =
+            confirm(
+                "Are you sure you want to delete this product?"
+            );
 
-            }
+
+        if (!confirmDelete) {
+
+            return;
+
+        }
 
 
-            // Delete product
+        // Show deleting
 
-            const {
-                error
-            } = await supabaseClient
+        event.target.innerHTML =
+            "Deleting...";
+
+
+        event.target.disabled =
+            true;
+
+
+        // Delete product
+
+        const {
+            error
+        } =
+            await supabaseClient
                 .from("products")
                 .delete()
                 .eq(
@@ -418,238 +875,23 @@ document.addEventListener(
                 );
 
 
-            if (error) {
-
-                console.error(
-                    "Delete product error:",
-                    error
-                );
-
-                return;
-
-            }
-
-
-            // Reload products
-
-            loadAdminProducts();
-
-        }
-
-    }
-);
-
-// ==========================
-// LOGOUT
-// ==========================
-
-let logoutBtn =
-    document.getElementById(
-        "logoutBtn"
-    );
-
-
-logoutBtn.addEventListener(
-    "click",
-    async function() {
-
-        await supabaseClient.auth.signOut();
-
-
-        window.location.href =
-            "login.html";
-
-    }
-);
-
-// ==========================
-// EDIT PRODUCT
-// ==========================
-
-document.addEventListener(
-    "click",
-    async function(event) {
-
-        if (
-            event.target.classList.contains(
-                "editProductBtn"
-            )
-        ) {
-
-            // Get product ID
-
-            let productId =
-                event.target.dataset.id;
-
-
-            // Get product from Supabase
-
-            const {
-                data: product,
-                error
-            } = await supabaseClient
-                .from("products")
-                .select("*")
-                .eq(
-                    "id",
-                    productId
-                )
-                .single();
-
-
-            // Check error
-
-            if (error) {
-
-                console.error(
-                    "Error loading product:",
-                    error
-                );
-
-                return;
-
-            }
-
-
-            // Fill edit form
-
-            document.getElementById(
-                "editProductId"
-            ).value =
-                product.id;
-
-
-            document.getElementById(
-                "editProductName"
-            ).value =
-                product.name;
-
-
-            document.getElementById(
-                "editProductPrice"
-            ).value =
-                product.price;
-
-
-            document.getElementById(
-                "editProductCategory"
-            ).value =
-                product.category;
-
-
-            document.getElementById(
-                "editProductImage"
-            ).value =
-                product.image_url;
-
-
-            // Scroll to edit form
-
-            document
-                .getElementById(
-                    "editProductSection"
-                )
-                .scrollIntoView({
-
-                    behavior: "smooth"
-
-                });
-
-        }
-
-    }
-);
-
-// ==========================
-// SAVE EDITED PRODUCT
-// ==========================
-
-let editProductForm =
-    document.getElementById(
-        "editProductForm"
-    );
-
-
-editProductForm.addEventListener(
-    "submit",
-    async function(event) {
-
-        // Stop page refresh
-
-        event.preventDefault();
-
-
-        // Get values
-
-        let productId =
-            document.getElementById(
-                "editProductId"
-            ).value;
-
-
-        let name =
-            document.getElementById(
-                "editProductName"
-            ).value;
-
-
-        let price =
-            Number(
-                document.getElementById(
-                    "editProductPrice"
-                ).value
-            );
-
-
-        let category =
-            document.getElementById(
-                "editProductCategory"
-            ).value;
-
-
-        let imageUrl =
-            document.getElementById(
-                "editProductImage"
-            ).value;
-
-
-        // Update product
-
-        const {
-            error
-        } = await supabaseClient
-            .from("products")
-            .update({
-
-                name: name,
-
-                price: price,
-
-                category: category,
-
-                image_url: imageUrl
-
-            })
-            .eq(
-                "id",
-                productId
-            );
-
-
-        // Check error
-
         if (error) {
 
             console.error(
-                "Update product error:",
+                "Delete product error:",
                 error
             );
 
+            alert(
+                "Error deleting product: " +
+                error.message
+            );
 
-            document.getElementById(
-                "editProductStatus"
-            ).innerHTML =
-                "Error updating product.";
+            event.target.innerHTML =
+                "Delete";
+
+            event.target.disabled =
+                false;
 
             return;
 
@@ -658,29 +900,17 @@ editProductForm.addEventListener(
 
         // Success
 
-        document.getElementById(
-            "editProductStatus"
-        ).innerHTML =
-            "Product updated successfully!";
-
-
-        // Clear form
-
-        editProductForm.reset();
-
-
-        // Reload products
-
         loadAdminProducts();
 
     }
 );
 
+
 // ==========================
 // CANCEL EDIT
 // ==========================
 
-let cancelEditBtn =
+const cancelEditBtn =
     document.getElementById(
         "cancelEditBtn"
     );
@@ -694,7 +924,482 @@ cancelEditBtn.addEventListener(
 
         document.getElementById(
             "editProductStatus"
-        ).innerHTML = "";
+        ).innerHTML =
+            "";
+
+    }
+);
+
+
+// ==========================
+// LOGOUT
+// ==========================
+
+const logoutBtn =
+    document.getElementById(
+        "logoutBtn"
+    );
+
+
+logoutBtn.addEventListener(
+    "click",
+    async function() {
+
+        const {
+            error
+        } =
+            await supabaseClient.auth.signOut();
+
+
+        if (error) {
+
+            console.error(
+                "Logout error:",
+                error
+            );
+
+            alert(
+                "Logout failed: " +
+                error.message
+            );
+
+            return;
+
+        }
+
+
+        window.location.href =
+            "login.html";
+
+    }
+);
+
+
+// ==========================
+// START ADMIN DASHBOARD
+// ==========================
+
+checkAdminAccess();
+
+// ==========================
+// LOAD CUSTOMER ORDERS
+// ==========================
+
+async function loadAdminOrders() {
+
+    const orderList =
+        document.getElementById(
+            "adminOrderList"
+        );
+
+
+    // Show loading
+
+    orderList.innerHTML =
+        "<p>Loading orders...</p>";
+
+
+    // ==========================
+    // GET ORDERS
+    // ==========================
+
+    const {
+        data: orders,
+        error: ordersError
+    } =
+        await supabaseClient
+            .from("orders")
+            .select("*")
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+    // Check error
+
+    if (ordersError) {
+
+        console.error(
+            "Error loading orders:",
+            ordersError
+        );
+
+        orderList.innerHTML =
+            "<p>Error loading orders: " +
+            ordersError.message +
+            "</p>";
+
+        return;
+
+    }
+
+
+    // ==========================
+    // CHECK EMPTY ORDERS
+    // ==========================
+
+    if (
+        !orders ||
+        orders.length === 0
+    ) {
+
+        orderList.innerHTML =
+            "<p>No customer orders yet.</p>";
+
+        return;
+
+    }
+
+
+    // Clear order list
+
+    orderList.innerHTML =
+        "";
+
+
+    // ==========================
+    // LOAD EACH ORDER
+    // ==========================
+
+    for (
+        const order of orders
+    ) {
+
+
+        // ==========================
+        // GET ORDER ITEMS
+        // ==========================
+
+        const {
+            data: orderItems,
+            error: itemsError
+        } =
+            await supabaseClient
+                .from("order_items")
+                .select("*")
+                .eq(
+                    "order_id",
+                    order.id
+                );
+
+
+        // Check items error
+
+        if (itemsError) {
+
+            console.error(
+                "Error loading order items:",
+                itemsError
+            );
+
+            continue;
+
+        }
+
+
+        // ==========================
+        // CREATE ORDER CARD
+        // ==========================
+
+        const orderCard =
+            document.createElement(
+                "div"
+            );
+
+
+        orderCard.className =
+            "admin-order-card";
+
+
+        // ==========================
+        // FORMAT DATE
+        // ==========================
+
+        let orderDate =
+            new Date(
+                order.created_at
+            ).toLocaleString();
+
+
+        // ==========================
+        // ORDER ITEMS HTML
+        // ==========================
+
+        let itemsHTML =
+            "";
+
+
+        orderItems.forEach(
+            function(item) {
+
+                itemsHTML += `
+
+                    <div class="admin-order-item">
+
+                        <strong>
+                            ${item.product_name}
+                        </strong>
+
+                        <span>
+                            Quantity:
+                            ${item.quantity}
+                        </span>
+
+                        <span>
+                            ₱${Number(
+                                item.price
+                            ).toLocaleString()}
+                        </span>
+
+                    </div>
+
+                `;
+
+            }
+        );
+
+
+        // ==========================
+        // ORDER CARD HTML
+        // ==========================
+
+        orderCard.innerHTML = `
+
+            <div class="admin-order-header">
+
+                <h3>
+                    Order #${order.id}
+                </h3>
+
+                <p>
+                    Date:
+                    ${orderDate}
+                </p>
+
+            </div>
+
+
+            <div class="admin-customer-info">
+
+                <h4>
+                    Customer Information
+                </h4>
+
+                <p>
+                    <strong>Name:</strong>
+                    ${order.customer_name}
+                </p>
+
+                <p>
+                    <strong>Email:</strong>
+                    ${order.customer_email}
+                </p>
+
+                <p>
+                    <strong>Phone:</strong>
+                    ${order.customer_phone}
+                </p>
+
+                <p>
+                    <strong>Address:</strong>
+                    ${order.customer_address}
+                </p>
+
+            </div>
+
+
+            <div class="admin-order-products">
+
+                <h4>
+                    Ordered Products
+                </h4>
+
+                ${itemsHTML}
+
+            </div>
+
+
+           <div class="admin-order-total">
+
+    <strong>
+        Total:
+    </strong>
+
+    ₱${Number(
+        order.total_amount
+    ).toLocaleString()}
+
+</div>
+
+
+<!-- ==========================
+     ORDER STATUS
+========================== -->
+
+<div class="admin-order-status">
+
+    <strong>
+        Order Status:
+    </strong>
+
+    <select
+        class="orderStatusSelect"
+        data-order-id="${order.id}"
+    >
+
+        <option
+            value="Pending"
+            ${order.status === "Pending" ? "selected" : ""}
+        >
+            Pending
+        </option>
+
+        <option
+            value="Processing"
+            ${order.status === "Processing" ? "selected" : ""}
+        >
+            Processing
+        </option>
+
+        <option
+            value="Shipped"
+            ${order.status === "Shipped" ? "selected" : ""}
+        >
+            Shipped
+        </option>
+
+        <option
+            value="Completed"
+            ${order.status === "Completed" ? "selected" : ""}
+        >
+            Completed
+        </option>
+
+        <option
+            value="Cancelled"
+            ${order.status === "Cancelled" ? "selected" : ""}
+        >
+            Cancelled
+        </option>
+
+    </select>
+
+</div>
+
+        `;
+
+
+        // Add order to dashboard
+
+        orderList.appendChild(
+            orderCard
+        );
+
+    }
+
+}
+
+
+// ==========================
+// LOAD ORDERS
+// ==========================
+
+loadAdminOrders();
+
+// ==========================
+// UPDATE ORDER STATUS
+// ==========================
+
+document.addEventListener(
+    "change",
+    async function(event) {
+
+        // Check if order status was changed
+
+        if (
+            !event.target.classList.contains(
+                "orderStatusSelect"
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        // Get order ID
+
+        const orderId =
+            event.target.dataset.orderId;
+
+
+        // Get new status
+
+        const newStatus =
+            event.target.value;
+
+
+        // Show updating status
+
+        event.target.disabled =
+            true;
+
+
+        // Update Supabase
+
+        const {
+            error
+        } =
+            await supabaseClient
+                .from("orders")
+                .update({
+
+                    status:
+                        newStatus
+
+                })
+                .eq(
+                    "id",
+                    orderId
+                );
+
+
+        // Check error
+
+        if (error) {
+
+            console.error(
+                "Order status update error:",
+                error
+            );
+
+            alert(
+                "Failed to update order status: " +
+                error.message
+            );
+
+            event.target.disabled =
+                false;
+
+            return;
+
+        }
+
+
+        // Success
+
+        console.log(
+            "Order status updated:",
+            orderId,
+            newStatus
+        );
+
+
+        event.target.disabled =
+            false;
 
     }
 );
