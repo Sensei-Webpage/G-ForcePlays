@@ -53,6 +53,13 @@ const cartSection =
 
 async function loadProducts() {
 
+    const productContainer =
+        document.getElementById("productContainer");
+
+    productContainer.innerHTML =
+        "<p>Loading products...</p>";
+
+
     const {
         data,
         error
@@ -71,8 +78,11 @@ async function loadProducts() {
             error
         );
 
-        return;
+        productContainer.innerHTML =
+            `<p>Unable to load products.</p>
+             <p>${error.message}</p>`;
 
+        return;
     }
 
 
@@ -80,12 +90,6 @@ async function loadProducts() {
         "Products loaded:",
         data
     );
-
-
-    const productContainer =
-        document.getElementById(
-            "productContainer"
-        );
 
 
     productContainer.innerHTML = "";
@@ -100,7 +104,6 @@ async function loadProducts() {
             "<p>No products available.</p>";
 
         return;
-
     }
 
 
@@ -159,6 +162,8 @@ async function loadProducts() {
 }
 
 
+// LOAD PRODUCTS
+
 loadProducts();
 
 
@@ -191,9 +196,7 @@ document.addEventListener(
                 "buyBtn"
             )
         ) {
-
             return;
-
         }
 
 
@@ -247,17 +250,13 @@ document.addEventListener(
 
             shoppingCart.push({
 
-                id:
-                    productId,
+                id: productId,
 
-                name:
-                    productName,
+                name: productName,
 
-                price:
-                    productPrice,
+                price: productPrice,
 
-                quantity:
-                    1
+                quantity: 1
 
             });
 
@@ -278,11 +277,17 @@ function displayCart() {
 
     let totalQuantity = 0;
 
+    let totalPrice = 0;
+
 
     shoppingCart.forEach(
         function(product) {
 
             totalQuantity +=
+                product.quantity;
+
+            totalPrice +=
+                product.price *
                 product.quantity;
 
         }
@@ -293,6 +298,10 @@ function displayCart() {
         totalQuantity;
 
 
+    cartTotal.textContent =
+        totalPrice.toLocaleString();
+
+
     if (
         shoppingCart.length === 0
     ) {
@@ -300,19 +309,11 @@ function displayCart() {
         cartItems.innerHTML =
             "<p>Your cart is empty.</p>";
 
-        cartTotal.textContent =
-            "0";
-
         return;
-
     }
 
 
-    cartItems.innerHTML =
-        "";
-
-
-    let totalPrice = 0;
+    cartItems.innerHTML = "";
 
 
     shoppingCart.forEach(
@@ -324,10 +325,6 @@ function displayCart() {
             const productTotal =
                 product.price *
                 product.quantity;
-
-
-            totalPrice +=
-                productTotal;
 
 
             const item =
@@ -350,7 +347,9 @@ function displayCart() {
                     ₱${productTotal.toLocaleString()}
                 </p>
 
-                <div class="quantity-controls">
+                <div
+                    class="quantity-controls"
+                >
 
                     <button
                         class="quantityBtn"
@@ -391,12 +390,10 @@ function displayCart() {
         }
     );
 
-
-    cartTotal.textContent =
-        totalPrice.toLocaleString();
-
 }
 
+
+// INITIAL CART
 
 displayCart();
 
@@ -423,6 +420,13 @@ document.addEventListener(
 
             const action =
                 event.target.dataset.action;
+
+
+            if (
+                !shoppingCart[index]
+            ) {
+                return;
+            }
 
 
             if (
@@ -543,7 +547,7 @@ shopButton.addEventListener(
 
 
 // ==========================
-// SEARCH + CATEGORY FILTER
+// SEARCH + CATEGORY
 // ==========================
 
 const searchBox =
@@ -604,25 +608,15 @@ function filterProducts() {
 
             const matchesCategory =
                 selectedCategory === "All" ||
-                productCategory === selectedCategory;
+                productCategory ===
+                    selectedCategory;
 
 
-            if (
+            card.style.display =
                 matchesSearch &&
                 matchesCategory
-            ) {
-
-                card.style.display =
-                    "block";
-
-            }
-
-            else {
-
-                card.style.display =
-                    "none";
-
-            }
+                    ? "block"
+                    : "none";
 
         }
     );
@@ -700,7 +694,8 @@ const prevButton =
     );
 
 
-let currentSlide = 0;
+let currentSlide =
+    0;
 
 
 function showSlide(index) {
@@ -745,7 +740,6 @@ nextButton.addEventListener(
 
         currentSlide++;
 
-
         if (
             currentSlide >=
             slides.length
@@ -754,7 +748,6 @@ nextButton.addEventListener(
             currentSlide = 0;
 
         }
-
 
         showSlide(
             currentSlide
@@ -770,7 +763,6 @@ prevButton.addEventListener(
 
         currentSlide--;
 
-
         if (
             currentSlide < 0
         ) {
@@ -779,7 +771,6 @@ prevButton.addEventListener(
                 slides.length - 1;
 
         }
-
 
         showSlide(
             currentSlide
@@ -802,7 +793,6 @@ dots.forEach(
                 currentSlide =
                     index;
 
-
                 showSlide(
                     currentSlide
                 );
@@ -819,7 +809,6 @@ setInterval(
 
         currentSlide++;
 
-
         if (
             currentSlide >=
             slides.length
@@ -828,7 +817,6 @@ setInterval(
             currentSlide = 0;
 
         }
-
 
         showSlide(
             currentSlide
@@ -889,11 +877,13 @@ contactForm.addEventListener(
         } = await supabaseClient
             .from("contacts")
             .insert([
+
                 {
                     name: name,
                     email: email,
                     message: message
                 }
+
             ]);
 
 
@@ -908,9 +898,7 @@ contactForm.addEventListener(
             contactStatus.textContent =
                 "Something went wrong. Please try again.";
 
-
             return;
-
         }
 
 
@@ -925,7 +913,7 @@ contactForm.addEventListener(
 
 
 // ==========================
-// CHECKOUT FORM
+// CHECKOUT
 // ==========================
 
 const checkoutFormContainer =
@@ -947,7 +935,6 @@ checkoutBtn.addEventListener(
             );
 
             return;
-
         }
 
 
@@ -994,7 +981,6 @@ checkoutForm.addEventListener(
                 "Your cart is empty.";
 
             return;
-
         }
 
 
@@ -1046,6 +1032,7 @@ checkoutForm.addEventListener(
         } = await supabaseClient
             .from("orders")
             .insert([
+
                 {
                     customer_name:
                         customerName,
@@ -1062,6 +1049,7 @@ checkoutForm.addEventListener(
                     total_amount:
                         totalAmount
                 }
+
             ])
             .select()
             .single();
@@ -1079,9 +1067,7 @@ checkoutForm.addEventListener(
                 "Order Error: " +
                 orderError.message;
 
-
             return;
-
         }
 
 
@@ -1132,9 +1118,7 @@ checkoutForm.addEventListener(
             checkoutStatus.textContent =
                 "Order was created, but there was a problem saving the products.";
 
-
             return;
-
         }
 
 
@@ -1154,9 +1138,9 @@ checkoutForm.addEventListener(
 );
 
 
-// ==================================================
+// ==========================
 // USER AUTHENTICATION
-// ==================================================
+// ==========================
 
 const loggedOutMenu =
     document.getElementById(
@@ -1194,14 +1178,43 @@ const logoutBtn =
     );
 
 
-// ==================================================
+// ==========================
+// UPDATE ACCOUNT UI
+// ==========================
+
+function showLoggedOut() {
+
+    loggedOutMenu.style.display =
+        "flex";
+
+    loggedInMenu.style.display =
+        "none";
+
+}
+
+
+function showLoggedIn(name) {
+
+    loggedOutMenu.style.display =
+        "none";
+
+    loggedInMenu.style.display =
+        "block";
+
+    accountName.textContent =
+        name || "Account";
+
+}
+
+
+// ==========================
 // CHECK USER SESSION
-// ==================================================
+// ==========================
 
 async function checkUserSession() {
 
     console.log(
-        "Checking user session..."
+        "Checking Supabase session..."
     );
 
 
@@ -1219,8 +1232,9 @@ async function checkUserSession() {
             error
         );
 
-        return;
+        showLoggedOut();
 
+        return;
     }
 
 
@@ -1228,53 +1242,42 @@ async function checkUserSession() {
         data.session;
 
 
-    // ==============================================
-    // USER IS LOGGED OUT
-    // ==============================================
-
     if (!session) {
 
         console.log(
-            "No active user session."
+            "No user logged in."
         );
 
-
-        loggedOutMenu.style.display =
-            "flex";
-
-
-        loggedInMenu.style.display =
-            "none";
-
+        showLoggedOut();
 
         return;
-
     }
 
-
-    // ==============================================
-    // USER IS LOGGED IN
-    // ==============================================
 
     const user =
         session.user;
 
 
     console.log(
-        "CURRENT SESSION:",
+        "Current session:",
         session
     );
 
 
     console.log(
-        "CURRENT USER:",
+        "Current user:",
         user
     );
 
 
-    // ==============================================
-    // GET USER PROFILE
-    // ==============================================
+    // SHOW ACCOUNT IMMEDIATELY
+
+    showLoggedIn(
+        user.email
+    );
+
+
+    // GET PROFILE
 
     const {
         data: profile,
@@ -1290,10 +1293,6 @@ async function checkUserSession() {
             .maybeSingle();
 
 
-    // ==============================================
-    // PROFILE NOT FOUND
-    // ==============================================
-
     if (profileError) {
 
         console.error(
@@ -1301,24 +1300,15 @@ async function checkUserSession() {
             profileError
         );
 
+        // Keep account visible
+
+        showLoggedIn(
+            user.email
+        );
+
+        return;
     }
 
-
-    // ==============================================
-    // SHOW LOGGED-IN MENU
-    // ==============================================
-
-    loggedOutMenu.style.display =
-        "none";
-
-
-    loggedInMenu.style.display =
-        "block";
-
-
-    // ==============================================
-    // SHOW USER NAME
-    // ==============================================
 
     if (
         profile &&
@@ -1330,144 +1320,24 @@ async function checkUserSession() {
 
     }
 
-    else {
-
-        accountName.textContent =
-            user.email;
-
-    }
-
 
     console.log(
-        "USER PROFILE:",
-        profile
+        "Current user role:",
+        profile?.role
     );
-
-
-    // ==============================================
-    // USER ROLE
-    // ==============================================
-
-    const userRole =
-        profile?.role || "customer";
-
-
-    console.log(
-        "CURRENT USER ROLE:",
-        userRole
-    );
-
-
-    // ==============================================
-    // REMOVE OLD ROLE LINKS
-    // ==============================================
-
-    const oldSellerLink =
-        document.getElementById(
-            "sellerDashboardLink"
-        );
-
-
-    const oldAdminLink =
-        document.getElementById(
-            "adminDashboardLink"
-        );
-
-
-    if (oldSellerLink) {
-
-        oldSellerLink.remove();
-
-    }
-
-
-    if (oldAdminLink) {
-
-        oldAdminLink.remove();
-
-    }
-
-
-    // ==============================================
-    // SELLER ACCOUNT
-    // ==============================================
-
-    if (
-        userRole === "seller"
-    ) {
-
-        const sellerLink =
-            document.createElement(
-                "a"
-            );
-
-
-        sellerLink.id =
-            "sellerDashboardLink";
-
-
-        sellerLink.href =
-            "seller-dashboard.html";
-
-
-        sellerLink.textContent =
-            "Seller Dashboard";
-
-
-        accountDropdown.insertBefore(
-            sellerLink,
-            logoutBtn
-        );
-
-    }
-
-
-    // ==============================================
-    // ADMIN ACCOUNT
-    // ==============================================
-
-    if (
-        userRole === "admin"
-    ) {
-
-        const adminLink =
-            document.createElement(
-                "a"
-            );
-
-
-        adminLink.id =
-            "adminDashboardLink";
-
-
-        adminLink.href =
-            "admin-dashboard.html";
-
-
-        adminLink.textContent =
-            "Admin Dashboard";
-
-
-        accountDropdown.insertBefore(
-            adminLink,
-            logoutBtn
-        );
-
-    }
 
 }
 
 
-// ==================================================
+// ==========================
 // ACCOUNT DROPDOWN
-// ==================================================
+// ==========================
 
 accountBtn.addEventListener(
     "click",
     function(event) {
 
         event.stopPropagation();
-
 
         accountDropdown.classList.toggle(
             "show"
@@ -1477,9 +1347,7 @@ accountBtn.addEventListener(
 );
 
 
-// ==================================================
-// CLOSE ACCOUNT DROPDOWN
-// ==================================================
+// CLOSE DROPDOWN
 
 document.addEventListener(
     "click",
@@ -1501,9 +1369,9 @@ document.addEventListener(
 );
 
 
-// ==================================================
+// ==========================
 // LOGOUT
-// ==================================================
+// ==========================
 
 logoutBtn.addEventListener(
     "click",
@@ -1527,21 +1395,16 @@ logoutBtn.addEventListener(
                 error
             );
 
-
             alert(
                 "Logout failed: " +
                 error.message
             );
 
-
             return;
-
         }
 
 
-        console.log(
-            "Logout successful."
-        );
+        showLoggedOut();
 
 
         window.location.href =
@@ -1551,9 +1414,9 @@ logoutBtn.addEventListener(
 );
 
 
-// ==================================================
+// ==========================
 // AUTH STATE LISTENER
-// ==================================================
+// ==========================
 
 supabaseClient.auth.onAuthStateChange(
     function(
@@ -1570,18 +1433,27 @@ supabaseClient.auth.onAuthStateChange(
 
         if (session) {
 
-            checkUserSession();
+            showLoggedIn(
+                session.user.email
+            );
+
+            // Delay profile request
+            // to avoid auth lock issues
+
+            setTimeout(
+                function() {
+
+                    checkUserSession();
+
+                },
+                100
+            );
 
         }
 
         else {
 
-            loggedOutMenu.style.display =
-                "flex";
-
-
-            loggedInMenu.style.display =
-                "none";
+            showLoggedOut();
 
         }
 
@@ -1589,8 +1461,8 @@ supabaseClient.auth.onAuthStateChange(
 );
 
 
-// ==================================================
+// ==========================
 // INITIAL SESSION CHECK
-// ==================================================
+// ==========================
 
 checkUserSession();
