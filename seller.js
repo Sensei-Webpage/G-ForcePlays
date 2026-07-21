@@ -1,6 +1,6 @@
-// ==========================
+// ==================================================
 // SUPABASE CONNECTION
-// ==========================
+// ==================================================
 
 const SUPABASE_URL =
     "https://ijiiccptmcdtnxvrfusr.supabase.co";
@@ -14,40 +14,97 @@ const supabaseClient =
         SUPABASE_KEY
     );
 
-console.log("Seller Supabase connected!");
+console.log(
+    "Seller Supabase connected!"
+);
 
 
-// ==========================
-// GET ELEMENTS
-// ==========================
+// ==================================================
+// DOM ELEMENTS
+// ==================================================
+
+const sellerWelcomeText =
+    document.getElementById(
+        "sellerWelcomeText"
+    );
+
+const addProductForm =
+    document.getElementById(
+        "addProductForm"
+    );
+
+const productStatus =
+    document.getElementById(
+        "productStatus"
+    );
+
+const productsStatus =
+    document.getElementById(
+        "productsStatus"
+    );
+
+const sellerProductList =
+    document.getElementById(
+        "sellerProductList"
+    );
 
 const sellerStatus =
-    document.getElementById("sellerStatus");
+    document.getElementById(
+        "sellerStatus"
+    );
 
 const sellerOrderList =
-    document.getElementById("sellerOrderList");
+    document.getElementById(
+        "sellerOrderList"
+    );
 
 const logoutBtn =
-    document.getElementById("logoutBtn");
+    document.getElementById(
+        "logoutBtn"
+    );
 
 
-// ==========================
+// ==================================================
+// CURRENT USER
+// ==================================================
+
+let currentUser = null;
+
+
+// ==================================================
+// CURRENT USER ROLE
+// ==================================================
+
+let currentUserRole = null;
+
+
+// ==================================================
 // CHECK SELLER ACCESS
-// ==========================
+// ==================================================
 
 async function checkSellerAccess() {
 
     try {
 
-        // Get current session
+        console.log(
+            "Checking seller dashboard access..."
+        );
+
+
+        // ==================================================
+        // GET SESSION
+        // ==================================================
 
         const {
             data,
             error
-        } = await supabaseClient.auth.getSession();
+        } =
+            await supabaseClient.auth.getSession();
 
 
-        // Check session error
+        // ==================================================
+        // SESSION ERROR
+        // ==================================================
 
         if (error) {
 
@@ -56,21 +113,25 @@ async function checkSellerAccess() {
                 error
             );
 
-            window.location.href = "login.html";
+            window.location.href =
+                "login.html";
 
             return false;
+
         }
 
 
-        // Get session
+        // ==================================================
+        // GET SESSION
+        // ==================================================
 
         const session =
             data.session;
 
 
-        // ==========================
+        // ==================================================
         // NOT LOGGED IN
-        // ==========================
+        // ==================================================
 
         if (!session) {
 
@@ -78,37 +139,53 @@ async function checkSellerAccess() {
                 "You must log in to access the seller dashboard."
             );
 
+
             window.location.href =
                 "login.html";
 
+
             return false;
+
         }
+
+
+        // ==================================================
+        // SAVE CURRENT USER
+        // ==================================================
+
+        currentUser =
+            session.user;
 
 
         console.log(
             "Logged in user:",
-            session.user.email
+            currentUser.email
         );
 
 
-        // ==========================
-        // GET USER PROFILE
-        // ==========================
+        // ==================================================
+        // GET PROFILE
+        // ==================================================
 
         const {
             data: profile,
             error: profileError
-        } = await supabaseClient
-            .from("profiles")
-            .select("role")
-            .eq(
-                "id",
-                session.user.id
-            )
-            .single();
+        } =
+            await supabaseClient
+                .from("profiles")
+                .select(
+                    "full_name, role"
+                )
+                .eq(
+                    "id",
+                    currentUser.id
+                )
+                .maybeSingle();
 
 
-        // Check profile error
+        // ==================================================
+        // PROFILE ERROR
+        // ==================================================
 
         if (profileError) {
 
@@ -117,104 +194,819 @@ async function checkSellerAccess() {
                 profileError
             );
 
+
             alert(
                 "Unable to verify your account role."
             );
 
+
             window.location.href =
                 "index.html";
 
+
             return false;
+
         }
 
 
+        // ==================================================
+        // NO PROFILE
+        // ==================================================
+
+        if (!profile) {
+
+            alert(
+                "Your account profile could not be found."
+            );
+
+
+            window.location.href =
+                "index.html";
+
+
+            return false;
+
+        }
+
+
+        // ==================================================
+        // GET ROLE
+        // ==================================================
+
+        currentUserRole =
+            String(
+                profile.role ||
+                ""
+            )
+            .toLowerCase()
+            .trim();
+
+
         console.log(
-            "User role:",
-            profile.role
+            "Current user role:",
+            currentUserRole
         );
 
 
-        // ==========================
-        // CHECK SELLER ROLE
-        // ==========================
+        // ==================================================
+        // CHECK SELLER OR ADMIN
+        // ==================================================
 
         if (
-            profile.role !== "seller"
+            currentUserRole !== "seller" &&
+            currentUserRole !== "admin"
         ) {
 
             alert(
-                "Access denied. Sellers only."
+                "Access denied. Sellers and admins only."
             );
+
 
             window.location.href =
                 "index.html";
 
+
             return false;
+
         }
 
 
-        // ==========================
-        // SELLER ACCESS GRANTED
-        // ==========================
+        // ==================================================
+        // DISPLAY WELCOME MESSAGE
+        // ==================================================
+
+        if (sellerWelcomeText) {
+
+            sellerWelcomeText.textContent =
+                "Welcome, " +
+                (
+                    profile.full_name ||
+                    currentUser.email
+                ) +
+                "!";
+
+        }
+
 
         console.log(
-            "Seller access granted."
+            "Dashboard access granted."
         );
 
+
         return true;
+
 
     } catch (error) {
 
         console.error(
-            "Seller access error:",
+            "Access check error:",
             error
         );
+
 
         window.location.href =
             "login.html";
 
+
         return false;
+
     }
 
 }
 
 
-// ==========================
-// LOAD CUSTOMER ORDERS
-// ==========================
+// ==================================================
+// ADD NEW PRODUCT
+// ==================================================
 
-async function loadSellerOrders() {
+if (addProductForm) {
 
-    sellerStatus.innerHTML =
-        "Loading customer orders...";
+    addProductForm.addEventListener(
+        "submit",
+        async function(event) {
 
-    sellerOrderList.innerHTML =
+            event.preventDefault();
+
+
+            // ==================================================
+            // CHECK USER
+            // ==================================================
+
+            if (!currentUser) {
+
+                alert(
+                    "You must be logged in."
+                );
+
+                return;
+
+            }
+
+
+            // ==================================================
+            // GET FORM VALUES
+            // ==================================================
+
+            const productName =
+                document.getElementById(
+                    "productName"
+                ).value.trim();
+
+
+            const productCategory =
+                document.getElementById(
+                    "productCategory"
+                ).value;
+
+
+            const productPrice =
+                Number(
+                    document.getElementById(
+                        "productPrice"
+                    ).value
+                );
+
+
+            const productStock =
+                Number(
+                    document.getElementById(
+                        "productStock"
+                    ).value
+                );
+
+
+            const productImage =
+                document.getElementById(
+                    "productImage"
+                ).value.trim();
+
+
+            // ==================================================
+            // VALIDATION
+            // ==================================================
+
+            if (
+                !productName ||
+                !productCategory ||
+                !productImage
+            ) {
+
+                if (productStatus) {
+
+                    productStatus.textContent =
+                        "Please complete all fields.";
+
+                }
+
+                return;
+
+            }
+
+
+            if (
+                productPrice < 0 ||
+                productStock < 0
+            ) {
+
+                if (productStatus) {
+
+                    productStatus.textContent =
+                        "Price and stock cannot be negative.";
+
+                }
+
+                return;
+
+            }
+
+
+            // ==================================================
+            // SHOW STATUS
+            // ==================================================
+
+            if (productStatus) {
+
+                productStatus.textContent =
+                    "Adding product...";
+
+            }
+
+
+            // ==================================================
+            // INSERT PRODUCT
+            // ==================================================
+
+            const {
+                error
+            } =
+                await supabaseClient
+                    .from("products")
+                    .insert([
+
+                        {
+
+                            name:
+                                productName,
+
+                            category:
+                                productCategory,
+
+                            price:
+                                productPrice,
+
+                            stock:
+                                productStock,
+
+                            image_url:
+                                productImage,
+
+                            seller_id:
+                                currentUser.id
+
+                        }
+
+                    ]);
+
+
+            // ==================================================
+            // CHECK ERROR
+            // ==================================================
+
+            if (error) {
+
+                console.error(
+                    "Product insert error:",
+                    error
+                );
+
+
+                if (productStatus) {
+
+                    productStatus.textContent =
+                        "Failed to add product: " +
+                        error.message;
+
+                }
+
+
+                return;
+
+            }
+
+
+            // ==================================================
+            // SUCCESS
+            // ==================================================
+
+            console.log(
+                "Product added successfully!"
+            );
+
+
+            if (productStatus) {
+
+                productStatus.textContent =
+                    "Product added successfully!";
+
+            }
+
+
+            // ==================================================
+            // RESET FORM
+            // ==================================================
+
+            addProductForm.reset();
+
+
+            // ==================================================
+            // RELOAD PRODUCTS
+            // ==================================================
+
+            await loadSellerProducts();
+
+        }
+    );
+
+}
+
+
+// ==================================================
+// LOAD SELLER PRODUCTS
+// ==================================================
+
+async function loadSellerProducts() {
+
+    if (!sellerProductList) {
+
+        return;
+
+    }
+
+
+    if (productsStatus) {
+
+        productsStatus.textContent =
+            "Loading your products...";
+
+    }
+
+
+    sellerProductList.innerHTML =
         "";
 
 
     try {
 
-        // ==========================
-        // GET ORDERS
-        // ==========================
+        // ==================================================
+        // BUILD QUERY
+        // ==================================================
+
+        let query =
+            supabaseClient
+                .from("products")
+                .select("*")
+                .order(
+                    "id",
+                    {
+                        ascending: false
+                    }
+                );
+
+
+        // ==================================================
+        // SELLER ONLY
+        // ==================================================
+
+        if (
+            currentUserRole ===
+            "seller"
+        ) {
+
+            query =
+                query.eq(
+                    "seller_id",
+                    currentUser.id
+                );
+
+        }
+
+
+        // ==================================================
+        // EXECUTE QUERY
+        // ==================================================
+
+        const {
+            data: products,
+            error
+        } =
+            await query;
+
+
+        // ==================================================
+        // ERROR
+        // ==================================================
+
+        if (error) {
+
+            console.error(
+                "Product loading error:",
+                error
+            );
+
+
+            if (productsStatus) {
+
+                productsStatus.textContent =
+                    "Error loading products: " +
+                    error.message;
+
+            }
+
+
+            return;
+
+        }
+
+
+        // ==================================================
+        // NO PRODUCTS
+        // ==================================================
+
+        if (
+            !products ||
+            products.length === 0
+        ) {
+
+            if (productsStatus) {
+
+                productsStatus.textContent =
+                    "You have no products yet.";
+
+            }
+
+
+            sellerProductList.innerHTML = `
+
+                <div class="empty-products">
+
+                    <p>
+                        No products found.
+                    </p>
+
+                </div>
+
+            `;
+
+
+            return;
+
+        }
+
+
+        // ==================================================
+        // PRODUCTS FOUND
+        // ==================================================
+
+        if (productsStatus) {
+
+            productsStatus.textContent =
+                `Found ${products.length} product(s).`;
+
+        }
+
+
+        // ==================================================
+        // DISPLAY PRODUCTS
+        // ==================================================
+
+        products.forEach(
+            function(product) {
+
+                createSellerProductCard(
+                    product
+                );
+
+            }
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Unexpected product error:",
+            error
+        );
+
+
+        if (productsStatus) {
+
+            productsStatus.textContent =
+                "Something went wrong while loading products.";
+
+        }
+
+    }
+
+}
+
+
+// ==================================================
+// CREATE PRODUCT CARD
+// ==================================================
+
+function createSellerProductCard(
+    product
+) {
+
+    const card =
+        document.createElement(
+            "div"
+        );
+
+
+    card.className =
+        "seller-product-card";
+
+
+    card.innerHTML = `
+
+        <img
+            src="${escapeHTML(
+                product.image_url ||
+                ""
+            )}"
+            alt="${escapeHTML(
+                product.name ||
+                "Product"
+            )}"
+        >
+
+
+        <div class="seller-product-info">
+
+            <h3>
+
+                ${escapeHTML(
+                    product.name ||
+                    "Unnamed Product"
+                )}
+
+            </h3>
+
+
+            <p>
+
+                Category:
+                ${escapeHTML(
+                    product.category ||
+                    "N/A"
+                )}
+
+            </p>
+
+
+            <p>
+
+                Price:
+                ₱${Number(
+                    product.price ||
+                    0
+                ).toLocaleString()}
+
+            </p>
+
+
+            <p>
+
+                Stock:
+                ${Number(
+                    product.stock ||
+                    0
+                )}
+
+            </p>
+
+
+            <button
+                class="deleteProductBtn"
+                data-product-id="${product.id}"
+                type="button"
+            >
+
+                Delete Product
+
+            </button>
+
+        </div>
+
+    `;
+
+
+    sellerProductList.appendChild(
+        card
+    );
+
+}
+
+
+// ==================================================
+// DELETE PRODUCT
+// ==================================================
+
+document.addEventListener(
+    "click",
+    async function(event) {
+
+
+        // ==================================================
+        // CHECK DELETE BUTTON
+        // ==================================================
+
+        if (
+            !event.target.classList.contains(
+                "deleteProductBtn"
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        // ==================================================
+        // GET PRODUCT ID
+        // ==================================================
+
+        const productId =
+            event.target.dataset.productId;
+
+
+        // ==================================================
+        // CONFIRM DELETE
+        // ==================================================
+
+        const confirmed =
+            confirm(
+                "Are you sure you want to delete this product?"
+            );
+
+
+        if (!confirmed) {
+
+            return;
+
+        }
+
+
+        // ==================================================
+        // DISABLE BUTTON
+        // ==================================================
+
+        event.target.disabled =
+            true;
+
+
+        event.target.textContent =
+            "Deleting...";
+
+
+        try {
+
+            // ==================================================
+            // DELETE PRODUCT
+            // ==================================================
+
+            const {
+                error
+            } =
+                await supabaseClient
+                    .from("products")
+                    .delete()
+                    .eq(
+                        "id",
+                        productId
+                    )
+                    .eq(
+                        "seller_id",
+                        currentUser.id
+                    );
+
+
+            // ==================================================
+            // CHECK ERROR
+            // ==================================================
+
+            if (error) {
+
+                console.error(
+                    "Delete product error:",
+                    error
+                );
+
+
+                alert(
+                    "Failed to delete product: " +
+                    error.message
+                );
+
+
+                event.target.disabled =
+                    false;
+
+
+                event.target.textContent =
+                    "Delete Product";
+
+
+                return;
+
+            }
+
+
+            // ==================================================
+            // SUCCESS
+            // ==================================================
+
+            alert(
+                "Product deleted successfully!"
+            );
+
+
+            await loadSellerProducts();
+
+
+        } catch (error) {
+
+            console.error(
+                "Unexpected delete error:",
+                error
+            );
+
+
+            alert(
+                "Something went wrong while deleting the product."
+            );
+
+
+            event.target.disabled =
+                false;
+
+
+            event.target.textContent =
+                "Delete Product";
+
+        }
+
+    }
+);
+
+
+// ==================================================
+// LOAD CUSTOMER ORDERS
+// ==================================================
+
+async function loadSellerOrders() {
+
+    if (sellerStatus) {
+
+        sellerStatus.textContent =
+            "Loading customer orders...";
+
+    }
+
+
+    if (sellerOrderList) {
+
+        sellerOrderList.innerHTML =
+            "";
+
+    }
+
+
+    try {
+
+        // ==================================================
+        // GET ALL ORDERS
+        // ==================================================
 
         const {
             data: orders,
             error
-        } = await supabaseClient
-            .from("orders")
-            .select("*")
-            .order(
-                "created_at",
-                {
-                    ascending: false
-                }
-            );
+        } =
+            await supabaseClient
+                .from("orders")
+                .select("*")
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                );
 
 
-        // ==========================
-        // CHECK ORDER ERROR
-        // ==========================
+        // ==================================================
+        // CHECK ERROR
+        // ==================================================
 
         if (error) {
 
@@ -223,47 +1015,63 @@ async function loadSellerOrders() {
                 error
             );
 
-            sellerStatus.innerHTML =
-                "Error loading orders: " +
-                error.message;
+
+            if (sellerStatus) {
+
+                sellerStatus.textContent =
+                    "Error loading orders: " +
+                    error.message;
+
+            }
+
 
             return;
+
         }
 
 
-        // ==========================
+        // ==================================================
         // NO ORDERS
-        // ==========================
+        // ==================================================
 
         if (
             !orders ||
             orders.length === 0
         ) {
 
-            sellerStatus.innerHTML =
-                "No customer orders yet.";
+            if (sellerStatus) {
+
+                sellerStatus.textContent =
+                    "No customer orders yet.";
+
+            }
+
 
             sellerOrderList.innerHTML = `
+
                 <p>
                     There are currently no customer orders.
                 </p>
+
             `;
 
+
             return;
+
         }
 
 
-        // ==========================
-        // ORDERS FOUND
-        // ==========================
+        // ==================================================
+        // LOAD ORDERS
+        // ==================================================
 
-        sellerStatus.innerHTML =
-            `Found ${orders.length} customer order(s).`;
+        if (sellerStatus) {
 
+            sellerStatus.textContent =
+                `Found ${orders.length} customer order(s).`;
 
-        // ==========================
-        // LOAD EACH ORDER
-        // ==========================
+        }
+
 
         for (
             const order of orders
@@ -275,6 +1083,7 @@ async function loadSellerOrders() {
 
         }
 
+
     } catch (error) {
 
         console.error(
@@ -282,81 +1091,88 @@ async function loadSellerOrders() {
             error
         );
 
-        sellerStatus.innerHTML =
-            "Something went wrong while loading orders.";
+
+        if (sellerStatus) {
+
+            sellerStatus.textContent =
+                "Something went wrong while loading orders.";
+
+        }
 
     }
 
 }
 
 
-// ==========================
-// CREATE SELLER ORDER CARD
-// ==========================
+// ==================================================
+// CREATE ORDER CARD
+// ==================================================
 
 async function createSellerOrderCard(
     order
 ) {
 
-    // ==========================
+    // ==================================================
     // GET ORDER ITEMS
-    // ==========================
+    // ==================================================
 
     const {
         data: orderItems,
-        error: itemsError
-    } = await supabaseClient
-        .from("order_items")
-        .select("*")
-        .eq(
-            "order_id",
-            order.id
-        );
+        error
+    } =
+        await supabaseClient
+            .from("order_items")
+            .select("*")
+            .eq(
+                "order_id",
+                order.id
+            );
 
 
-    // ==========================
-    // CHECK ITEMS ERROR
-    // ==========================
-
-    if (itemsError) {
+    if (error) {
 
         console.error(
             "Order items error:",
-            itemsError
+            error
         );
 
         return;
+
     }
 
 
-    // ==========================
+    // ==================================================
     // CREATE CARD
-    // ==========================
+    // ==================================================
 
     const orderCard =
         document.createElement(
             "div"
         );
 
+
     orderCard.className =
         "seller-order-card";
 
 
-    // ==========================
+    // ==================================================
     // FORMAT DATE
-    // ==========================
+    // ==================================================
 
     const orderDate =
-        new Date(
-            order.created_at
-        ).toLocaleString();
+        order.created_at
+            ? new Date(
+                order.created_at
+            ).toLocaleString()
+            : "Unknown date";
 
 
-    // ==========================
-    // CREATE ITEMS HTML
-    // ==========================
+    // ==================================================
+    // CREATE PRODUCTS HTML
+    // ==================================================
 
-    let itemsHTML = "";
+    let itemsHTML =
+        "";
 
 
     if (
@@ -367,30 +1183,39 @@ async function createSellerOrderCard(
         orderItems.forEach(
             function(item) {
 
-                const itemPrice =
-                    Number(
-                        item.price || 0
-                    );
-
-
                 itemsHTML += `
 
                     <div class="seller-order-item">
 
                         <strong>
+
                             ${escapeHTML(
                                 item.product_name ||
                                 "Unknown Product"
                             )}
+
                         </strong>
 
-                        <span>
-                            Quantity:
-                            ${item.quantity || 0}
-                        </span>
 
                         <span>
-                            ₱${itemPrice.toLocaleString()}
+
+                            Quantity:
+                            ${Number(
+                                item.quantity ||
+                                0
+                            )}
+
+                        </span>
+
+
+                        <span>
+
+                            Price:
+                            ₱${Number(
+                                item.price ||
+                                0
+                            ).toLocaleString()}
+
                         </span>
 
                     </div>
@@ -400,51 +1225,65 @@ async function createSellerOrderCard(
             }
         );
 
-    } else {
+    }
+
+    else {
 
         itemsHTML = `
+
             <p>
-                No products found for this order.
+                No products found.
             </p>
+
         `;
 
     }
 
 
-    // ==========================
+    // ==================================================
     // ORDER STATUS
-    // ==========================
+    // ==================================================
 
     const orderStatus =
         order.status ||
         "Pending";
 
 
-    // ==========================
+    // ==================================================
     // ORDER TOTAL
-    // ==========================
+    // ==================================================
 
     const orderTotal =
         Number(
-            order.total_amount || 0
+            order.total_amount ||
+            0
         );
 
 
-    // ==========================
-    // CREATE ORDER CARD HTML
-    // ==========================
+    // ==================================================
+    // CREATE CARD HTML
+    // ==================================================
 
     orderCard.innerHTML = `
 
         <div class="seller-order-header">
 
             <h3>
-                Order #${order.id}
+
+                Order #${escapeHTML(
+                    order.id
+                )}
+
             </h3>
 
+
             <p>
+
                 Date:
-                ${orderDate}
+                ${escapeHTML(
+                    orderDate
+                )}
+
             </p>
 
         </div>
@@ -456,36 +1295,60 @@ async function createSellerOrderCard(
                 Customer Information
             </h4>
 
+
             <p>
-                <strong>Name:</strong>
+
+                <strong>
+                    Name:
+                </strong>
+
                 ${escapeHTML(
                     order.customer_name ||
                     "Not provided"
                 )}
+
             </p>
 
+
             <p>
-                <strong>Email:</strong>
+
+                <strong>
+                    Email:
+                </strong>
+
                 ${escapeHTML(
                     order.customer_email ||
                     "Not provided"
                 )}
+
             </p>
 
+
             <p>
-                <strong>Phone:</strong>
+
+                <strong>
+                    Phone:
+                </strong>
+
                 ${escapeHTML(
                     order.customer_phone ||
                     "Not provided"
                 )}
+
             </p>
 
+
             <p>
-                <strong>Address:</strong>
+
+                <strong>
+                    Address:
+                </strong>
+
                 ${escapeHTML(
                     order.customer_address ||
                     "Not provided"
                 )}
+
             </p>
 
         </div>
@@ -496,6 +1359,7 @@ async function createSellerOrderCard(
             <h4>
                 Ordered Products
             </h4>
+
 
             ${itemsHTML}
 
@@ -519,6 +1383,7 @@ async function createSellerOrderCard(
                 Order Status:
             </strong>
 
+
             <select
                 class="sellerStatusSelect"
                 data-order-id="${order.id}"
@@ -526,9 +1391,12 @@ async function createSellerOrderCard(
 
                 <option
                     value="Pending"
-                    ${orderStatus === "Pending"
-                        ? "selected"
-                        : ""}
+                    ${
+                        orderStatus ===
+                        "Pending"
+                            ? "selected"
+                            : ""
+                    }
                 >
                     Pending
                 </option>
@@ -536,9 +1404,12 @@ async function createSellerOrderCard(
 
                 <option
                     value="Processing"
-                    ${orderStatus === "Processing"
-                        ? "selected"
-                        : ""}
+                    ${
+                        orderStatus ===
+                        "Processing"
+                            ? "selected"
+                            : ""
+                    }
                 >
                     Processing
                 </option>
@@ -546,9 +1417,12 @@ async function createSellerOrderCard(
 
                 <option
                     value="Shipped"
-                    ${orderStatus === "Shipped"
-                        ? "selected"
-                        : ""}
+                    ${
+                        orderStatus ===
+                        "Shipped"
+                            ? "selected"
+                            : ""
+                    }
                 >
                     Shipped
                 </option>
@@ -556,9 +1430,12 @@ async function createSellerOrderCard(
 
                 <option
                     value="Completed"
-                    ${orderStatus === "Completed"
-                        ? "selected"
-                        : ""}
+                    ${
+                        orderStatus ===
+                        "Completed"
+                            ? "selected"
+                            : ""
+                    }
                 >
                     Completed
                 </option>
@@ -566,9 +1443,12 @@ async function createSellerOrderCard(
 
                 <option
                     value="Cancelled"
-                    ${orderStatus === "Cancelled"
-                        ? "selected"
-                        : ""}
+                    ${
+                        orderStatus ===
+                        "Cancelled"
+                            ? "selected"
+                            : ""
+                    }
                 >
                     Cancelled
                 </option>
@@ -580,10 +1460,6 @@ async function createSellerOrderCard(
     `;
 
 
-    // ==========================
-    // ADD CARD TO PAGE
-    // ==========================
-
     sellerOrderList.appendChild(
         orderCard
     );
@@ -591,15 +1467,14 @@ async function createSellerOrderCard(
 }
 
 
-// ==========================
+// ==================================================
 // UPDATE ORDER STATUS
-// ==========================
+// ==================================================
 
 document.addEventListener(
     "change",
     async function(event) {
 
-        // Check if status dropdown
 
         if (
             !event.target.classList.contains(
@@ -608,28 +1483,17 @@ document.addEventListener(
         ) {
 
             return;
+
         }
 
-
-        // ==========================
-        // GET ORDER ID
-        // ==========================
 
         const orderId =
             event.target.dataset.orderId;
 
 
-        // ==========================
-        // GET NEW STATUS
-        // ==========================
-
         const newStatus =
             event.target.value;
 
-
-        // ==========================
-        // DISABLE DROPDOWN
-        // ==========================
 
         event.target.disabled =
             true;
@@ -637,26 +1501,22 @@ document.addEventListener(
 
         try {
 
-            // ==========================
-            // UPDATE DATABASE
-            // ==========================
-
             const {
                 error
-            } = await supabaseClient
-                .from("orders")
-                .update({
-                    status: newStatus
-                })
-                .eq(
-                    "id",
-                    orderId
-                );
+            } =
+                await supabaseClient
+                    .from("orders")
+                    .update({
 
+                        status:
+                            newStatus
 
-            // ==========================
-            // CHECK ERROR
-            // ==========================
+                    })
+                    .eq(
+                        "id",
+                        orderId
+                    );
+
 
             if (error) {
 
@@ -665,21 +1525,17 @@ document.addEventListener(
                     error
                 );
 
+
                 alert(
                     "Failed to update order status: " +
                     error.message
                 );
 
-                event.target.disabled =
-                    false;
 
                 return;
+
             }
 
-
-            // ==========================
-            // SUCCESS
-            // ==========================
 
             console.log(
                 "Order status updated:",
@@ -700,16 +1556,13 @@ document.addEventListener(
                 error
             );
 
+
             alert(
                 "Something went wrong while updating the order."
             );
 
         }
 
-
-        // ==========================
-        // ENABLE DROPDOWN
-        // ==========================
 
         event.target.disabled =
             false;
@@ -718,89 +1571,94 @@ document.addEventListener(
 );
 
 
-// ==========================
+// ==================================================
 // LOGOUT
-// ==========================
+// ==================================================
 
-logoutBtn.addEventListener(
-    "click",
-    async function() {
+if (logoutBtn) {
 
-        // Disable button
+    logoutBtn.addEventListener(
+        "click",
+        async function() {
 
-        logoutBtn.disabled =
-            true;
-
-        logoutBtn.innerHTML =
-            "Logging out...";
+            logoutBtn.disabled =
+                true;
 
 
-        try {
-
-            // Sign out
-
-            const {
-                error
-            } = await supabaseClient.auth.signOut();
+            logoutBtn.textContent =
+                "Logging out...";
 
 
-            // Check error
+            try {
 
-            if (error) {
+                const {
+                    error
+                } =
+                    await supabaseClient.auth.signOut();
+
+
+                if (error) {
+
+                    console.error(
+                        "Logout error:",
+                        error
+                    );
+
+
+                    alert(
+                        "Logout failed: " +
+                        error.message
+                    );
+
+
+                    logoutBtn.disabled =
+                        false;
+
+
+                    logoutBtn.textContent =
+                        "Logout";
+
+
+                    return;
+
+                }
+
+
+                window.location.href =
+                    "login.html";
+
+
+            } catch (error) {
 
                 console.error(
-                    "Logout error:",
+                    "Unexpected logout error:",
                     error
                 );
 
+
                 alert(
-                    "Logout failed: " +
-                    error.message
+                    "Something went wrong while logging out."
                 );
+
 
                 logoutBtn.disabled =
                     false;
 
-                logoutBtn.innerHTML =
+
+                logoutBtn.textContent =
                     "Logout";
 
-                return;
             }
 
-
-            // ==========================
-            // REDIRECT
-            // ==========================
-
-            window.location.href =
-                "login.html";
-
-        } catch (error) {
-
-            console.error(
-                "Unexpected logout error:",
-                error
-            );
-
-            alert(
-                "Something went wrong while logging out."
-            );
-
-            logoutBtn.disabled =
-                false;
-
-            logoutBtn.innerHTML =
-                "Logout";
-
         }
+    );
 
-    }
-);
+}
 
 
-// ==========================
+// ==================================================
 // ESCAPE HTML
-// ==========================
+// ==================================================
 
 function escapeHTML(
     value
@@ -811,17 +1669,21 @@ function escapeHTML(
             "div"
         );
 
+
     div.textContent =
-        String(value);
+        String(
+            value
+        );
+
 
     return div.innerHTML;
 
 }
 
 
-// ==========================
+// ==================================================
 // START SELLER DASHBOARD
-// ==========================
+// ==================================================
 
 async function startSellerDashboard() {
 
@@ -830,29 +1692,53 @@ async function startSellerDashboard() {
     );
 
 
-    // Check seller access
+    // ==================================================
+    // CHECK ACCESS
+    // ==================================================
 
     const hasAccess =
         await checkSellerAccess();
 
 
-    // Stop if access denied
-
     if (!hasAccess) {
 
         return;
+
     }
 
 
-    // Load orders
+    // ==================================================
+    // LOAD PRODUCTS
+    // ==================================================
+
+    await loadSellerProducts();
+
+
+    // ==================================================
+    // LOAD ORDERS
+    // ==================================================
 
     await loadSellerOrders();
+
+
+    console.log(
+        "Seller dashboard loaded successfully."
+    );
 
 }
 
 
-// ==========================
+// ==================================================
 // START
-// ==========================
+// ==================================================
 
 startSellerDashboard();
+
+
+// ==================================================
+// END
+// ==================================================
+
+console.log(
+    "seller.js loaded successfully."
+);

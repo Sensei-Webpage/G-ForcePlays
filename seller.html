@@ -1,136 +1,278 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
 
-```
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<title>Seller Dashboard - G-ForcePlays</title>
+    <title>Seller Dashboard - G-ForcePlays</title>
 
+    <!-- FAVICON -->
 
-<!-- FAVICON -->
+    <link
+        rel="icon"
+        type="image/png"
+        href="images/G-Force Plays.png"
+    >
 
-<link
-    rel="icon"
-    type="image/png"
-    href="images/G-Force Plays.png"
->
+    <!-- SELLER CSS -->
 
-
-<!-- SELLER CSS -->
-
-<link
-    rel="stylesheet"
-    href="seller.css"
->
-```
+    <link
+        rel="stylesheet"
+        href="seller.css"
+    >
 
 </head>
 
+
 <body>
-
-```
-<!-- ==========================
-     SELLER HEADER
-=========================== -->
-
-<header>
-
-
-    <!-- TITLE -->
-
-    <h1>
-        G-ForcePlays Seller Dashboard
-    </h1>
-
-
-    <!-- NAVIGATION -->
-
-    <nav>
-
-
-        <!-- BACK TO STORE -->
-
-        <a href="index.html">
-            Back to Store
-        </a>
-
-
-        <!-- LOGOUT -->
-
-        <button
-            id="logoutBtn"
-            type="button"
-        >
-            Logout
-        </button>
-
-
-    </nav>
-
-
-</header>
-
-
-
-<!-- ==========================
-     SELLER DASHBOARD
-=========================== -->
-
-<main id="sellerDashboard">
-
-
-    <!-- PAGE TITLE -->
-
-    <h2>
-        Customer Orders
-    </h2>
-
-
-    <!-- STATUS -->
-
-    <p id="sellerStatus">
-        Loading orders...
-    </p>
 
 
     <!-- ==========================
-         ORDER LIST
+         SELLER HEADER
     =========================== -->
 
-    <section id="sellerOrderList">
+    <header>
 
-        <!-- Customer orders will be loaded here by seller.js -->
-
-    </section>
-
-
-</main>
+        <h1>
+            G-ForcePlays Seller Dashboard
+        </h1>
 
 
+        <nav>
 
-<!-- ==========================
-     SUPABASE
-=========================== -->
-
-<script
-    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
-></script>
+            <a href="index.html">
+                Back to Store
+            </a>
 
 
-<!-- ==========================
-     SELLER JAVASCRIPT
-=========================== -->
+            <button
+                id="logoutBtn"
+                type="button"
+            >
+                Logout
+            </button>
 
-<script src="seller.js"></script>
-```
+        </nav>
+
+    </header>
+
+
+
+    <!-- ==========================
+         MAIN DASHBOARD
+    =========================== -->
+
+    <main id="sellerDashboard">
+
+
+        <!-- ==========================
+             SELLER INFORMATION
+        =========================== -->
+
+        <section class="seller-welcome">
+
+            <h2>
+                Seller Dashboard
+            </h2>
+
+            <p id="sellerWelcomeText">
+                Welcome, Seller!
+            </p>
+
+        </section>
+
+
+
+        <!-- ==========================
+             ADD PRODUCT
+        =========================== -->
+
+        <section
+            id="addProductSection"
+            class="seller-section"
+        >
+
+            <h2>
+                Add New Product
+            </h2>
+
+
+            <form id="addProductForm">
+
+
+                <!-- PRODUCT NAME -->
+
+                <input
+                    type="text"
+                    id="productName"
+                    placeholder="Product Name"
+                    required
+                >
+
+
+                <!-- PRODUCT CATEGORY -->
+
+                <select
+                    id="productCategory"
+                    required
+                >
+
+                    <option value="">
+                        Select Category
+                    </option>
+
+                    <option value="Laptops">
+                        Laptops
+                    </option>
+
+                    <option value="Desktop PCs">
+                        Desktop PCs
+                    </option>
+
+                    <option value="Accessories">
+                        Accessories
+                    </option>
+
+                </select>
+
+
+                <!-- PRODUCT PRICE -->
+
+                <input
+                    type="number"
+                    id="productPrice"
+                    placeholder="Price"
+                    min="0"
+                    step="0.01"
+                    required
+                >
+
+
+                <!-- PRODUCT STOCK -->
+
+                <input
+                    type="number"
+                    id="productStock"
+                    placeholder="Stock Quantity"
+                    min="0"
+                    required
+                >
+
+
+                <!-- PRODUCT IMAGE -->
+
+                <input
+                    type="url"
+                    id="productImage"
+                    placeholder="Product Image URL"
+                    required
+                >
+
+
+                <!-- ADD PRODUCT -->
+
+                <button
+                    type="submit"
+                >
+                    Add Product
+                </button>
+
+
+            </form>
+
+
+            <!-- PRODUCT STATUS -->
+
+            <p id="productStatus"></p>
+
+        </section>
+
+
+
+        <!-- ==========================
+             MY PRODUCTS
+        =========================== -->
+
+        <section
+            id="myProductsSection"
+            class="seller-section"
+        >
+
+            <h2>
+                My Products
+            </h2>
+
+
+            <p id="productsStatus">
+                Loading your products...
+            </p>
+
+
+            <div
+                id="sellerProductList"
+                class="seller-product-grid"
+            >
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==========================
+             CUSTOMER ORDERS
+        =========================== -->
+
+        <section
+            id="ordersSection"
+            class="seller-section"
+        >
+
+            <h2>
+                Customer Orders
+            </h2>
+
+
+            <p id="sellerStatus">
+                Loading orders...
+            </p>
+
+
+            <section id="sellerOrderList">
+
+                <!-- Orders loaded by seller.js -->
+
+            </section>
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- ==========================
+         SUPABASE
+    =========================== -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ></script>
+
+
+
+    <!-- ==========================
+         SELLER JAVASCRIPT
+    =========================== -->
+
+    <script src="seller.js"></script>
+
 
 </body>
 
