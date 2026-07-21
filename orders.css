@@ -1,0 +1,383 @@
+/* ==========================
+   GENERAL
+========================== */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f5f5f5;
+    color: #222;
+    min-height: 100vh;
+}
+
+
+/* ==========================
+   HEADER
+========================== */
+
+header {
+    background: #111;
+    color: white;
+
+    min-height: 70px;
+
+    padding: 15px 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+}
+
+
+header h1 {
+    font-size: 24px;
+}
+
+
+/* ==========================
+   NAVIGATION
+========================== */
+
+header nav {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+
+header nav a {
+    color: white;
+
+    text-decoration: none;
+
+    font-weight: bold;
+
+    padding: 10px 15px;
+
+    border-radius: 8px;
+
+    transition: 0.3s;
+}
+
+
+header nav a:hover {
+    background: #007bff;
+}
+
+
+/* ==========================
+   LOGOUT BUTTON
+========================== */
+
+#logoutBtn {
+    padding: 10px 15px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #dc3545;
+
+    color: white;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+
+#logoutBtn:hover {
+    background: #b02a37;
+}
+
+
+/* ==========================
+   MY ORDERS PAGE
+========================== */
+
+#myOrdersPage {
+    max-width: 1100px;
+
+    margin: 40px auto;
+
+    padding: 20px;
+}
+
+
+#myOrdersPage h2 {
+    font-size: 32px;
+
+    margin-bottom: 15px;
+}
+
+
+#ordersStatus {
+    margin-bottom: 25px;
+
+    color: #555;
+
+    font-size: 16px;
+}
+
+
+/* ==========================
+   ORDER CARD
+========================== */
+
+.my-order-card {
+    background: white;
+
+    margin-top: 25px;
+
+    padding: 25px;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 5px 20px
+        rgba(0, 0, 0, 0.1);
+}
+
+
+/* ==========================
+   ORDER HEADER
+========================== */
+
+.my-order-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 20px;
+
+    padding-bottom: 15px;
+
+    border-bottom: 1px solid #ddd;
+}
+
+
+.my-order-header h3 {
+    font-size: 20px;
+}
+
+
+.my-order-header p {
+    color: #666;
+
+    font-size: 14px;
+}
+
+
+/* ==========================
+   ORDER STATUS
+========================== */
+
+.my-order-status {
+    margin-top: 20px;
+
+    padding: 12px 15px;
+
+    background: #f5f5f5;
+
+    border-radius: 8px;
+}
+
+
+.my-order-status strong {
+    margin-right: 8px;
+}
+
+
+.my-order-status span {
+    font-weight: bold;
+
+    color: #007bff;
+}
+
+
+/* ==========================
+   PRODUCTS
+========================== */
+
+.my-order-products {
+    margin-top: 25px;
+}
+
+
+.my-order-products h4 {
+    margin-bottom: 15px;
+
+    font-size: 18px;
+}
+
+
+/* ==========================
+   ORDER ITEM
+========================== */
+
+.my-order-item {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 15px;
+
+    margin-top: 8px;
+
+    background: #f5f5f5;
+
+    border-radius: 8px;
+}
+
+
+.my-order-item strong {
+    flex: 1;
+}
+
+
+.my-order-item span {
+    color: #555;
+}
+
+
+/* ==========================
+   ORDER TOTAL
+========================== */
+
+.my-order-total {
+    margin-top: 25px;
+
+    padding-top: 20px;
+
+    border-top: 1px solid #ddd;
+
+    font-size: 20px;
+
+    text-align: right;
+}
+
+
+.my-order-total strong {
+    margin-right: 5px;
+}
+
+
+/* ==========================
+   EMPTY / STATUS MESSAGE
+========================== */
+
+#ordersStatus {
+    font-weight: 500;
+}
+
+
+/* ==========================
+   MOBILE
+========================== */
+
+@media (max-width: 768px) {
+
+    header {
+        flex-direction: column;
+
+        text-align: center;
+
+        padding: 20px;
+    }
+
+
+    header h1 {
+        font-size: 22px;
+    }
+
+
+    header nav {
+        flex-wrap: wrap;
+
+        justify-content: center;
+    }
+
+
+    #myOrdersPage {
+        margin: 20px auto;
+
+        padding: 15px;
+    }
+
+
+    #myOrdersPage h2 {
+        font-size: 28px;
+    }
+
+
+    .my-order-header {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+
+    .my-order-item {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+
+    .my-order-total {
+        text-align: left;
+    }
+
+}
+
+
+/* ==========================
+   SMALL MOBILE
+========================== */
+
+@media (max-width: 500px) {
+
+    header nav {
+        width: 100%;
+
+        flex-direction: column;
+    }
+
+
+    header nav a,
+    #logoutBtn {
+        width: 100%;
+
+        text-align: center;
+    }
+
+
+    .my-order-card {
+        padding: 18px;
+    }
+
+
+    .my-order-header h3 {
+        font-size: 18px;
+    }
+
+}

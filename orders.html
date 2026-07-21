@@ -1,84 +1,134 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
 
-    <meta charset="UTF-8">
+```
+<meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
-    <title>My Orders - G-ForcePlays</title>
+<title>My Orders - G-ForcePlays</title>
 
-    <link
-        rel="icon"
-        type="image/png"
-        href="images/G-Force Plays.png"
-    >
+<!-- FAVICON -->
 
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
+<link
+    rel="icon"
+    type="image/png"
+    href="images/G-Force Plays.png"
+>
+
+<!-- ORDERS CSS -->
+
+<link
+    rel="stylesheet"
+    href="orders.css"
+>
+```
 
 </head>
 
-
 <body>
 
-    <!-- HEADER -->
+```
+<!-- ==========================
+     HEADER
+=========================== -->
 
-    <header>
-
-        <h1>
-            G-ForcePlays
-        </h1>
-
-        <nav>
-
-            <a href="index.html">
-                Back to Store
-            </a>
-
-            <button id="logoutBtn">
-                Logout
-            </button>
-
-        </nav>
-
-    </header>
+<header>
 
 
-    <!-- MY ORDERS -->
+    <!-- WEBSITE TITLE -->
 
-    <main id="myOrdersPage">
-
-        <h2>
-            My Orders
-        </h2>
+    <h1>
+        G-ForcePlays
+    </h1>
 
 
-        <p id="ordersStatus">
-            Loading your orders...
-        </p>
+    <!-- NAVIGATION -->
+
+    <nav>
 
 
-        <div id="myOrdersList">
+        <!-- BACK TO STORE -->
 
-            <!-- Orders will appear here -->
-
-        </div>
-
-    </main>
+        <a href="index.html">
+            Back to Store
+        </a>
 
 
-    <!-- SUPABASE -->
+        <!-- LOGOUT -->
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+        <button
+            id="logoutBtn"
+            type="button"
+        >
+            Logout
+        </button>
 
-    <script src="orders.js"></script>
+
+    </nav>
+
+
+</header>
+
+
+
+<!-- ==========================
+     MY ORDERS PAGE
+=========================== -->
+
+<main id="myOrdersPage">
+
+
+    <!-- PAGE TITLE -->
+
+    <h2>
+        My Orders
+    </h2>
+
+
+    <!-- ORDER STATUS -->
+
+    <p id="ordersStatus">
+        Loading your orders...
+    </p>
+
+
+    <!-- ==========================
+         ORDERS LIST
+    =========================== -->
+
+    <div id="myOrdersList">
+
+        <!-- Orders will be loaded here by orders.js -->
+
+    </div>
+
+
+</main>
+
+
+
+<!-- ==========================
+     SUPABASE
+=========================== -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
+
+
+<!-- ==========================
+     ORDERS JAVASCRIPT
+=========================== -->
+
+<script src="orders.js"></script>
+```
 
 </body>
 
