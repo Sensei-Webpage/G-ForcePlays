@@ -4,116 +4,142 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<title>My Orders - G-ForcePlays</title>
+    <title>My Orders - G-ForcePlays</title>
 
-<link
-    rel="icon"
-    type="image/png"
-    href="images/G-Force Plays.png"
->
 
-<link
-    rel="stylesheet"
-    href="orders.css"
->
-```
+    <!-- FAVICON -->
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="images/G-Force Plays.png"
+    >
+
+
+    <!-- ORDERS CSS -->
+
+    <link
+        rel="stylesheet"
+        href="orders.css"
+    >
 
 </head>
 
+
 <body>
 
-```
-<!-- ==========================
-     HEADER
-=========================== -->
 
-<header>
+    <!-- ==========================
+         HEADER
+    =========================== -->
 
-    <div class="header-container">
+    <header>
 
-        <h1>
-            G-ForcePlays
-        </h1>
+        <div class="header-container">
 
 
-        <nav>
+            <!-- WEBSITE TITLE -->
 
-            <a href="index.html">
-                Back to Store
-            </a>
-
-
-            <button
-                id="logoutBtn"
-                type="button"
-            >
-                Logout
-            </button>
-
-        </nav>
-
-    </div>
-
-</header>
+            <h1>
+                G-ForcePlays
+            </h1>
 
 
+            <!-- NAVIGATION -->
 
-<!-- ==========================
-     MY ORDERS
-=========================== -->
-
-<main id="myOrdersPage">
+            <nav>
 
 
-    <div class="orders-container">
+                <!-- BACK TO STORE -->
+
+                <a href="index.html">
+                    Back to Store
+                </a>
 
 
-        <h2>
-            My Orders
-        </h2>
+                <!-- LOGOUT -->
+
+                <button
+                    id="logoutBtn"
+                    type="button"
+                >
+                    Logout
+                </button>
 
 
-        <p id="ordersStatus">
-            Loading your orders...
-        </p>
+            </nav>
 
 
-        <div id="myOrdersList">
+        </div>
 
-            <!-- Orders will be loaded here by orders.js -->
+    </header>
+
+
+
+    <!-- ==========================
+         MY ORDERS
+    =========================== -->
+
+    <main id="myOrdersPage">
+
+
+        <div class="orders-container">
+
+
+            <!-- PAGE TITLE -->
+
+            <h2>
+                My Orders
+            </h2>
+
+
+            <!-- ORDER STATUS -->
+
+            <p id="ordersStatus">
+                Loading your orders...
+            </p>
+
+
+            <!-- ==========================
+                 ORDERS LIST
+            =========================== -->
+
+            <div id="myOrdersList">
+
+                <!-- Orders will be loaded here by orders.js -->
+
+            </div>
+
 
         </div>
 
 
-    </div>
-
-
-</main>
+    </main>
 
 
 
-<!-- ==========================
-     SUPABASE
-=========================== -->
+    <!-- ==========================
+         SUPABASE
+    =========================== -->
 
-<script
-    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
-></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ></script>
 
 
-<!-- ==========================
-     ORDERS JAVASCRIPT
-=========================== -->
+    <!-- ==========================
+         ORDERS JAVASCRIPT
+    =========================== -->
 
-<script src="orders.js"></script>
-```
+    <script src="orders.js"></script>
+
 
 </body>
 
