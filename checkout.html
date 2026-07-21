@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Checkout | G-Force Plays</title>
+
+    <link rel="stylesheet" href="checkout.css">
+
+</head>
+
+<body>
+
+    <div class="checkoutContainer">
+
+        <h1>Checkout</h1>
+
+        <div class="checkoutContent">
+
+            <!-- LEFT SIDE -->
+
+            <div class="checkoutLeft">
+
+                <!-- Products -->
+
+                <div class="card">
+
+                    <h2>Products Ordered</h2>
+
+                    <div id="checkoutProducts">
+
+                    </div>
+
+                </div>
+
+                <!-- Customer Information -->
+
+                <div class="customerSection card">
+
+                    <h2>Delivery Address</h2>
+
+                    <form id="checkoutForm">
+
+                        <input
+                            type="text"
+                            id="customerName"
+                            placeholder="Full Name"
+                            required>
+
+                        <input
+                            type="email"
+                            id="customerEmail"
+                            placeholder="Email"
+                            required>
+
+                        <input
+                            type="text"
+                            id="customerPhone"
+                            placeholder="Phone Number"
+                            required>
+
+                        <textarea
+                            id="customerAddress"
+                            placeholder="Complete Address"
+                            required></textarea>
+
+                        <p id="checkoutStatus"></p>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT SIDE -->
+
+            <div class="checkoutRight">
+
+                <div class="summaryCard">
+
+                    <h2>Order Summary</h2>
+
+                    <div class="summaryRow">
+
+                        <span>Subtotal</span>
+
+                        <span id="subtotalAmount">
+
+                            ₱0
+
+                        </span>
+
+                    </div>
+
+                    <div class="summaryRow">
+
+                        <span>Shipping</span>
+
+                        <span id="shippingAmount">
+
+                            FREE
+
+                        </span>
+
+                    </div>
+
+                    <div class="summaryRow">
+
+                        <span>Voucher</span>
+
+                        <span id="voucherAmount">
+
+                            ₱0
+
+                        </span>
+
+                    </div>
+
+                    <div class="summaryRow total">
+
+                        <span>Total</span>
+
+                        <span id="checkoutTotal">
+
+                            ₱0
+
+                        </span>
+
+                    </div>
+
+                    <br>
+
+                    <button
+                        class="placeOrderBtn"
+                        id="placeOrderBtn"
+                        type="submit"
+                        form="checkoutForm">
+
+                        PLACE ORDER
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+    <script src="checkout.js"></script>
+
+</body>
+
+</html>

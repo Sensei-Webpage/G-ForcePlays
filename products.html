@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Products | G-Force Plays</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css">
+
+    <link
+        rel="stylesheet"
+        href="products.css">
+
+</head>
+
+<body>
+
+    <!-- ==========================================
+         HEADER
+    =========================================== -->
+
+    <header class="products-header">
+
+        <div class="logo">
+
+            <a href="index.html">
+
+                G-Force Plays
+
+            </a>
+
+        </div>
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search products...">
+
+        </div>
+
+        <div class="header-buttons">
+
+            <a
+                href="cart.html"
+                class="cartButton">
+
+                🛒 Cart
+
+                <span id="cartCount">
+
+                    0
+
+                </span>
+
+            </a>
+
+        </div>
+
+    </header>
+
+    <!-- ==========================================
+         PAGE TITLE
+    =========================================== -->
+
+    <section class="products-title">
+
+        <h1>
+
+            All Products
+
+        </h1>
+
+        <p>
+
+            Browse products from our trusted sellers.
+
+        </p>
+
+    </section>
+
+    <!-- ==========================================
+         STATUS
+    =========================================== -->
+
+    <div
+        id="productsStatus"
+        class="statusText">
+
+        Loading products...
+
+    </div>
+
+    <!-- ==========================================
+         PRODUCT GRID
+    =========================================== -->
+
+    <section
+        id="productGrid"
+        class="product-grid">
+
+    </section>
+
+    <!-- ==========================================
+         SUPABASE
+    =========================================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+    <!-- ==========================================
+         PRODUCTS SCRIPT
+    =========================================== -->
+
+    <script src="products.js"></script>
+
+</body>
+
+</html>

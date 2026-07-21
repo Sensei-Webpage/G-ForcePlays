@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Shopping Cart | G-Force Plays</title>
+
+    <link rel="stylesheet" href="cart.css">
+
+</head>
+
+<body>
+
+    <div class="cartContainer">
+
+        <h1>Shopping Cart</h1>
+
+        <div class="cartContent">
+
+            <!-- LEFT SIDE -->
+
+            <div class="cartLeft">
+
+                <div id="cartItems">
+
+                    <!-- Products will appear here -->
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT SIDE -->
+
+            <div class="cartRight">
+
+                <div class="summaryCard">
+
+                    <h2>Order Summary</h2>
+
+                    <div class="summaryRow">
+
+                        <span>Items</span>
+
+                        <span id="cartItemCount">0</span>
+
+                    </div>
+
+                    <div class="summaryRow">
+
+                        <span>Subtotal</span>
+
+                        <span id="cartSubtotal">
+
+                            ₱0
+
+                        </span>
+
+                    </div>
+
+                    <div class="summaryRow">
+
+                        <span>Shipping</span>
+
+                        <span>
+
+                            Calculated at checkout
+
+                        </span>
+
+                    </div>
+
+                    <div class="summaryRow total">
+
+                        <span>Total</span>
+
+                        <span id="cartTotal">
+
+                            ₱0
+
+                        </span>
+
+                    </div>
+
+                    <button
+                        id="checkoutBtn">
+
+                        Proceed to Checkout
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+    <script src="cart.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,214 @@
+/* ==========================
+   PRODUCTS SECTION
+========================== */
+
+.products-section {
+    padding: 50px 5%;
+    background: var(--background-color);
+}
+
+
+.products-section h2 {
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 30px;
+    color: var(--text-color);
+}
+
+
+/* ==========================
+   PRODUCT GRID
+========================== */
+
+.product-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+}
+
+
+/* ==========================
+   PRODUCT CARD
+========================== */
+
+.product-card {
+
+    background: var(--card-color);
+
+    border-radius: 15px;
+
+    padding: 20px;
+
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+
+    transition: 0.3s ease;
+
+    overflow: hidden;
+}
+
+
+.product-card:hover {
+
+    transform: translateY(-8px);
+
+}
+
+
+
+/* ==========================
+   PRODUCT IMAGE
+========================== */
+
+.product-card img {
+
+    width: 100%;
+
+    height: 220px;
+
+    object-fit: contain;
+
+    border-radius: 10px;
+
+    margin-bottom: 15px;
+
+}
+
+
+
+/* ==========================
+   PRODUCT NAME
+========================== */
+
+.product-card h3 {
+
+    font-size: 20px;
+
+    margin-bottom: 10px;
+
+    color: var(--text-color);
+
+}
+
+
+
+/* ==========================
+   PRODUCT DESCRIPTION
+========================== */
+
+.product-card p {
+
+    color: var(--text-color);
+
+    opacity: 0.8;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+
+}
+
+
+
+/* ==========================
+   PRODUCT PRICE
+========================== */
+
+.product-price {
+
+    font-size: 22px;
+
+    font-weight: bold;
+
+    color: #00ff88;
+
+    margin: 15px 0;
+
+}
+
+
+
+/* ==========================
+   ADD TO CART BUTTON
+========================== */
+
+.add-cart-btn {
+
+    width: 100%;
+
+    padding: 12px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #007bff;
+
+    color: white;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+
+}
+
+
+.add-cart-btn:hover {
+
+    background: #0056b3;
+
+}
+
+
+
+/* ==========================
+   STOCK LABEL
+========================== */
+
+.stock {
+
+    font-size: 14px;
+
+    margin-top: 10px;
+
+    color: #00cc66;
+
+}
+
+
+.out-stock {
+
+    color: red;
+
+}
+
+
+
+/* ==========================
+   RESPONSIVE DESIGN
+========================== */
+
+@media(max-width:768px){
+
+    .products-section {
+
+        padding:30px 20px;
+
+    }
+
+
+    .products-section h2 {
+
+        font-size:26px;
+
+    }
+
+
+    .product-card img {
+
+        height:180px;
+
+    }
+
+}
