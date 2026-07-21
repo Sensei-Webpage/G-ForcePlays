@@ -1,6 +1,6 @@
-// ==========================
+// ==================================================
 // SUPABASE CONNECTION
-// ==========================
+// ==================================================
 
 const SUPABASE_URL =
     "https://ijiiccptmcdtnxvrfusr.supabase.co";
@@ -17,16 +17,16 @@ const supabaseClient =
 console.log("Supabase client connected!");
 
 
-// ==========================
+// ==================================================
 // SHOPPING CART
-// ==========================
+// ==================================================
 
 let shoppingCart = [];
 
 
-// ==========================
+// ==================================================
 // DOM ELEMENTS
-// ==========================
+// ==================================================
 
 const cart =
     document.getElementById("cartCount");
@@ -46,87 +46,194 @@ const cartBtn =
 const cartSection =
     document.getElementById("cartSection");
 
+const checkoutFormContainer =
+    document.getElementById(
+        "checkoutFormContainer"
+    );
 
-// ==========================
-// ACCOUNT ELEMENTS
-// ==========================
+const checkoutForm =
+    document.getElementById(
+        "checkoutForm"
+    );
+
+const checkoutStatus =
+    document.getElementById(
+        "checkoutStatus"
+    );
+
+const contactForm =
+    document.getElementById(
+        "contactForm"
+    );
+
+const contactStatus =
+    document.getElementById(
+        "contactStatus"
+    );
+
+
+// ==================================================
+// ACCOUNT DOM ELEMENTS
+// ==================================================
 
 const loggedOutMenu =
-    document.getElementById("loggedOutMenu");
+    document.getElementById(
+        "loggedOutMenu"
+    );
 
 const loggedInMenu =
-    document.getElementById("loggedInMenu");
+    document.getElementById(
+        "loggedInMenu"
+    );
 
 const accountBtn =
-    document.getElementById("accountBtn");
+    document.getElementById(
+        "accountBtn"
+    );
 
 const accountName =
-    document.getElementById("accountName");
+    document.getElementById(
+        "accountName"
+    );
 
 const accountDropdown =
-    document.getElementById("accountDropdown");
+    document.getElementById(
+        "accountDropdown"
+    );
 
 const logoutBtn =
-    document.getElementById("logoutBtn");
+    document.getElementById(
+        "logoutBtn"
+    );
 
 const sellerDashboardLink =
-    document.getElementById("sellerDashboardLink");
+    document.getElementById(
+        "sellerDashboardLink"
+    );
 
 const adminDashboardLink =
-    document.getElementById("adminDashboardLink");
+    document.getElementById(
+        "adminDashboardLink"
+    );
 
 const becomeSellerLink =
-    document.getElementById("becomeSellerLink");
+    document.getElementById(
+        "becomeSellerLink"
+    );
 
 
-// ==========================
-// ACCOUNT UI
-// ==========================
+// ==================================================
+// DEFAULT ACCOUNT STATE
+// ==================================================
 
 function showLoggedOutMenu() {
 
-    loggedOutMenu.style.display =
-        "flex";
+    if (loggedOutMenu) {
 
-    loggedInMenu.style.display =
-        "none";
+        loggedOutMenu.style.display =
+            "flex";
 
-    accountDropdown.classList.remove(
-        "show"
-    );
+    }
+
+    if (loggedInMenu) {
+
+        loggedInMenu.style.display =
+            "none";
+
+    }
 
 }
 
+
+// ==================================================
+// SHOW LOGGED IN ACCOUNT
+// ==================================================
 
 function showLoggedInMenu() {
 
-    loggedOutMenu.style.display =
-        "none";
+    if (loggedOutMenu) {
 
-    loggedInMenu.style.display =
-        "block";
+        loggedOutMenu.style.display =
+            "none";
+
+    }
+
+    if (loggedInMenu) {
+
+        loggedInMenu.style.display =
+            "block";
+
+    }
 
 }
 
 
-// ==========================
+// ==================================================
+// RESET ROLE LINKS
+// ==================================================
+
+function resetRoleLinks() {
+
+    if (sellerDashboardLink) {
+
+        sellerDashboardLink.style.display =
+            "none";
+
+    }
+
+    if (adminDashboardLink) {
+
+        adminDashboardLink.style.display =
+            "none";
+
+    }
+
+    if (becomeSellerLink) {
+
+        becomeSellerLink.style.display =
+            "block";
+
+    }
+
+}
+
+
+// ==================================================
 // LOAD PRODUCTS
-// ==========================
+// ==================================================
 
 async function loadProducts() {
+
+    const productContainer =
+        document.getElementById(
+            "productContainer"
+        );
+
+
+    if (!productContainer) {
+
+        return;
+
+    }
+
+
+    productContainer.innerHTML =
+        "<p>Loading products...</p>";
+
 
     const {
         data,
         error
-    } = await supabaseClient
-        .from("products")
-        .select("*")
-        .order(
-            "id",
-            {
-                ascending: true
-            }
-        );
+    } =
+        await supabaseClient
+            .from("products")
+            .select("*")
+            .order(
+                "id",
+                {
+                    ascending: true
+                }
+            );
 
 
     if (error) {
@@ -136,9 +243,8 @@ async function loadProducts() {
             error
         );
 
-        document.getElementById(
-            "productContainer"
-        ).innerHTML =
+
+        productContainer.innerHTML =
             "<p>Unable to load products.</p>";
 
         return;
@@ -150,12 +256,6 @@ async function loadProducts() {
         "Products loaded:",
         data
     );
-
-
-    const productContainer =
-        document.getElementById(
-            "productContainer"
-        );
 
 
     productContainer.innerHTML =
@@ -234,9 +334,43 @@ async function loadProducts() {
 }
 
 
-// ==========================
+// ==================================================
+// INITIAL PRODUCT LOAD
+// ==================================================
+
+loadProducts();
+
+
+// ==================================================
+// CART BUTTON
+// ==================================================
+
+if (cartBtn) {
+
+    cartBtn.addEventListener(
+        "click",
+        function() {
+
+            if (cartSection) {
+
+                cartSection.scrollIntoView({
+
+                    behavior:
+                        "smooth"
+
+                });
+
+            }
+
+        }
+    );
+
+}
+
+
+// ==================================================
 // ADD TO CART
-// ==========================
+// ==================================================
 
 document.addEventListener(
     "click",
@@ -262,6 +396,13 @@ document.addEventListener(
             event.target.closest(
                 ".card"
             );
+
+
+        if (!card) {
+
+            return;
+
+        }
 
 
         const productName =
@@ -336,11 +477,18 @@ document.addEventListener(
 );
 
 
-// ==========================
+// ==================================================
 // DISPLAY CART
-// ==========================
+// ==================================================
 
 function displayCart() {
+
+    if (!cart) {
+
+        return;
+
+    }
+
 
     let totalQuantity =
         0;
@@ -356,6 +504,7 @@ function displayCart() {
             totalQuantity +=
                 product.quantity;
 
+
             totalPrice +=
                 product.price *
                 product.quantity;
@@ -368,8 +517,14 @@ function displayCart() {
         totalQuantity;
 
 
-    cartTotal.textContent =
-        totalPrice.toLocaleString();
+    if (
+        !cartItems ||
+        !cartTotal
+    ) {
+
+        return;
+
+    }
 
 
     if (
@@ -379,6 +534,11 @@ function displayCart() {
 
         cartItems.innerHTML =
             "<p>Your cart is empty.</p>";
+
+
+        cartTotal.textContent =
+            "0";
+
 
         return;
 
@@ -449,7 +609,6 @@ function displayCart() {
 
                 </div>
 
-
                 <button
                     class="removeBtn"
                     data-index="${index}"
@@ -468,36 +627,30 @@ function displayCart() {
         }
     );
 
+
+    cartTotal.textContent =
+        totalPrice.toLocaleString();
+
 }
 
 
-// ==========================
-// CART BUTTON
-// ==========================
+// ==================================================
+// INITIAL CART
+// ==================================================
 
-cartBtn.addEventListener(
-    "click",
-    function() {
-
-        cartSection.scrollIntoView({
-
-            behavior:
-                "smooth"
-
-        });
-
-    }
-);
+displayCart();
 
 
-// ==========================
-// CART QUANTITY / REMOVE
-// ==========================
+// ==================================================
+// CART QUANTITY + REMOVE
+// ==================================================
 
 document.addEventListener(
     "click",
     function(event) {
 
+
+        // INCREASE / DECREASE
 
         if (
             event.target.classList.contains(
@@ -514,6 +667,15 @@ document.addEventListener(
 
             const action =
                 event.target.dataset.action;
+
+
+            if (
+                !shoppingCart[index]
+            ) {
+
+                return;
+
+            }
 
 
             if (
@@ -559,6 +721,8 @@ document.addEventListener(
         }
 
 
+        // REMOVE
+
         if (
             event.target.classList.contains(
                 "removeBtn"
@@ -586,9 +750,9 @@ document.addEventListener(
 );
 
 
-// ==========================
+// ==================================================
 // DARK MODE
-// ==========================
+// ==================================================
 
 const darkButton =
     document.getElementById(
@@ -596,21 +760,25 @@ const darkButton =
     );
 
 
-darkButton.addEventListener(
-    "click",
-    function() {
+if (darkButton) {
 
-        document.body.classList.toggle(
-            "dark"
-        );
+    darkButton.addEventListener(
+        "click",
+        function() {
 
-    }
-);
+            document.body.classList.toggle(
+                "dark"
+            );
+
+        }
+    );
+
+}
 
 
-// ==========================
+// ==================================================
 // SHOP NOW
-// ==========================
+// ==================================================
 
 const shopButton =
     document.getElementById(
@@ -618,30 +786,37 @@ const shopButton =
     );
 
 
-const products =
+const productsSection =
     document.getElementById(
         "products"
     );
 
 
-shopButton.addEventListener(
-    "click",
-    function() {
+if (
+    shopButton &&
+    productsSection
+) {
 
-        products.scrollIntoView({
+    shopButton.addEventListener(
+        "click",
+        function() {
 
-            behavior:
-                "smooth"
+            productsSection.scrollIntoView({
 
-        });
+                behavior:
+                    "smooth"
 
-    }
-);
+            });
+
+        }
+    );
+
+}
 
 
-// ==========================
+// ==================================================
 // SEARCH + CATEGORY FILTER
-// ==========================
+// ==================================================
 
 const searchBox =
     document.getElementById(
@@ -659,7 +834,18 @@ let selectedCategory =
     "All";
 
 
+// ==================================================
+// FILTER PRODUCTS
+// ==================================================
+
 function filterProducts() {
+
+
+    if (!searchBox) {
+
+        return;
+
+    }
 
 
     const search =
@@ -718,7 +904,7 @@ function filterProducts() {
             ) {
 
                 card.style.display =
-                    "block";
+                    "";
 
             }
 
@@ -735,15 +921,27 @@ function filterProducts() {
 }
 
 
-searchBox.addEventListener(
-    "input",
-    function() {
+// ==================================================
+// SEARCH
+// ==================================================
 
-        filterProducts();
+if (searchBox) {
 
-    }
-);
+    searchBox.addEventListener(
+        "input",
+        function() {
 
+            filterProducts();
+
+        }
+    );
+
+}
+
+
+// ==================================================
+// CATEGORY BUTTONS
+// ==================================================
 
 categoryButtons.forEach(
     function(button) {
@@ -783,9 +981,9 @@ categoryButtons.forEach(
 );
 
 
-// ==========================
+// ==================================================
 // BANNER SLIDESHOW
-// ==========================
+// ==================================================
 
 const slides =
     document.querySelectorAll(
@@ -815,9 +1013,23 @@ let currentSlide =
     0;
 
 
+// ==================================================
+// SHOW SLIDE
+// ==================================================
+
 function showSlide(
     index
 ) {
+
+
+    if (
+        slides.length ===
+        0
+    ) {
+
+        return;
+
+    }
 
 
     slides.forEach(
@@ -842,22 +1054,20 @@ function showSlide(
     );
 
 
-    if (
-        slides[index]
-    ) {
-
-        slides[index].classList.add(
-            "active"
-        );
-
-    }
+    slides[
+        index
+    ].classList.add(
+        "active"
+    );
 
 
     if (
         dots[index]
     ) {
 
-        dots[index].classList.add(
+        dots[
+            index
+        ].classList.add(
             "active"
         );
 
@@ -866,53 +1076,77 @@ function showSlide(
 }
 
 
-nextButton.addEventListener(
-    "click",
-    function() {
+// ==================================================
+// NEXT SLIDE
+// ==================================================
 
-        currentSlide++;
+if (nextButton) {
 
-        if (
-            currentSlide >=
-            slides.length
-        ) {
+    nextButton.addEventListener(
+        "click",
+        function() {
 
-            currentSlide =
-                0;
-
-        }
-
-        showSlide(
-            currentSlide
-        );
-
-    }
-);
+            currentSlide++;
 
 
-prevButton.addEventListener(
-    "click",
-    function() {
+            if (
+                currentSlide >=
+                slides.length
+            ) {
 
-        currentSlide--;
+                currentSlide =
+                    0;
 
-        if (
-            currentSlide < 0
-        ) {
+            }
 
-            currentSlide =
-                slides.length -
-                1;
+
+            showSlide(
+                currentSlide
+            );
 
         }
+    );
 
-        showSlide(
-            currentSlide
-        );
+}
 
-    }
-);
 
+// ==================================================
+// PREVIOUS SLIDE
+// ==================================================
+
+if (prevButton) {
+
+    prevButton.addEventListener(
+        "click",
+        function() {
+
+            currentSlide--;
+
+
+            if (
+                currentSlide < 0
+            ) {
+
+                currentSlide =
+                    slides.length -
+                    1;
+
+            }
+
+
+            showSlide(
+                currentSlide
+            );
+
+        }
+    );
+
+}
+
+
+// ==================================================
+// DOTS
+// ==================================================
 
 dots.forEach(
     function(
@@ -928,6 +1162,7 @@ dots.forEach(
                 currentSlide =
                     index;
 
+
                 showSlide(
                     currentSlide
                 );
@@ -939,395 +1174,382 @@ dots.forEach(
 );
 
 
-setInterval(
-    function() {
+// ==================================================
+// AUTO SLIDESHOW
+// ==================================================
 
-        currentSlide++;
+if (
+    slides.length > 1
+) {
 
-        if (
-            currentSlide >=
-            slides.length
-        ) {
+    setInterval(
+        function() {
 
-            currentSlide =
-                0;
-
-        }
-
-        showSlide(
-            currentSlide
-        );
-
-    },
-    5000
-);
+            currentSlide++;
 
 
-// ==========================
-// CONTACT FORM
-// ==========================
+            if (
+                currentSlide >=
+                slides.length
+            ) {
 
-const contactForm =
-    document.getElementById(
-        "contactForm"
-    );
+                currentSlide =
+                    0;
 
-
-const contactStatus =
-    document.getElementById(
-        "contactStatus"
-    );
+            }
 
 
-contactForm.addEventListener(
-    "submit",
-    async function(event) {
-
-
-        event.preventDefault();
-
-
-        const name =
-            document.getElementById(
-                "contactName"
-            ).value.trim();
-
-
-        const email =
-            document.getElementById(
-                "contactEmail"
-            ).value.trim();
-
-
-        const message =
-            document.getElementById(
-                "contactMessage"
-            ).value.trim();
-
-
-        contactStatus.textContent =
-            "Sending message...";
-
-
-        const {
-            error
-        } = await supabaseClient
-            .from("contacts")
-            .insert([
-
-                {
-
-                    name:
-                        name,
-
-                    email:
-                        email,
-
-                    message:
-                        message
-
-                }
-
-            ]);
-
-
-        if (
-            error
-        ) {
-
-            console.error(
-                "Contact form error:",
-                error
+            showSlide(
+                currentSlide
             );
+
+        },
+        5000
+    );
+
+}
+
+
+// ==================================================
+// CONTACT FORM
+// ==================================================
+
+if (contactForm) {
+
+    contactForm.addEventListener(
+        "submit",
+        async function(event) {
+
+
+            event.preventDefault();
+
+
+            const name =
+                document.getElementById(
+                    "contactName"
+                ).value.trim();
+
+
+            const email =
+                document.getElementById(
+                    "contactEmail"
+                ).value.trim();
+
+
+            const message =
+                document.getElementById(
+                    "contactMessage"
+                ).value.trim();
 
 
             contactStatus.textContent =
-                "Something went wrong. Please try again.";
+                "Sending message...";
 
 
-            return;
+            const {
+                error
+            } =
+                await supabaseClient
+                    .from("contacts")
+                    .insert([
 
-        }
+                        {
 
+                            name:
+                                name,
 
-        contactStatus.textContent =
-            "Message sent successfully!";
+                            email:
+                                email,
 
+                            message:
+                                message
 
-        contactForm.reset();
+                        }
 
-    }
-);
-
-
-// ==========================
-// CHECKOUT FORM
-// ==========================
-
-const checkoutFormContainer =
-    document.getElementById(
-        "checkoutFormContainer"
-    );
+                    ]);
 
 
-checkoutBtn.addEventListener(
-    "click",
-    function() {
+            if (error) {
+
+                console.error(
+                    "Contact form error:",
+                    error
+                );
 
 
-        if (
-            shoppingCart.length ===
-            0
-        ) {
-
-            alert(
-                "Your cart is empty. Please add a product first."
-            );
-
-            return;
-
-        }
+                contactStatus.textContent =
+                    "Something went wrong. Please try again.";
 
 
-        checkoutFormContainer.style.display =
-            "block";
-
-
-        checkoutFormContainer.scrollIntoView({
-
-            behavior:
-                "smooth"
-
-        });
-
-    }
-);
-
-
-// ==========================
-// PLACE ORDER
-// ==========================
-
-const checkoutForm =
-    document.getElementById(
-        "checkoutForm"
-    );
-
-
-const checkoutStatus =
-    document.getElementById(
-        "checkoutStatus"
-    );
-
-
-checkoutForm.addEventListener(
-    "submit",
-    async function(event) {
-
-
-        event.preventDefault();
-
-
-        if (
-            shoppingCart.length ===
-            0
-        ) {
-
-            checkoutStatus.textContent =
-                "Your cart is empty.";
-
-            return;
-
-        }
-
-
-        const customerName =
-            document.getElementById(
-                "customerName"
-            ).value.trim();
-
-
-        const customerEmail =
-            document.getElementById(
-                "customerEmail"
-            ).value.trim();
-
-
-        const customerPhone =
-            document.getElementById(
-                "customerPhone"
-            ).value.trim();
-
-
-        const customerAddress =
-            document.getElementById(
-                "customerAddress"
-            ).value.trim();
-
-
-        let totalAmount =
-            0;
-
-
-        shoppingCart.forEach(
-            function(product) {
-
-                totalAmount +=
-                    product.price *
-                    product.quantity;
+                return;
 
             }
-        );
 
 
-        checkoutStatus.textContent =
-            "Processing your order...";
+            contactStatus.textContent =
+                "Message sent successfully!";
 
 
-        // ==========================
-        // SAVE ORDER
-        // ==========================
-
-        const {
-            data: order,
-            error: orderError
-        } = await supabaseClient
-            .from("orders")
-            .insert([
-
-                {
-
-                    customer_name:
-                        customerName,
-
-                    customer_email:
-                        customerEmail,
-
-                    customer_phone:
-                        customerPhone,
-
-                    customer_address:
-                        customerAddress,
-
-                    total_amount:
-                        totalAmount
-
-                }
-
-            ])
-            .select()
-            .single();
-
-
-        if (
-            orderError
-        ) {
-
-            console.error(
-                "ORDER ERROR:",
-                orderError
-            );
-
-
-            checkoutStatus.textContent =
-                "Order Error: " +
-                orderError.message;
-
-
-            return;
+            contactForm.reset();
 
         }
+    );
+
+}
 
 
-        // ==========================
-        // CREATE ORDER ITEMS
-        // ==========================
+// ==================================================
+// CHECKOUT BUTTON
+// ==================================================
 
-        const orderItems =
-            shoppingCart.map(
+if (checkoutBtn) {
+
+    checkoutBtn.addEventListener(
+        "click",
+        function() {
+
+
+            if (
+                shoppingCart.length ===
+                0
+            ) {
+
+                alert(
+                    "Your cart is empty. Please add a product first."
+                );
+
+                return;
+
+            }
+
+
+            checkoutFormContainer.style.display =
+                "block";
+
+
+            checkoutFormContainer.scrollIntoView({
+
+                behavior:
+                    "smooth"
+
+            });
+
+        }
+    );
+
+}
+
+
+// ==================================================
+// PLACE ORDER
+// ==================================================
+
+if (checkoutForm) {
+
+    checkoutForm.addEventListener(
+        "submit",
+        async function(event) {
+
+
+            event.preventDefault();
+
+
+            if (
+                shoppingCart.length ===
+                0
+            ) {
+
+                checkoutStatus.textContent =
+                    "Your cart is empty.";
+
+                return;
+
+            }
+
+
+            const customerName =
+                document.getElementById(
+                    "customerName"
+                ).value.trim();
+
+
+            const customerEmail =
+                document.getElementById(
+                    "customerEmail"
+                ).value.trim();
+
+
+            const customerPhone =
+                document.getElementById(
+                    "customerPhone"
+                ).value.trim();
+
+
+            const customerAddress =
+                document.getElementById(
+                    "customerAddress"
+                ).value.trim();
+
+
+            let totalAmount =
+                0;
+
+
+            shoppingCart.forEach(
                 function(product) {
 
-                    return {
-
-                        order_id:
-                            order.id,
-
-                        product_id:
-                            product.id,
-
-                        product_name:
-                            product.name,
-
-                        quantity:
-                            product.quantity,
-
-                        price:
-                            product.price
-
-                    };
+                    totalAmount +=
+                        product.price *
+                        product.quantity;
 
                 }
             );
 
 
-        // ==========================
-        // SAVE ORDER ITEMS
-        // ==========================
-
-        const {
-            error: itemsError
-        } = await supabaseClient
-            .from("order_items")
-            .insert(
-                orderItems
-            );
+            checkoutStatus.textContent =
+                "Processing your order...";
 
 
-        if (
-            itemsError
-        ) {
+            // SAVE ORDER
 
-            console.error(
-                "Order items error:",
-                itemsError
-            );
+            const {
+                data: order,
+                error: orderError
+            } =
+                await supabaseClient
+                    .from("orders")
+                    .insert([
 
+                        {
+
+                            customer_name:
+                                customerName,
+
+                            customer_email:
+                                customerEmail,
+
+                            customer_phone:
+                                customerPhone,
+
+                            customer_address:
+                                customerAddress,
+
+                            total_amount:
+                                totalAmount
+
+                        }
+
+                    ])
+                    .select()
+                    .single();
+
+
+            if (orderError) {
+
+                console.error(
+                    "ORDER ERROR:",
+                    orderError
+                );
+
+
+                checkoutStatus.textContent =
+                    "Order Error: " +
+                    orderError.message;
+
+
+                return;
+
+            }
+
+
+            // CREATE ORDER ITEMS
+
+            const orderItems =
+                shoppingCart.map(
+                    function(product) {
+
+                        return {
+
+                            order_id:
+                                order.id,
+
+                            product_id:
+                                product.id,
+
+                            product_name:
+                                product.name,
+
+                            quantity:
+                                product.quantity,
+
+                            price:
+                                product.price
+
+                        };
+
+                    }
+                );
+
+
+            // SAVE ORDER ITEMS
+
+            const {
+                error: itemsError
+            } =
+                await supabaseClient
+                    .from("order_items")
+                    .insert(
+                        orderItems
+                    );
+
+
+            if (itemsError) {
+
+                console.error(
+                    "ORDER ITEMS ERROR:",
+                    itemsError
+                );
+
+
+                checkoutStatus.textContent =
+                    "Order was created, but there was a problem saving the products.";
+
+
+                return;
+
+            }
+
+
+            // SUCCESS
 
             checkoutStatus.textContent =
-                "Order was created, but there was a problem saving the products.";
+                "Order placed successfully! Thank you for your purchase.";
 
 
-            return;
+            shoppingCart =
+                [];
+
+
+            displayCart();
+
+
+            checkoutForm.reset();
 
         }
+    );
+
+}
 
 
-        // ==========================
-        // SUCCESS
-        // ==========================
-
-        checkoutStatus.textContent =
-            "Order placed successfully! Thank you for your purchase.";
-
-
-        shoppingCart =
-            [];
-
-
-        displayCart();
-
-
-        checkoutForm.reset();
-
-    }
-);
-
-
-// ==========================
+// ==================================================
 // CHECK USER SESSION
-// ==========================
+// ==================================================
 
 async function checkUserSession() {
+
+    console.log(
+        "Checking user session..."
+    );
 
 
     const {
@@ -1337,16 +1559,16 @@ async function checkUserSession() {
         await supabaseClient.auth.getSession();
 
 
-    if (
-        error
-    ) {
+    if (error) {
 
         console.error(
             "Session error:",
             error
         );
 
+
         showLoggedOutMenu();
+
 
         return;
 
@@ -1357,29 +1579,31 @@ async function checkUserSession() {
         data.session;
 
 
-    // ==========================
-    // LOGGED OUT
-    // ==========================
+    // ==============================================
+    // USER IS LOGGED OUT
+    // ==============================================
 
-    if (
-        !session
-    ) {
+    if (!session) {
 
         console.log(
-            "No active user session."
+            "No active session."
         );
 
 
         showLoggedOutMenu();
+
+
+        resetRoleLinks();
+
 
         return;
 
     }
 
 
-    // ==========================
-    // LOGGED IN
-    // ==========================
+    // ==============================================
+    // USER IS LOGGED IN
+    // ==============================================
 
     const user =
         session.user;
@@ -1394,15 +1618,17 @@ async function checkUserSession() {
     showLoggedInMenu();
 
 
-    // DEFAULT ACCOUNT NAME
+    resetRoleLinks();
+
 
     accountName.textContent =
-        user.email;
+        user.email ||
+        "Account";
 
 
-    // ==========================
-    // GET PROFILE
-    // ==========================
+    // ==============================================
+    // GET USER PROFILE
+    // ==============================================
 
     const {
         data: profile,
@@ -1410,17 +1636,17 @@ async function checkUserSession() {
     } =
         await supabaseClient
             .from("profiles")
-            .select("*")
+            .select(
+                "full_name, role"
+            )
             .eq(
                 "id",
                 user.id
             )
-            .single();
+            .maybeSingle();
 
 
-    if (
-        profileError
-    ) {
+    if (profileError) {
 
         console.error(
             "Profile error:",
@@ -1433,21 +1659,31 @@ async function checkUserSession() {
     }
 
 
+    // ==============================================
+    // NO PROFILE FOUND
+    // ==============================================
+
+    if (!profile) {
+
+        console.log(
+            "No profile found for user."
+        );
+
+
+        return;
+
+    }
+
+
     console.log(
-        "Current user profile:",
+        "User profile:",
         profile
     );
 
 
-    console.log(
-        "Current user role:",
-        profile.role
-    );
-
-
-    // ==========================
-    // DISPLAY NAME
-    // ==========================
+    // ==============================================
+    // DISPLAY USER NAME
+    // ==============================================
 
     if (
         profile.full_name
@@ -1459,84 +1695,140 @@ async function checkUserSession() {
     }
 
 
-    // ==========================
-    // RESET ROLE LINKS
-    // ==========================
+    // ==============================================
+    // GET USER ROLE
+    // ==============================================
 
-    sellerDashboardLink.style.display =
-        "none";
+    const role =
+        String(
+            profile.role ||
+            "user"
+        )
+        .toLowerCase()
+        .trim();
 
-    adminDashboardLink.style.display =
-        "none";
 
-    becomeSellerLink.style.display =
-        "block";
+    console.log(
+        "Current user role:",
+        role
+    );
 
 
-    // ==========================
+    // ==============================================
     // ADMIN
-    // ==========================
+    // ==============================================
 
     if (
-        profile.role ===
+        role ===
         "admin"
     ) {
 
-        adminDashboardLink.style.display =
-            "block";
+        if (adminDashboardLink) {
 
-        becomeSellerLink.style.display =
-            "none";
+            adminDashboardLink.style.display =
+                "block";
+
+        }
+
+
+        if (sellerDashboardLink) {
+
+            sellerDashboardLink.style.display =
+                "block";
+
+        }
+
+
+        if (becomeSellerLink) {
+
+            becomeSellerLink.style.display =
+                "none";
+
+        }
 
     }
 
 
-    // ==========================
+    // ==============================================
     // SELLER
-    // ==========================
+    // ==============================================
 
     else if (
-        profile.role ===
+        role ===
         "seller"
     ) {
 
-        sellerDashboardLink.style.display =
-            "block";
+        if (sellerDashboardLink) {
 
-        becomeSellerLink.style.display =
-            "none";
+            sellerDashboardLink.style.display =
+                "block";
+
+        }
+
+
+        if (becomeSellerLink) {
+
+            becomeSellerLink.style.display =
+                "none";
+
+        }
 
     }
 
+
+    // ==============================================
+    // NORMAL USER
+    // ==============================================
+
+    else {
+
+        if (becomeSellerLink) {
+
+            becomeSellerLink.style.display =
+                "block";
+
+        }
+
+    }
 
 }
 
 
-// ==========================
+// ==================================================
 // ACCOUNT DROPDOWN
-// ==========================
+// ==================================================
 
-accountBtn.addEventListener(
-    "click",
-    function(event) {
+if (accountBtn) {
 
-        event.stopPropagation();
+    accountBtn.addEventListener(
+        "click",
+        function(event) {
 
-        accountDropdown.classList.toggle(
-            "show"
-        );
-
-    }
-);
+            event.stopPropagation();
 
 
-// ==========================
-// CLOSE DROPDOWN
-// ==========================
+            if (accountDropdown) {
+
+                accountDropdown.classList.toggle(
+                    "show"
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+// ==================================================
+// CLOSE ACCOUNT DROPDOWN
+// ==================================================
 
 document.addEventListener(
     "click",
     function(event) {
+
 
         if (
             !event.target.closest(
@@ -1544,9 +1836,13 @@ document.addEventListener(
             )
         ) {
 
-            accountDropdown.classList.remove(
-                "show"
-            );
+            if (accountDropdown) {
+
+                accountDropdown.classList.remove(
+                    "show"
+                );
+
+            }
 
         }
 
@@ -1554,48 +1850,69 @@ document.addEventListener(
 );
 
 
-// ==========================
+// ==================================================
 // LOGOUT
-// ==========================
+// ==================================================
 
-logoutBtn.addEventListener(
-    "click",
-    async function() {
+if (logoutBtn) {
 
-
-        const {
-            error
-        } =
-            await supabaseClient.auth.signOut();
+    logoutBtn.addEventListener(
+        "click",
+        async function() {
 
 
-        if (
-            error
-        ) {
-
-            console.error(
-                "Logout error:",
+            const {
                 error
+            } =
+                await supabaseClient.auth.signOut();
+
+
+            if (error) {
+
+                console.error(
+                    "Logout error:",
+                    error
+                );
+
+
+                alert(
+                    "Logout failed. Please try again."
+                );
+
+
+                return;
+
+            }
+
+
+            console.log(
+                "User logged out."
             );
 
-            return;
+
+            showLoggedOutMenu();
+
+
+            resetRoleLinks();
+
+
+            if (accountDropdown) {
+
+                accountDropdown.classList.remove(
+                    "show"
+                );
+
+            }
 
         }
+    );
+
+}
 
 
-        showLoggedOutMenu();
-
-
-        window.location.href =
-            "index.html";
-
-    }
-);
-
-
-// ==========================
+// ==================================================
 // AUTH STATE LISTENER
-// ==========================
+// ==================================================
 
 supabaseClient.auth.onAuthStateChange(
     function(
@@ -1610,9 +1927,7 @@ supabaseClient.auth.onAuthStateChange(
         );
 
 
-        if (
-            session
-        ) {
+        if (session) {
 
             checkUserSession();
 
@@ -1622,28 +1937,31 @@ supabaseClient.auth.onAuthStateChange(
 
             showLoggedOutMenu();
 
+
+            resetRoleLinks();
+
         }
 
     }
 );
 
 
-// ==========================
-// INITIAL CART
-// ==========================
-
-displayCart();
-
-
-// ==========================
-// INITIAL PRODUCT LOAD
-// ==========================
-
-loadProducts();
-
-
-// ==========================
+// ==================================================
 // INITIAL SESSION CHECK
-// ==========================
+// ==================================================
+
+showLoggedOutMenu();
+
+resetRoleLinks();
+
 
 checkUserSession();
+
+
+// ==================================================
+// END
+// ==================================================
+
+console.log(
+    "G-ForcePlays script loaded successfully."
+);
