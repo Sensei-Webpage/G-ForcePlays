@@ -39,8 +39,6 @@ async function loadMyOrders() {
 
     console.log("Loading customer orders...");
 
-    // Show loading message
-
     if (ordersStatus) {
         ordersStatus.textContent =
             "Loading your orders...";
@@ -81,7 +79,9 @@ async function loadMyOrders() {
     }
 
 
-    // Current logged-in user
+    // ==========================
+    // CURRENT USER
+    // ==========================
 
     const user =
         userData.user;
@@ -233,7 +233,6 @@ async function loadMyOrders() {
         const orderCard =
             document.createElement("div");
 
-
         orderCard.className =
             "my-order-card";
 
@@ -260,7 +259,7 @@ async function loadMyOrders() {
 
 
         // ==========================
-        // CREATE PRODUCTS HTML
+        // PRODUCTS HTML
         // ==========================
 
         let itemsHTML =
@@ -327,7 +326,7 @@ async function loadMyOrders() {
 
 
         // ==========================
-        // ORDER TOTAL
+        // TOTAL
         // ==========================
 
         const totalAmount =
@@ -337,7 +336,7 @@ async function loadMyOrders() {
 
 
         // ==========================
-        // CREATE ORDER CARD
+        // ORDER CARD HTML
         // ==========================
 
         orderCard.innerHTML = `
@@ -429,10 +428,6 @@ if (logoutBtn) {
             } =
                 await supabaseClient.auth.signOut();
 
-
-            // ==========================
-            // CHECK LOGOUT ERROR
-            // ==========================
 
             if (error) {
 
