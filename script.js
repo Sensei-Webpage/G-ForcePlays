@@ -48,6 +48,68 @@ const cartSection =
 
 
 // ==========================
+// ACCOUNT ELEMENTS
+// ==========================
+
+const loggedOutMenu =
+    document.getElementById("loggedOutMenu");
+
+const loggedInMenu =
+    document.getElementById("loggedInMenu");
+
+const accountBtn =
+    document.getElementById("accountBtn");
+
+const accountName =
+    document.getElementById("accountName");
+
+const accountDropdown =
+    document.getElementById("accountDropdown");
+
+const logoutBtn =
+    document.getElementById("logoutBtn");
+
+const sellerDashboardLink =
+    document.getElementById("sellerDashboardLink");
+
+const adminDashboardLink =
+    document.getElementById("adminDashboardLink");
+
+const becomeSellerLink =
+    document.getElementById("becomeSellerLink");
+
+
+// ==========================
+// ACCOUNT UI
+// ==========================
+
+function showLoggedOutMenu() {
+
+    loggedOutMenu.style.display =
+        "flex";
+
+    loggedInMenu.style.display =
+        "none";
+
+    accountDropdown.classList.remove(
+        "show"
+    );
+
+}
+
+
+function showLoggedInMenu() {
+
+    loggedOutMenu.style.display =
+        "none";
+
+    loggedInMenu.style.display =
+        "block";
+
+}
+
+
+// ==========================
 // LOAD PRODUCTS
 // ==========================
 
@@ -59,9 +121,13 @@ async function loadProducts() {
     } = await supabaseClient
         .from("products")
         .select("*")
-        .order("id", {
-            ascending: true
-        });
+        .order(
+            "id",
+            {
+                ascending: true
+            }
+        );
+
 
     if (error) {
 
@@ -70,20 +136,31 @@ async function loadProducts() {
             error
         );
 
+        document.getElementById(
+            "productContainer"
+        ).innerHTML =
+            "<p>Unable to load products.</p>";
+
         return;
+
     }
+
 
     console.log(
         "Products loaded:",
         data
     );
 
+
     const productContainer =
         document.getElementById(
             "productContainer"
         );
 
-    productContainer.innerHTML = "";
+
+    productContainer.innerHTML =
+        "";
+
 
     if (
         !data ||
@@ -94,7 +171,9 @@ async function loadProducts() {
             "<p>No products available.</p>";
 
         return;
+
     }
+
 
     data.forEach(
         function(product) {
@@ -104,63 +183,55 @@ async function loadProducts() {
                     "div"
                 );
 
-            card.className = "card";
+
+            card.className =
+                "card";
+
 
             card.dataset.category =
-                product.category || "";
+                product.category ||
+                "";
+
 
             card.innerHTML = `
 
                 <img
-                    src="${product.image_url}"
-                    alt="${product.name}"
+                    src="${product.image_url || ""}"
+                    alt="${product.name || "Product"}"
                 >
 
                 <h3>
-                    ${product.name}
+                    ${product.name || "Unnamed Product"}
                 </h3>
 
                 <p>
                     ₱${Number(
-                        product.price
+                        product.price || 0
                     ).toLocaleString()}
                 </p>
 
                 <button
                     class="buyBtn"
                     data-id="${product.id}"
+                    type="button"
                 >
                     Add to Cart
                 </button>
 
             `;
 
+
             productContainer.appendChild(
                 card
             );
+
         }
     );
 
+
     filterProducts();
+
 }
-
-loadProducts();
-
-
-// ==========================
-// CART BUTTON
-// ==========================
-
-cartBtn.addEventListener(
-    "click",
-    function() {
-
-        cartSection.scrollIntoView({
-            behavior: "smooth"
-        });
-
-    }
-);
 
 
 // ==========================
@@ -171,49 +242,64 @@ document.addEventListener(
     "click",
     function(event) {
 
+
         if (
             !event.target.classList.contains(
                 "buyBtn"
             )
         ) {
+
             return;
+
         }
+
 
         const productId =
             event.target.dataset.id;
+
 
         const card =
             event.target.closest(
                 ".card"
             );
 
+
         const productName =
             card.querySelector(
                 "h3"
             ).textContent.trim();
+
 
         const productPriceText =
             card.querySelector(
                 "p"
             ).textContent;
 
+
         const productPrice =
             Number(
+
                 productPriceText
                     .replace("₱", "")
                     .replace(/,/g, "")
                     .trim()
+
             );
+
 
         const existingProduct =
             shoppingCart.find(
                 function(product) {
 
-                    return product.id ==
-                        productId;
+                    return String(
+                        product.id
+                    ) === String(
+                        productId
+                    );
 
                 }
             );
+
 
         if (
             existingProduct
@@ -221,21 +307,28 @@ document.addEventListener(
 
             existingProduct.quantity++;
 
-        } else {
+        }
+
+        else {
 
             shoppingCart.push({
 
-                id: productId,
+                id:
+                    productId,
 
-                name: productName,
+                name:
+                    productName,
 
-                price: productPrice,
+                price:
+                    productPrice,
 
-                quantity: 1
+                quantity:
+                    1
 
             });
 
         }
+
 
         displayCart();
 
@@ -249,7 +342,13 @@ document.addEventListener(
 
 function displayCart() {
 
-    let totalQuantity = 0;
+    let totalQuantity =
+        0;
+
+
+    let totalPrice =
+        0;
+
 
     shoppingCart.forEach(
         function(product) {
@@ -257,28 +356,38 @@ function displayCart() {
             totalQuantity +=
                 product.quantity;
 
+            totalPrice +=
+                product.price *
+                product.quantity;
+
         }
     );
+
 
     cart.textContent =
         totalQuantity;
 
+
+    cartTotal.textContent =
+        totalPrice.toLocaleString();
+
+
     if (
-        shoppingCart.length === 0
+        shoppingCart.length ===
+        0
     ) {
 
         cartItems.innerHTML =
             "<p>Your cart is empty.</p>";
 
-        cartTotal.textContent =
-            "0";
-
         return;
+
     }
 
-    cartItems.innerHTML = "";
 
-    let totalPrice = 0;
+    cartItems.innerHTML =
+        "";
+
 
     shoppingCart.forEach(
         function(
@@ -286,20 +395,21 @@ function displayCart() {
             index
         ) {
 
+
             const productTotal =
                 product.price *
                 product.quantity;
 
-            totalPrice +=
-                productTotal;
 
             const item =
                 document.createElement(
                     "div"
                 );
 
+
             item.className =
                 "cart-item";
+
 
             item.innerHTML = `
 
@@ -319,6 +429,7 @@ function displayCart() {
                         class="quantityBtn"
                         data-index="${index}"
                         data-action="decrease"
+                        type="button"
                     >
                         −
                     </button>
@@ -331,20 +442,24 @@ function displayCart() {
                         class="quantityBtn"
                         data-index="${index}"
                         data-action="increase"
+                        type="button"
                     >
                         +
                     </button>
 
                 </div>
 
+
                 <button
                     class="removeBtn"
                     data-index="${index}"
+                    type="button"
                 >
                     Remove
                 </button>
 
             `;
+
 
             cartItems.appendChild(
                 item
@@ -353,12 +468,26 @@ function displayCart() {
         }
     );
 
-    cartTotal.textContent =
-        totalPrice.toLocaleString();
-
 }
 
-displayCart();
+
+// ==========================
+// CART BUTTON
+// ==========================
+
+cartBtn.addEventListener(
+    "click",
+    function() {
+
+        cartSection.scrollIntoView({
+
+            behavior:
+                "smooth"
+
+        });
+
+    }
+);
 
 
 // ==========================
@@ -369,22 +498,27 @@ document.addEventListener(
     "click",
     function(event) {
 
+
         if (
             event.target.classList.contains(
                 "quantityBtn"
             )
         ) {
 
+
             const index =
                 Number(
                     event.target.dataset.index
                 );
 
+
             const action =
                 event.target.dataset.action;
 
+
             if (
-                action === "increase"
+                action ===
+                "increase"
             ) {
 
                 shoppingCart[
@@ -393,13 +527,16 @@ document.addEventListener(
 
             }
 
+
             if (
-                action === "decrease"
+                action ===
+                "decrease"
             ) {
 
                 shoppingCart[
                     index
                 ].quantity--;
+
 
                 if (
                     shoppingCart[
@@ -416,8 +553,11 @@ document.addEventListener(
 
             }
 
+
             displayCart();
+
         }
+
 
         if (
             event.target.classList.contains(
@@ -425,17 +565,21 @@ document.addEventListener(
             )
         ) {
 
+
             const index =
                 Number(
                     event.target.dataset.index
                 );
+
 
             shoppingCart.splice(
                 index,
                 1
             );
 
+
             displayCart();
+
         }
 
     }
@@ -450,6 +594,7 @@ const darkButton =
     document.getElementById(
         "darkModeBtn"
     );
+
 
 darkButton.addEventListener(
     "click",
@@ -472,17 +617,22 @@ const shopButton =
         "shopNowBtn"
     );
 
+
 const products =
     document.getElementById(
         "products"
     );
+
 
 shopButton.addEventListener(
     "click",
     function() {
 
         products.scrollIntoView({
-            behavior: "smooth"
+
+            behavior:
+                "smooth"
+
         });
 
     }
@@ -498,28 +648,35 @@ const searchBox =
         "searchBox"
     );
 
+
 const categoryButtons =
     document.querySelectorAll(
         ".categoryBtn"
     );
 
-let selectedCategory = "All";
+
+let selectedCategory =
+    "All";
 
 
 function filterProducts() {
+
 
     const search =
         searchBox.value
             .toLowerCase()
             .trim();
 
+
     const cards =
         document.querySelectorAll(
             ".card"
         );
 
+
     cards.forEach(
         function(card) {
+
 
             const productName =
                 card.querySelector(
@@ -529,6 +686,7 @@ function filterProducts() {
                 .toLowerCase()
                 .trim();
 
+
             const productCategory =
                 (
                     card.dataset.category ||
@@ -536,15 +694,23 @@ function filterProducts() {
                 )
                 .trim();
 
+
             const matchesSearch =
                 productName.includes(
                     search
                 );
 
+
             const matchesCategory =
-                selectedCategory === "All" ||
+
+                selectedCategory ===
+                    "All"
+
+                ||
+
                 productCategory ===
                     selectedCategory;
+
 
             if (
                 matchesSearch &&
@@ -554,7 +720,9 @@ function filterProducts() {
                 card.style.display =
                     "block";
 
-            } else {
+            }
+
+            else {
 
                 card.style.display =
                     "none";
@@ -569,19 +737,26 @@ function filterProducts() {
 
 searchBox.addEventListener(
     "input",
-    filterProducts
+    function() {
+
+        filterProducts();
+
+    }
 );
 
 
 categoryButtons.forEach(
     function(button) {
 
+
         button.addEventListener(
             "click",
             function() {
 
+
                 selectedCategory =
                     button.dataset.category;
+
 
                 categoryButtons.forEach(
                     function(btn) {
@@ -593,9 +768,11 @@ categoryButtons.forEach(
                     }
                 );
 
+
                 button.classList.add(
                     "active"
                 );
+
 
                 filterProducts();
 
@@ -615,25 +792,33 @@ const slides =
         ".slide"
     );
 
+
 const dots =
     document.querySelectorAll(
         ".dot"
     );
+
 
 const nextButton =
     document.querySelector(
         ".nextBtn"
     );
 
+
 const prevButton =
     document.querySelector(
         ".prevBtn"
     );
 
-let currentSlide = 0;
+
+let currentSlide =
+    0;
 
 
-function showSlide(index) {
+function showSlide(
+    index
+) {
+
 
     slides.forEach(
         function(slide) {
@@ -645,6 +830,7 @@ function showSlide(index) {
         }
     );
 
+
     dots.forEach(
         function(dot) {
 
@@ -655,17 +841,27 @@ function showSlide(index) {
         }
     );
 
-    slides[
-        index
-    ].classList.add(
-        "active"
-    );
 
-    dots[
-        index
-    ].classList.add(
-        "active"
-    );
+    if (
+        slides[index]
+    ) {
+
+        slides[index].classList.add(
+            "active"
+        );
+
+    }
+
+
+    if (
+        dots[index]
+    ) {
+
+        dots[index].classList.add(
+            "active"
+        );
+
+    }
 
 }
 
@@ -681,7 +877,8 @@ nextButton.addEventListener(
             slides.length
         ) {
 
-            currentSlide = 0;
+            currentSlide =
+                0;
 
         }
 
@@ -704,7 +901,8 @@ prevButton.addEventListener(
         ) {
 
             currentSlide =
-                slides.length - 1;
+                slides.length -
+                1;
 
         }
 
@@ -721,6 +919,7 @@ dots.forEach(
         dot,
         index
     ) {
+
 
         dot.addEventListener(
             "click",
@@ -750,7 +949,8 @@ setInterval(
             slides.length
         ) {
 
-            currentSlide = 0;
+            currentSlide =
+                0;
 
         }
 
@@ -772,6 +972,7 @@ const contactForm =
         "contactForm"
     );
 
+
 const contactStatus =
     document.getElementById(
         "contactStatus"
@@ -782,53 +983,76 @@ contactForm.addEventListener(
     "submit",
     async function(event) {
 
+
         event.preventDefault();
+
 
         const name =
             document.getElementById(
                 "contactName"
             ).value.trim();
 
+
         const email =
             document.getElementById(
                 "contactEmail"
             ).value.trim();
+
 
         const message =
             document.getElementById(
                 "contactMessage"
             ).value.trim();
 
+
         contactStatus.textContent =
             "Sending message...";
+
 
         const {
             error
         } = await supabaseClient
             .from("contacts")
             .insert([
+
                 {
-                    name: name,
-                    email: email,
-                    message: message
+
+                    name:
+                        name,
+
+                    email:
+                        email,
+
+                    message:
+                        message
+
                 }
+
             ]);
 
-        if (error) {
+
+        if (
+            error
+        ) {
 
             console.error(
                 "Contact form error:",
                 error
             );
 
+
             contactStatus.textContent =
                 "Something went wrong. Please try again.";
 
+
             return;
+
         }
+
 
         contactStatus.textContent =
             "Message sent successfully!";
+
 
         contactForm.reset();
 
@@ -837,7 +1061,7 @@ contactForm.addEventListener(
 
 
 // ==========================
-// CHECKOUT
+// CHECKOUT FORM
 // ==========================
 
 const checkoutFormContainer =
@@ -850,8 +1074,10 @@ checkoutBtn.addEventListener(
     "click",
     function() {
 
+
         if (
-            shoppingCart.length === 0
+            shoppingCart.length ===
+            0
         ) {
 
             alert(
@@ -859,13 +1085,19 @@ checkoutBtn.addEventListener(
             );
 
             return;
+
         }
+
 
         checkoutFormContainer.style.display =
             "block";
 
+
         checkoutFormContainer.scrollIntoView({
-            behavior: "smooth"
+
+            behavior:
+                "smooth"
+
         });
 
     }
@@ -881,6 +1113,7 @@ const checkoutForm =
         "checkoutForm"
     );
 
+
 const checkoutStatus =
     document.getElementById(
         "checkoutStatus"
@@ -891,39 +1124,50 @@ checkoutForm.addEventListener(
     "submit",
     async function(event) {
 
+
         event.preventDefault();
 
+
         if (
-            shoppingCart.length === 0
+            shoppingCart.length ===
+            0
         ) {
 
             checkoutStatus.textContent =
                 "Your cart is empty.";
 
             return;
+
         }
+
 
         const customerName =
             document.getElementById(
                 "customerName"
             ).value.trim();
 
+
         const customerEmail =
             document.getElementById(
                 "customerEmail"
             ).value.trim();
+
 
         const customerPhone =
             document.getElementById(
                 "customerPhone"
             ).value.trim();
 
+
         const customerAddress =
             document.getElementById(
                 "customerAddress"
             ).value.trim();
 
-        let totalAmount = 0;
+
+        let totalAmount =
+            0;
+
 
         shoppingCart.forEach(
             function(product) {
@@ -935,9 +1179,14 @@ checkoutForm.addEventListener(
             }
         );
 
+
         checkoutStatus.textContent =
             "Processing your order...";
 
+
+        // ==========================
+        // SAVE ORDER
+        // ==========================
 
         const {
             data: order,
@@ -945,7 +1194,9 @@ checkoutForm.addEventListener(
         } = await supabaseClient
             .from("orders")
             .insert([
+
                 {
+
                     customer_name:
                         customerName,
 
@@ -960,32 +1211,44 @@ checkoutForm.addEventListener(
 
                     total_amount:
                         totalAmount
+
                 }
+
             ])
             .select()
             .single();
 
 
-        if (orderError) {
+        if (
+            orderError
+        ) {
 
             console.error(
                 "ORDER ERROR:",
                 orderError
             );
 
+
             checkoutStatus.textContent =
                 "Order Error: " +
                 orderError.message;
 
+
             return;
+
         }
 
+
+        // ==========================
+        // CREATE ORDER ITEMS
+        // ==========================
 
         const orderItems =
             shoppingCart.map(
                 function(product) {
 
                     return {
+
                         order_id:
                             order.id,
 
@@ -1000,11 +1263,16 @@ checkoutForm.addEventListener(
 
                         price:
                             product.price
+
                     };
 
                 }
             );
 
+
+        // ==========================
+        // SAVE ORDER ITEMS
+        // ==========================
 
         const {
             error: itemsError
@@ -1015,101 +1283,44 @@ checkoutForm.addEventListener(
             );
 
 
-        if (itemsError) {
+        if (
+            itemsError
+        ) {
 
             console.error(
                 "Order items error:",
                 itemsError
             );
 
+
             checkoutStatus.textContent =
                 "Order was created, but there was a problem saving the products.";
 
+
             return;
+
         }
 
+
+        // ==========================
+        // SUCCESS
+        // ==========================
 
         checkoutStatus.textContent =
             "Order placed successfully! Thank you for your purchase.";
 
-        shoppingCart = [];
+
+        shoppingCart =
+            [];
+
 
         displayCart();
+
 
         checkoutForm.reset();
 
     }
 );
-
-
-// ==================================================
-// USER AUTHENTICATION
-// ==================================================
-
-const loggedOutMenu =
-    document.getElementById(
-        "loggedOutMenu"
-    );
-
-const loggedInMenu =
-    document.getElementById(
-        "loggedInMenu"
-    );
-
-const accountBtn =
-    document.getElementById(
-        "accountBtn"
-    );
-
-const accountName =
-    document.getElementById(
-        "accountName"
-    );
-
-const accountDropdown =
-    document.getElementById(
-        "accountDropdown"
-    );
-
-const logoutBtn =
-    document.getElementById(
-        "logoutBtn"
-    );
-
-
-// ==========================
-// SHOW LOGGED OUT MENU
-// ==========================
-
-function showLoggedOutMenu() {
-
-    loggedOutMenu.style.display =
-        "flex";
-
-    loggedInMenu.style.display =
-        "none";
-
-}
-
-
-// ==========================
-// SHOW LOGGED IN MENU
-// ==========================
-
-function showLoggedInMenu(
-    name
-) {
-
-    loggedOutMenu.style.display =
-        "none";
-
-    loggedInMenu.style.display =
-        "block";
-
-    accountName.textContent =
-        name;
-
-}
 
 
 // ==========================
@@ -1118,9 +1329,6 @@ function showLoggedInMenu(
 
 async function checkUserSession() {
 
-    console.log(
-        "Checking user session..."
-    );
 
     const {
         data,
@@ -1129,7 +1337,9 @@ async function checkUserSession() {
         await supabaseClient.auth.getSession();
 
 
-    if (error) {
+    if (
+        error
+    ) {
 
         console.error(
             "Session error:",
@@ -1139,6 +1349,7 @@ async function checkUserSession() {
         showLoggedOutMenu();
 
         return;
+
     }
 
 
@@ -1146,39 +1357,52 @@ async function checkUserSession() {
         data.session;
 
 
-    // USER IS NOT LOGGED IN
+    // ==========================
+    // LOGGED OUT
+    // ==========================
 
-    if (!session) {
+    if (
+        !session
+    ) {
 
         console.log(
             "No active user session."
         );
 
+
         showLoggedOutMenu();
 
         return;
+
     }
 
 
-    // USER IS LOGGED IN
+    // ==========================
+    // LOGGED IN
+    // ==========================
 
     const user =
         session.user;
 
 
     console.log(
-        "Logged in user:",
-        user.email
+        "Current user:",
+        user
     );
 
 
-    // DEFAULT NAME
+    showLoggedInMenu();
 
-    let displayName =
+
+    // DEFAULT ACCOUNT NAME
+
+    accountName.textContent =
         user.email;
 
 
+    // ==========================
     // GET PROFILE
+    // ==========================
 
     const {
         data: profile,
@@ -1186,41 +1410,104 @@ async function checkUserSession() {
     } =
         await supabaseClient
             .from("profiles")
-            .select(
-                "full_name, role"
-            )
+            .select("*")
             .eq(
                 "id",
                 user.id
             )
-            .maybeSingle();
+            .single();
 
 
     if (
-        !profileError &&
-        profile
+        profileError
     ) {
 
-        if (
-            profile.full_name
-        ) {
-
-            displayName =
-                profile.full_name;
-
-        }
-
-        console.log(
-            "User role:",
-            profile.role
+        console.error(
+            "Profile error:",
+            profileError
         );
+
+
+        return;
 
     }
 
 
-    showLoggedInMenu(
-        displayName
+    console.log(
+        "Current user profile:",
+        profile
     );
+
+
+    console.log(
+        "Current user role:",
+        profile.role
+    );
+
+
+    // ==========================
+    // DISPLAY NAME
+    // ==========================
+
+    if (
+        profile.full_name
+    ) {
+
+        accountName.textContent =
+            profile.full_name;
+
+    }
+
+
+    // ==========================
+    // RESET ROLE LINKS
+    // ==========================
+
+    sellerDashboardLink.style.display =
+        "none";
+
+    adminDashboardLink.style.display =
+        "none";
+
+    becomeSellerLink.style.display =
+        "block";
+
+
+    // ==========================
+    // ADMIN
+    // ==========================
+
+    if (
+        profile.role ===
+        "admin"
+    ) {
+
+        adminDashboardLink.style.display =
+            "block";
+
+        becomeSellerLink.style.display =
+            "none";
+
+    }
+
+
+    // ==========================
+    // SELLER
+    // ==========================
+
+    else if (
+        profile.role ===
+        "seller"
+    ) {
+
+        sellerDashboardLink.style.display =
+            "block";
+
+        becomeSellerLink.style.display =
+            "none";
+
+    }
+
 
 }
 
@@ -1275,9 +1562,6 @@ logoutBtn.addEventListener(
     "click",
     async function() {
 
-        console.log(
-            "Logging out..."
-        );
 
         const {
             error
@@ -1285,35 +1569,25 @@ logoutBtn.addEventListener(
             await supabaseClient.auth.signOut();
 
 
-        if (error) {
+        if (
+            error
+        ) {
 
             console.error(
                 "Logout error:",
                 error
             );
 
-            alert(
-                "Logout failed. Please try again."
-            );
-
             return;
+
         }
 
 
-        // CLOSE DROPDOWN
-
-        accountDropdown.classList.remove(
-            "show"
-        );
-
-
-        // SHOW LOGIN / SIGN UP
-
         showLoggedOutMenu();
 
-        console.log(
-            "Successfully logged out."
-        );
+
+        window.location.href =
+            "index.html";
 
     }
 );
@@ -1329,6 +1603,7 @@ supabaseClient.auth.onAuthStateChange(
         session
     ) {
 
+
         console.log(
             "Auth state changed:",
             event
@@ -1341,7 +1616,9 @@ supabaseClient.auth.onAuthStateChange(
 
             checkUserSession();
 
-        } else {
+        }
+
+        else {
 
             showLoggedOutMenu();
 
@@ -1352,9 +1629,21 @@ supabaseClient.auth.onAuthStateChange(
 
 
 // ==========================
-// START AUTH CHECK
+// INITIAL CART
 // ==========================
 
-showLoggedOutMenu();
+displayCart();
+
+
+// ==========================
+// INITIAL PRODUCT LOAD
+// ==========================
+
+loadProducts();
+
+
+// ==========================
+// INITIAL SESSION CHECK
+// ==========================
 
 checkUserSession();

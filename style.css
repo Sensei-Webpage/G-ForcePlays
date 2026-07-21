@@ -27,15 +27,19 @@ body {
 header {
     background: #111;
     color: white;
+
     min-height: 70px;
+
     padding: 15px 30px;
 
     display: flex;
     align-items: center;
+
     gap: 20px;
 
     position: sticky;
     top: 0;
+
     z-index: 2000;
 }
 
@@ -52,16 +56,23 @@ header h1 {
 nav {
     display: flex;
     align-items: center;
+
     gap: 15px;
+
     margin-left: 20px;
 }
 
 nav a {
     color: white;
+
     text-decoration: none;
+
     font-weight: bold;
+
     padding: 10px 12px;
+
     border-radius: 6px;
+
     transition: 0.3s;
 }
 
@@ -76,50 +87,82 @@ nav a:hover {
 
 #accountArea {
     position: relative;
+
     margin-left: auto;
+
+    display: block;
 }
 
 
-/* LOGGED OUT */
+/* ==========================
+   LOGGED OUT
+========================== */
 
 #loggedOutMenu {
     display: flex;
+
     align-items: center;
+
     gap: 10px;
 }
 
 #loggedOutMenu a {
+    display: inline-block;
+
+    visibility: visible;
+
+    opacity: 1;
+
     color: white;
+
+    background: #007bff;
+
     text-decoration: none;
+
     font-weight: bold;
+
     padding: 10px 15px;
+
     border-radius: 8px;
+
     transition: 0.3s;
 }
 
 #loggedOutMenu a:hover {
-    background: #007bff;
+    background: #0056b3;
 }
 
 
-/* LOGGED IN */
+/* ==========================
+   LOGGED IN
+========================== */
 
 #loggedInMenu {
     display: none;
+
     position: relative;
 }
 
 
-/* ACCOUNT BUTTON */
+/* ==========================
+   ACCOUNT BUTTON
+========================== */
 
 #accountBtn {
     padding: 10px 15px;
+
     border: none;
+
     border-radius: 8px;
+
     background: #007bff;
+
     color: white;
+
     font-weight: bold;
+
     cursor: pointer;
+
     transition: 0.3s;
 }
 
@@ -128,35 +171,54 @@ nav a:hover {
 }
 
 
-/* ACCOUNT DROPDOWN */
+/* ==========================
+   ACCOUNT DROPDOWN
+========================== */
 
 .account-dropdown {
     display: none;
+
     position: absolute;
+
     right: 0;
+
     top: calc(100% + 10px);
 
-    width: 210px;
+    width: 220px;
 
     background: white;
+
     border-radius: 12px;
+
     padding: 10px;
 
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    box-shadow:
+        0 10px 30px
+        rgba(0, 0, 0, 0.2);
 
     z-index: 3000;
 }
 
 .account-dropdown.show {
     display: flex;
+
     flex-direction: column;
 }
 
+
+/* DROPDOWN LINKS */
+
 .account-dropdown a {
+    display: block;
+
     padding: 12px 15px;
+
     color: #333;
+
     text-decoration: none;
+
     border-radius: 8px;
+
     transition: 0.3s;
 }
 
@@ -168,15 +230,22 @@ nav a:hover {
 /* LOGOUT */
 
 #logoutBtn {
+    width: 100%;
+
     padding: 12px 15px;
+
     border: none;
+
     background: transparent;
+
     color: #dc3545;
 
     text-align: left;
+
     font-size: 15px;
 
     cursor: pointer;
+
     border-radius: 8px;
 }
 
@@ -186,17 +255,20 @@ nav a:hover {
 
 
 /* ==========================
-   CART BUTTON
+   CART
 ========================== */
 
 .cart-area {
     display: flex;
+
     align-items: center;
 }
 
 #cartBtn {
     background: #28a745;
+
     color: white;
+
     border: none;
 
     padding: 10px 15px;
@@ -204,6 +276,7 @@ nav a:hover {
     border-radius: 8px;
 
     font-weight: bold;
+
     cursor: pointer;
 
     transition: 0.3s;
@@ -220,6 +293,7 @@ nav a:hover {
 
 #darkModeBtn {
     background: #444;
+
     color: white;
 
     border: none;
@@ -241,12 +315,14 @@ nav a:hover {
 
 
 /* ==========================
-   HERO / BANNER
+   HERO
 ========================== */
 
 .hero {
     position: relative;
+
     width: 100%;
+
     height: 500px;
 
     overflow: hidden;
@@ -258,9 +334,11 @@ nav a:hover {
     position: absolute;
 
     width: 100%;
+
     height: 100%;
 
     top: 0;
+
     left: 0;
 }
 
@@ -268,6 +346,7 @@ nav a:hover {
     position: absolute;
 
     width: 100%;
+
     height: 100%;
 
     opacity: 0;
@@ -277,11 +356,13 @@ nav a:hover {
 
 .slide.active {
     opacity: 1;
+
     z-index: 1;
 }
 
 .slide img {
     width: 100%;
+
     height: 100%;
 
     object-fit: cover;
@@ -319,7 +400,8 @@ nav a:hover {
     top: 50%;
     left: 50%;
 
-    transform: translate(-50%, -50%);
+    transform:
+        translate(-50%, -50%);
 
     text-align: center;
 
@@ -328,17 +410,21 @@ nav a:hover {
     z-index: 5;
 
     width: 90%;
+
     max-width: 700px;
 }
 
 .hero-content h2 {
     font-size: 42px;
+
     margin-bottom: 15px;
 }
 
 .hero-content p {
     font-size: 18px;
+
     line-height: 1.6;
+
     margin-bottom: 25px;
 }
 
@@ -349,12 +435,15 @@ nav a:hover {
     padding: 14px 28px;
 
     border: none;
+
     border-radius: 8px;
 
     background: #007bff;
+
     color: white;
 
     font-size: 16px;
+
     font-weight: bold;
 
     cursor: pointer;
@@ -364,6 +453,7 @@ nav a:hover {
 
 #shopNowBtn:hover {
     background: #0056b3;
+
     transform: translateY(-2px);
 }
 
@@ -383,9 +473,11 @@ nav a:hover {
     z-index: 10;
 
     width: 50px;
+
     height: 50px;
 
     border: none;
+
     border-radius: 50%;
 
     background: rgba(0, 0, 0, 0.5);
@@ -421,6 +513,7 @@ nav a:hover {
     position: absolute;
 
     bottom: 20px;
+
     left: 50%;
 
     transform: translateX(-50%);
@@ -428,11 +521,13 @@ nav a:hover {
     z-index: 10;
 
     display: flex;
+
     gap: 10px;
 }
 
 .dot {
     width: 12px;
+
     height: 12px;
 
     border-radius: 50%;
@@ -448,6 +543,7 @@ nav a:hover {
 
 .dot.active {
     opacity: 1;
+
     transform: scale(1.2);
 }
 
@@ -458,11 +554,13 @@ nav a:hover {
 
 #products {
     padding: 60px 30px;
+
     text-align: center;
 }
 
 #products > h2 {
     font-size: 32px;
+
     margin-bottom: 25px;
 }
 
@@ -471,11 +569,13 @@ nav a:hover {
 
 #searchBox {
     width: 100%;
+
     max-width: 500px;
 
     padding: 14px 18px;
 
     border: 1px solid #ccc;
+
     border-radius: 8px;
 
     font-size: 16px;
@@ -490,7 +590,7 @@ nav a:hover {
 }
 
 
-/* CATEGORY FILTERS */
+/* CATEGORY */
 
 .category-filters {
     display: flex;
@@ -512,6 +612,7 @@ nav a:hover {
     border-radius: 8px;
 
     background: #ddd;
+
     color: #222;
 
     font-weight: bold;
@@ -527,11 +628,14 @@ nav a:hover {
 
 .categoryBtn.active {
     background: #007bff;
+
     color: white;
 }
 
 
-/* PRODUCT GRID */
+/* ==========================
+   PRODUCT GRID
+========================== */
 
 .container {
     max-width: 1200px;
@@ -540,10 +644,11 @@ nav a:hover {
 
     display: grid;
 
-    grid-template-columns: repeat(
-        auto-fit,
-        minmax(230px, 1fr)
-    );
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(230px, 1fr)
+        );
 
     gap: 25px;
 }
@@ -558,7 +663,9 @@ nav a:hover {
 
     padding: 20px;
 
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    box-shadow:
+        0 5px 20px
+        rgba(0, 0, 0, 0.1);
 
     transition: 0.3s;
 }
@@ -566,11 +673,14 @@ nav a:hover {
 .card:hover {
     transform: translateY(-5px);
 
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    box-shadow:
+        0 10px 25px
+        rgba(0, 0, 0, 0.15);
 }
 
 .card img {
     width: 100%;
+
     height: 200px;
 
     object-fit: contain;
@@ -580,6 +690,7 @@ nav a:hover {
 
 .card h3 {
     font-size: 19px;
+
     margin-bottom: 10px;
 }
 
@@ -636,7 +747,9 @@ nav a:hover {
 
     border-radius: 12px;
 
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    box-shadow:
+        0 5px 20px
+        rgba(0, 0, 0, 0.1);
 
     text-align: left;
 }
@@ -668,6 +781,7 @@ nav a:hover {
 
 .cart-item h3 {
     flex: 1;
+
     min-width: 180px;
 }
 
@@ -688,6 +802,7 @@ nav a:hover {
 
 .quantityBtn {
     width: 32px;
+
     height: 32px;
 
     border: none;
@@ -729,7 +844,7 @@ nav a:hover {
 }
 
 
-/* CHECKOUT BUTTON */
+/* CHECKOUT */
 
 #checkoutBtn {
     margin-top: 20px;
@@ -754,9 +869,7 @@ nav a:hover {
 }
 
 
-/* ==========================
-   CHECKOUT FORM
-========================== */
+/* CHECKOUT FORM */
 
 #checkoutFormContainer {
     margin-top: 30px;
@@ -1048,6 +1161,7 @@ body.dark #contactForm textarea {
     #darkModeBtn {
         order: 5;
     }
+
 }
 
 
@@ -1107,8 +1221,10 @@ body.dark #contactForm textarea {
     .account-dropdown {
         right: 50%;
 
-        transform: translateX(50%);
+        transform:
+            translateX(50%);
     }
+
 }
 
 
@@ -1143,4 +1259,5 @@ body.dark #contactForm textarea {
 
         justify-content: center;
     }
+
 }

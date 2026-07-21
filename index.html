@@ -35,7 +35,6 @@
 
     <header>
 
-
         <!-- WEBSITE TITLE -->
 
         <h1>
@@ -88,9 +87,6 @@
 
             <div id="loggedInMenu">
 
-
-                <!-- ACCOUNT BUTTON -->
-
                 <button
                     id="accountBtn"
                     type="button"
@@ -118,13 +114,45 @@
                         My Account
                     </a>
 
+
                     <a href="orders.html">
                         My Orders
                     </a>
 
-                    <a href="seller-application.html">
+
+                    <!-- SELLER DASHBOARD -->
+
+                    <a
+                        href="seller-dashboard.html"
+                        id="sellerDashboardLink"
+                        style="display: none;"
+                    >
+                        Seller Dashboard
+                    </a>
+
+
+                    <!-- ADMIN DASHBOARD -->
+
+                    <a
+                        href="admin.html"
+                        id="adminDashboardLink"
+                        style="display: none;"
+                    >
+                        Admin Dashboard
+                    </a>
+
+
+                    <!-- BECOME A SELLER -->
+
+                    <a
+                        href="seller-application.html"
+                        id="becomeSellerLink"
+                    >
                         Become a Seller
                     </a>
+
+
+                    <!-- LOGOUT -->
 
                     <button
                         id="logoutBtn"
@@ -135,15 +163,13 @@
 
                 </div>
 
-
             </div>
-
 
         </div>
 
 
         <!-- ==========================
-             CART BUTTON
+             CART
         =========================== -->
 
         <div class="cart-area">
@@ -229,17 +255,14 @@
 
         <div class="hero-content">
 
-
             <h2>
                 Your One-Stop Computer Shop
             </h2>
-
 
             <p>
                 Find laptops, desktops, gaming accessories,
                 and more at affordable prices.
             </p>
-
 
             <button
                 id="shopNowBtn"
@@ -248,11 +271,10 @@
                 Shop Now
             </button>
 
-
         </div>
 
 
-        <!-- PREVIOUS SLIDE -->
+        <!-- PREVIOUS -->
 
         <button
             class="prevBtn"
@@ -263,7 +285,7 @@
         </button>
 
 
-        <!-- NEXT SLIDE -->
+        <!-- NEXT -->
 
         <button
             class="nextBtn"
@@ -274,7 +296,7 @@
         </button>
 
 
-        <!-- SLIDER DOTS -->
+        <!-- DOTS -->
 
         <div class="dots">
 
@@ -301,7 +323,7 @@
 
 
     <!-- ==========================
-         PRODUCTS SECTION
+         PRODUCTS
     =========================== -->
 
     <section id="products">
@@ -312,7 +334,7 @@
         </h2>
 
 
-        <!-- SEARCH BOX -->
+        <!-- SEARCH -->
 
         <input
             type="text"
@@ -322,10 +344,9 @@
         >
 
 
-        <!-- CATEGORY FILTERS -->
+        <!-- CATEGORIES -->
 
         <div class="category-filters">
-
 
             <button
                 class="categoryBtn active"
@@ -362,7 +383,6 @@
                 Accessories
             </button>
 
-
         </div>
 
 
@@ -373,14 +393,16 @@
             id="productContainer"
         >
 
-            <!-- Products will be loaded from Supabase -->
+            <p>
+                Loading products...
+            </p>
 
         </div>
 
 
 
         <!-- ==========================
-             SHOPPING CART
+             CART
         =========================== -->
 
         <section id="cartSection">
@@ -391,8 +413,6 @@
             </h2>
 
 
-            <!-- CART ITEMS -->
-
             <div id="cartItems">
 
                 <p>
@@ -401,8 +421,6 @@
 
             </div>
 
-
-            <!-- CART TOTAL -->
 
             <h3>
 
@@ -413,8 +431,6 @@
             </h3>
 
 
-            <!-- CHECKOUT BUTTON -->
-
             <button
                 id="checkoutBtn"
                 type="button"
@@ -424,15 +440,12 @@
 
 
 
-            <!-- ==========================
-                 CHECKOUT FORM
-            =========================== -->
+            <!-- CHECKOUT -->
 
             <div
                 id="checkoutFormContainer"
                 style="display: none;"
             >
-
 
                 <h2>
                     Checkout
@@ -483,10 +496,7 @@
                 </form>
 
 
-                <!-- CHECKOUT STATUS -->
-
                 <p id="checkoutStatus"></p>
-
 
             </div>
 
@@ -499,7 +509,7 @@
 
 
     <!-- ==========================
-         CONTACT SECTION
+         CONTACT
     =========================== -->
 
     <section id="contact">
@@ -524,9 +534,6 @@
             Address: Bataan, Philippines
         </p>
 
-
-
-        <!-- CONTACT FORM -->
 
         <form id="contactForm">
 
@@ -564,8 +571,6 @@
         </form>
 
 
-        <!-- CONTACT STATUS -->
-
         <p id="contactStatus"></p>
 
 
@@ -579,18 +584,16 @@
 
     <footer>
 
-
         <p>
             © 2026 G-ForcePlays. All Rights Reserved.
         </p>
-
 
     </footer>
 
 
 
     <!-- ==========================
-         SUPABASE JAVASCRIPT
+         SUPABASE
     =========================== -->
 
     <script
