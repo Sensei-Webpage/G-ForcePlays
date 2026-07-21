@@ -1,6 +1,6 @@
-// ==========================
+// ==================================================
 // SUPABASE CONNECTION
-// ==========================
+// ==================================================
 
 const SUPABASE_URL =
     "https://ijiiccptmcdtnxvrfusr.supabase.co";
@@ -14,166 +14,172 @@ const supabaseClient =
         SUPABASE_KEY
     );
 
-console.log("Orders Supabase connected!");
+console.log(
+    "My Orders Supabase connected!"
+);
 
 
-// ==========================
-// GET ELEMENTS
-// ==========================
+// ==================================================
+// DOM ELEMENTS
+// ==================================================
 
 const ordersStatus =
-    document.getElementById("ordersStatus");
+    document.getElementById(
+        "ordersStatus"
+    );
 
 const myOrdersList =
-    document.getElementById("myOrdersList");
+    document.getElementById(
+        "myOrdersList"
+    );
 
 const logoutBtn =
-    document.getElementById("logoutBtn");
+    document.getElementById(
+        "logoutBtn"
+    );
 
 
-// ==========================
-// LOAD CUSTOMER ORDERS
-// ==========================
+// ==================================================
+// CURRENT USER
+// ==================================================
 
-async function loadMyOrders() {
-
-    console.log("Loading customer orders...");
-
-    if (ordersStatus) {
-        ordersStatus.textContent =
-            "Loading your orders...";
-    }
+let currentUser = null;
 
 
-    // ==========================
-    // GET CURRENT USER
-    // ==========================
+// ==================================================
+// CHECK USER LOGIN
+// ==================================================
 
-    const {
-        data: userData,
-        error: userError
-    } =
-        await supabaseClient.auth.getUser();
+async function checkUserLogin() {
+
+    console.log(
+        "Checking user login..."
+    );
 
 
-    // ==========================
-    // CHECK USER
-    // ==========================
+    try {
 
-    if (
-        userError ||
-        !userData ||
-        !userData.user
-    ) {
+        const {
+            data,
+            error
+        } =
+            await supabaseClient.auth.getSession();
+
+
+        // ==================================================
+        // SESSION ERROR
+        // ==================================================
+
+        if (error) {
+
+            console.error(
+                "Session error:",
+                error
+            );
+
+
+            if (ordersStatus) {
+
+                ordersStatus.textContent =
+                    "Unable to verify your login.";
+
+            }
+
+
+            window.location.href =
+                "login.html";
+
+
+            return false;
+
+        }
+
+
+        // ==================================================
+        // GET SESSION
+        // ==================================================
+
+        const session =
+            data.session;
+
+
+        // ==================================================
+        // USER NOT LOGGED IN
+        // ==================================================
+
+        if (!session) {
+
+            alert(
+                "You must log in to view your orders."
+            );
+
+
+            window.location.href =
+                "login.html";
+
+
+            return false;
+
+        }
+
+
+        // ==================================================
+        // SAVE CURRENT USER
+        // ==================================================
+
+        currentUser =
+            session.user;
+
+
+        console.log(
+            "Logged in user:",
+            currentUser.email
+        );
+
+
+        return true;
+
+
+    } catch (error) {
 
         console.error(
-            "User error:",
-            userError
+            "Login check error:",
+            error
         );
+
 
         window.location.href =
             "login.html";
 
-        return;
+
+        return false;
 
     }
 
-
-    // ==========================
-    // CURRENT USER
-    // ==========================
-
-    const user =
-        userData.user;
-
-    console.log(
-        "Current customer:",
-        user.email
-    );
+}
 
 
-    // ==========================
-    // LOAD ORDERS
-    // ==========================
+// ==================================================
+// LOAD MY ORDERS
+// ==================================================
 
-    const {
-        data: orders,
-        error: ordersError
-    } =
-        await supabaseClient
-            .from("orders")
-            .select("*")
-            .eq(
-                "customer_email",
-                user.email
-            )
-            .order(
-                "created_at",
-                {
-                    ascending: false
-                }
-            );
+async function loadMyOrders() {
 
-
-    // ==========================
-    // CHECK ORDER ERROR
-    // ==========================
-
-    if (ordersError) {
-
-        console.error(
-            "Orders loading error:",
-            ordersError
-        );
-
-        if (ordersStatus) {
-
-            ordersStatus.textContent =
-                "Unable to load your orders.";
-
-        }
+    if (!currentUser) {
 
         return;
 
     }
 
 
-    // ==========================
-    // NO ORDERS
-    // ==========================
-
-    if (
-        !orders ||
-        orders.length === 0
-    ) {
-
-        if (ordersStatus) {
-
-            ordersStatus.textContent =
-                "You have not placed any orders yet.";
-
-        }
-
-        if (myOrdersList) {
-
-            myOrdersList.innerHTML =
-                "";
-
-        }
-
-        return;
-
-    }
-
-
-    // ==========================
-    // ORDERS FOUND
-    // ==========================
+    // ==================================================
+    // SHOW LOADING
+    // ==================================================
 
     if (ordersStatus) {
 
         ordersStatus.textContent =
-            "Here are your orders:";
+            "Loading your orders...";
 
     }
 
@@ -186,220 +192,157 @@ async function loadMyOrders() {
     }
 
 
-    // ==========================
-    // LOOP THROUGH ORDERS
-    // ==========================
+    try {
 
-    for (
-        const order of orders
-    ) {
+        // ==================================================
+        // GET CUSTOMER EMAIL
+        // ==================================================
+
+        const customerEmail =
+            currentUser.email;
 
 
-        // ==========================
-        // GET ORDER ITEMS
-        // ==========================
+        console.log(
+            "Loading orders for:",
+            customerEmail
+        );
+
+
+        // ==================================================
+        // GET ORDERS
+        // ==================================================
 
         const {
-            data: orderItems,
-            error: itemsError
+            data: orders,
+            error
         } =
             await supabaseClient
-                .from("order_items")
+                .from("orders")
                 .select("*")
                 .eq(
-                    "order_id",
-                    order.id
+                    "customer_email",
+                    customerEmail
+                )
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
                 );
 
 
-        // ==========================
-        // CHECK ITEMS ERROR
-        // ==========================
+        // ==================================================
+        // CHECK ERROR
+        // ==================================================
 
-        if (itemsError) {
+        if (error) {
 
             console.error(
-                "Order items error:",
-                itemsError
+                "Orders loading error:",
+                error
             );
+
+
+            if (ordersStatus) {
+
+                ordersStatus.textContent =
+                    "Error loading your orders: " +
+                    error.message;
+
+            }
+
+
+            return;
 
         }
 
 
-        // ==========================
-        // CREATE ORDER CARD
-        // ==========================
-
-        const orderCard =
-            document.createElement("div");
-
-        orderCard.className =
-            "my-order-card";
-
-
-        // ==========================
-        // FORMAT DATE
-        // ==========================
-
-        const orderDate =
-            order.created_at
-                ? new Date(
-                    order.created_at
-                ).toLocaleString()
-                : "Date unavailable";
-
-
-        // ==========================
-        // ORDER STATUS
-        // ==========================
-
-        const orderStatus =
-            order.status ||
-            "Pending";
-
-
-        // ==========================
-        // PRODUCTS HTML
-        // ==========================
-
-        let itemsHTML =
-            "";
-
+        // ==================================================
+        // NO ORDERS
+        // ==================================================
 
         if (
-            orderItems &&
-            orderItems.length > 0
+            !orders ||
+            orders.length === 0
         ) {
 
-            orderItems.forEach(
-                function(item) {
+            if (ordersStatus) {
 
-                    const productName =
-                        item.product_name ||
-                        "Unknown Product";
+                ordersStatus.textContent =
+                    "You have no orders yet.";
 
-                    const quantity =
-                        item.quantity ||
-                        0;
-
-                    const price =
-                        Number(
-                            item.price || 0
-                        );
+            }
 
 
-                    itemsHTML += `
+            if (myOrdersList) {
 
-                        <div class="my-order-item">
+                myOrdersList.innerHTML = `
 
-                            <strong>
-                                ${productName}
-                            </strong>
+                    <div class="no-orders">
 
-                            <span>
-                                Quantity:
-                                ${quantity}
-                            </span>
+                        <h3>
+                            No Orders Found
+                        </h3>
 
-                            <span>
-                                ₱${price.toLocaleString()}
-                            </span>
+                        <p>
+                            You have not placed any orders yet.
+                        </p>
 
-                        </div>
+                        <a href="index.html">
+                            Start Shopping
+                        </a>
 
-                    `;
+                    </div>
 
-                }
-            );
+                `;
 
-        } else {
+            }
 
-            itemsHTML = `
 
-                <p>
-                    No products found for this order.
-                </p>
-
-            `;
+            return;
 
         }
 
 
-        // ==========================
-        // TOTAL
-        // ==========================
+        // ==================================================
+        // ORDERS FOUND
+        // ==================================================
 
-        const totalAmount =
-            Number(
-                order.total_amount || 0
+        if (ordersStatus) {
+
+            ordersStatus.textContent =
+                `Found ${orders.length} order(s).`;
+
+        }
+
+
+        // ==================================================
+        // LOAD EACH ORDER
+        // ==================================================
+
+        for (
+            const order of orders
+        ) {
+
+            await createOrderCard(
+                order
             );
 
-
-        // ==========================
-        // ORDER CARD HTML
-        // ==========================
-
-        orderCard.innerHTML = `
-
-            <div class="my-order-header">
-
-                <h3>
-                    Order #${order.id}
-                </h3>
-
-                <p>
-                    ${orderDate}
-                </p>
-
-            </div>
+        }
 
 
-            <div class="my-order-status">
+    } catch (error) {
 
-                <strong>
-                    Status:
-                </strong>
-
-                <span>
-                    ${orderStatus}
-                </span>
-
-            </div>
+        console.error(
+            "Unexpected orders error:",
+            error
+        );
 
 
-            <div class="my-order-products">
+        if (ordersStatus) {
 
-                <h4>
-                    Products
-                </h4>
-
-                ${itemsHTML}
-
-            </div>
-
-
-            <div class="my-order-total">
-
-                <strong>
-                    Total:
-                </strong>
-
-                ₱${totalAmount.toLocaleString()}
-
-            </div>
-
-        `;
-
-
-        // ==========================
-        // ADD ORDER TO PAGE
-        // ==========================
-
-        if (myOrdersList) {
-
-            myOrdersList.appendChild(
-                orderCard
-            );
+            ordersStatus.textContent =
+                "Something went wrong while loading your orders.";
 
         }
 
@@ -408,9 +351,280 @@ async function loadMyOrders() {
 }
 
 
-// ==========================
+// ==================================================
+// CREATE ORDER CARD
+// ==================================================
+
+async function createOrderCard(
+    order
+) {
+
+    // ==================================================
+    // GET ORDER ITEMS
+    // ==================================================
+
+    const {
+        data: orderItems,
+        error
+    } =
+        await supabaseClient
+            .from("order_items")
+            .select("*")
+            .eq(
+                "order_id",
+                order.id
+            );
+
+
+    // ==================================================
+    // CHECK ITEMS ERROR
+    // ==================================================
+
+    if (error) {
+
+        console.error(
+            "Order items error:",
+            error
+        );
+
+        return;
+
+    }
+
+
+    // ==================================================
+    // CREATE ORDER CARD
+    // ==================================================
+
+    const orderCard =
+        document.createElement(
+            "div"
+        );
+
+
+    orderCard.className =
+        "my-order-card";
+
+
+    // ==================================================
+    // FORMAT DATE
+    // ==================================================
+
+    const orderDate =
+        order.created_at
+            ? new Date(
+                order.created_at
+            ).toLocaleString()
+            : "Unknown date";
+
+
+    // ==================================================
+    // ORDER STATUS
+    // ==================================================
+
+    const orderStatus =
+        order.status ||
+        "Pending";
+
+
+    // ==================================================
+    // ORDER TOTAL
+    // ==================================================
+
+    const orderTotal =
+        Number(
+            order.total_amount ||
+            0
+        );
+
+
+    // ==================================================
+    // CREATE ITEMS HTML
+    // ==================================================
+
+    let itemsHTML =
+        "";
+
+
+    if (
+        orderItems &&
+        orderItems.length > 0
+    ) {
+
+        orderItems.forEach(
+            function(item) {
+
+                const itemTotal =
+                    Number(
+                        item.price ||
+                        0
+                    ) *
+                    Number(
+                        item.quantity ||
+                        0
+                    );
+
+
+                itemsHTML += `
+
+                    <div class="my-order-item">
+
+                        <div>
+
+                            <strong>
+                                ${escapeHTML(
+                                    item.product_name ||
+                                    "Unknown Product"
+                                )}
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            Quantity:
+                            ${Number(
+                                item.quantity ||
+                                0
+                            )}
+
+                        </div>
+
+
+                        <div>
+
+                            Price:
+                            ₱${Number(
+                                item.price ||
+                                0
+                            ).toLocaleString()}
+
+                        </div>
+
+
+                        <div>
+
+                            Subtotal:
+                            ₱${itemTotal.toLocaleString()}
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+        );
+
+    }
+
+    else {
+
+        itemsHTML = `
+
+            <p>
+                No products found for this order.
+            </p>
+
+        `;
+
+    }
+
+
+    // ==================================================
+    // CREATE ORDER CARD
+    // ==================================================
+
+    orderCard.innerHTML = `
+
+        <div class="my-order-header">
+
+            <h3>
+
+                Order #${escapeHTML(
+                    order.id
+                )}
+
+            </h3>
+
+
+            <p>
+
+                Date:
+                ${escapeHTML(
+                    orderDate
+                )}
+
+            </p>
+
+        </div>
+
+
+        <div class="my-order-products">
+
+            <h4>
+                Ordered Products
+            </h4>
+
+
+            ${itemsHTML}
+
+        </div>
+
+
+        <div class="my-order-total">
+
+            <strong>
+                Total:
+            </strong>
+
+
+            ₱${orderTotal.toLocaleString()}
+
+        </div>
+
+
+        <div class="my-order-status">
+
+            <strong>
+                Order Status:
+            </strong>
+
+
+            <span
+                class="status-badge status-${orderStatus.toLowerCase()}"
+            >
+
+                ${escapeHTML(
+                    orderStatus
+                )}
+
+            </span>
+
+        </div>
+
+    `;
+
+
+    // ==================================================
+    // ADD CARD TO PAGE
+    // ==================================================
+
+    if (myOrdersList) {
+
+        myOrdersList.appendChild(
+            orderCard
+        );
+
+    }
+
+}
+
+
+// ==================================================
 // LOGOUT
-// ==========================
+// ==================================================
 
 if (logoutBtn) {
 
@@ -418,39 +632,78 @@ if (logoutBtn) {
         "click",
         async function() {
 
-            console.log(
-                "Logging out..."
-            );
+            logoutBtn.disabled =
+                true;
 
 
-            const {
-                error
-            } =
-                await supabaseClient.auth.signOut();
+            logoutBtn.textContent =
+                "Logging out...";
 
 
-            if (error) {
+            try {
+
+                const {
+                    error
+                } =
+                    await supabaseClient.auth.signOut();
+
+
+                if (error) {
+
+                    console.error(
+                        "Logout error:",
+                        error
+                    );
+
+
+                    alert(
+                        "Logout failed: " +
+                        error.message
+                    );
+
+
+                    logoutBtn.disabled =
+                        false;
+
+
+                    logoutBtn.textContent =
+                        "Logout";
+
+
+                    return;
+
+                }
+
+
+                // ==================================================
+                // REDIRECT
+                // ==================================================
+
+                window.location.href =
+                    "login.html";
+
+
+            } catch (error) {
 
                 console.error(
-                    "Logout error:",
+                    "Unexpected logout error:",
                     error
                 );
 
+
                 alert(
-                    "Logout failed. Please try again."
+                    "Something went wrong while logging out."
                 );
 
-                return;
+
+                logoutBtn.disabled =
+                    false;
+
+
+                logoutBtn.textContent =
+                    "Logout";
 
             }
-
-
-            // ==========================
-            // REDIRECT TO LOGIN
-            // ==========================
-
-            window.location.href =
-                "login.html";
 
         }
     );
@@ -458,8 +711,82 @@ if (logoutBtn) {
 }
 
 
-// ==========================
-// START ORDERS PAGE
-// ==========================
+// ==================================================
+// ESCAPE HTML
+// ==================================================
 
-loadMyOrders();
+function escapeHTML(
+    value
+) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+        String(
+            value
+        );
+
+
+    return div.innerHTML;
+
+}
+
+
+// ==================================================
+// START MY ORDERS PAGE
+// ==================================================
+
+async function startMyOrdersPage() {
+
+    console.log(
+        "Starting My Orders page..."
+    );
+
+
+    // ==================================================
+    // CHECK LOGIN
+    // ==================================================
+
+    const isLoggedIn =
+        await checkUserLogin();
+
+
+    if (!isLoggedIn) {
+
+        return;
+
+    }
+
+
+    // ==================================================
+    // LOAD ORDERS
+    // ==================================================
+
+    await loadMyOrders();
+
+
+    console.log(
+        "My Orders page loaded successfully."
+    );
+
+}
+
+
+// ==================================================
+// START
+// ==================================================
+
+startMyOrdersPage();
+
+
+// ==================================================
+// END
+// ==================================================
+
+console.log(
+    "orders.js loaded successfully."
+);
