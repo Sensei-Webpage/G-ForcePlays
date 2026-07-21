@@ -153,7 +153,7 @@ function updateRoleLinks(role) {
 
 
     // ==================================================
-    // HIDE ALL ROLE-SPECIFIC LINKS FIRST
+    // HIDE ALL ROLE-SPECIFIC LINKS
     // ==================================================
 
     if (sellerDashboardLink) {
@@ -163,14 +163,12 @@ function updateRoleLinks(role) {
 
     }
 
-
     if (adminDashboardLink) {
 
         adminDashboardLink.style.display =
             "none";
 
     }
-
 
     if (becomeSellerLink) {
 
@@ -182,13 +180,6 @@ function updateRoleLinks(role) {
 
     // ==================================================
     // ADMIN
-    // ADMIN CAN SEE:
-    //
-    // My Account
-    // My Orders
-    // Seller Dashboard
-    // Admin Dashboard
-    // Logout
     // ==================================================
 
     if (
@@ -200,36 +191,21 @@ function updateRoleLinks(role) {
         );
 
 
-        // SHOW SELLER DASHBOARD
-
         if (sellerDashboardLink) {
 
             sellerDashboardLink.style.display =
                 "block";
 
-            console.log(
-                "Seller Dashboard shown for admin."
-            );
-
         }
 
-
-        // SHOW ADMIN DASHBOARD
 
         if (adminDashboardLink) {
 
             adminDashboardLink.style.display =
                 "block";
 
-            console.log(
-                "Admin Dashboard shown."
-            );
-
         }
 
-
-        // ADMIN DOES NOT NEED
-        // BECOME A SELLER
 
         if (becomeSellerLink) {
 
@@ -246,12 +222,6 @@ function updateRoleLinks(role) {
 
     // ==================================================
     // SELLER
-    // SELLER CAN SEE:
-    //
-    // My Account
-    // My Orders
-    // Seller Dashboard
-    // Logout
     // ==================================================
 
     if (
@@ -267,10 +237,6 @@ function updateRoleLinks(role) {
 
             sellerDashboardLink.style.display =
                 "block";
-
-            console.log(
-                "Seller Dashboard shown."
-            );
 
         }
 
@@ -298,12 +264,6 @@ function updateRoleLinks(role) {
 
     // ==================================================
     // CUSTOMER
-    // CUSTOMER CAN SEE:
-    //
-    // My Account
-    // My Orders
-    // Become a Seller
-    // Logout
     // ==================================================
 
     if (
@@ -346,7 +306,6 @@ function updateRoleLinks(role) {
 
     // ==================================================
     // UNKNOWN ROLE
-    // DEFAULT TO CUSTOMER
     // ==================================================
 
     console.log(
@@ -387,6 +346,12 @@ async function loadProducts() {
         "<p>Loading products...</p>";
 
 
+    // ==================================================
+    // GET PRODUCTS
+    // IMPORTANT:
+    // seller_id IS INCLUDED
+    // ==================================================
+
     const {
         data,
         error
@@ -401,6 +366,10 @@ async function loadProducts() {
                 }
             );
 
+
+    // ==================================================
+    // CHECK ERROR
+    // ==================================================
 
     if (error) {
 
@@ -428,6 +397,10 @@ async function loadProducts() {
         "";
 
 
+    // ==================================================
+    // NO PRODUCTS
+    // ==================================================
+
     if (
         !data ||
         data.length === 0
@@ -440,6 +413,10 @@ async function loadProducts() {
 
     }
 
+
+    // ==================================================
+    // DISPLAY PRODUCTS
+    // ==================================================
 
     data.forEach(
         function(product) {
@@ -478,6 +455,7 @@ async function loadProducts() {
                 <button
                     class="buyBtn"
                     data-id="${product.id}"
+                    data-seller-id="${product.seller_id || ""}"
                     type="button"
                 >
                     Add to Cart
@@ -553,9 +531,25 @@ document.addEventListener(
         }
 
 
+        // ==================================================
+        // GET PRODUCT ID
+        // ==================================================
+
         const productId =
             event.target.dataset.id;
 
+
+        // ==================================================
+        // GET SELLER ID
+        // ==================================================
+
+        const sellerId =
+            event.target.dataset.sellerId;
+
+
+        // ==================================================
+        // GET PRODUCT CARD
+        // ==================================================
 
         const card =
             event.target.closest(
@@ -570,11 +564,19 @@ document.addEventListener(
         }
 
 
+        // ==================================================
+        // GET PRODUCT NAME
+        // ==================================================
+
         const productName =
             card.querySelector("h3")
                 .textContent
                 .trim();
 
+
+        // ==================================================
+        // GET PRODUCT PRICE
+        // ==================================================
 
         const productPriceText =
             card.querySelector("p")
@@ -589,6 +591,10 @@ document.addEventListener(
                     .trim()
             );
 
+
+        // ==================================================
+        // CHECK EXISTING CART PRODUCT
+        // ==================================================
 
         const existingProduct =
             shoppingCart.find(
@@ -605,11 +611,20 @@ document.addEventListener(
             );
 
 
+        // ==================================================
+        // INCREASE QUANTITY
+        // ==================================================
+
         if (existingProduct) {
 
             existingProduct.quantity++;
 
         }
+
+
+        // ==================================================
+        // ADD NEW PRODUCT
+        // ==================================================
 
         else {
 
@@ -625,11 +640,20 @@ document.addEventListener(
                     productPrice,
 
                 quantity:
-                    1
+                    1,
+
+                seller_id:
+                    sellerId
 
             });
 
         }
+
+
+        console.log(
+            "Product added to cart:",
+            shoppingCart
+        );
 
 
         displayCart();
@@ -674,6 +698,10 @@ function displayCart() {
     );
 
 
+    // ==================================================
+    // UPDATE CART COUNT
+    // ==================================================
+
     cart.textContent =
         totalQuantity;
 
@@ -687,6 +715,10 @@ function displayCart() {
 
     }
 
+
+    // ==================================================
+    // EMPTY CART
+    // ==================================================
 
     if (
         shoppingCart.length === 0
@@ -705,9 +737,17 @@ function displayCart() {
     }
 
 
+    // ==================================================
+    // CLEAR CART
+    // ==================================================
+
     cartItems.innerHTML =
         "";
 
+
+    // ==================================================
+    // DISPLAY CART PRODUCTS
+    // ==================================================
 
     shoppingCart.forEach(
         function(
@@ -787,6 +827,10 @@ function displayCart() {
     );
 
 
+    // ==================================================
+    // UPDATE TOTAL
+    // ==================================================
+
     cartTotal.textContent =
         totalPrice.toLocaleString();
 
@@ -809,7 +853,9 @@ document.addEventListener(
     function(event) {
 
 
+        // ==================================================
         // INCREASE / DECREASE
+        // ==================================================
 
         if (
             event.target.classList.contains(
@@ -875,7 +921,9 @@ document.addEventListener(
         }
 
 
+        // ==================================================
         // REMOVE
+        // ==================================================
 
         if (
             event.target.classList.contains(
@@ -1488,6 +1536,10 @@ if (checkoutForm) {
             event.preventDefault();
 
 
+            // ==================================================
+            // CHECK CART
+            // ==================================================
+
             if (
                 shoppingCart.length === 0
             ) {
@@ -1499,6 +1551,10 @@ if (checkoutForm) {
 
             }
 
+
+            // ==================================================
+            // GET CUSTOMER INFORMATION
+            // ==================================================
 
             const customerName =
                 document.getElementById(
@@ -1523,6 +1579,10 @@ if (checkoutForm) {
                     "customerAddress"
                 ).value.trim();
 
+
+            // ==================================================
+            // CALCULATE TOTAL
+            // ==================================================
 
             let totalAmount =
                 0;
@@ -1570,7 +1630,10 @@ if (checkoutForm) {
                                 customerAddress,
 
                             total_amount:
-                                totalAmount
+                                totalAmount,
+
+                            status:
+                                "Pending"
 
                         }
 
@@ -1578,6 +1641,10 @@ if (checkoutForm) {
                     .select()
                     .single();
 
+
+            // ==================================================
+            // ORDER ERROR
+            // ==================================================
 
             if (orderError) {
 
@@ -1599,6 +1666,8 @@ if (checkoutForm) {
 
             // ==================================================
             // CREATE ORDER ITEMS
+            // IMPORTANT:
+            // seller_id IS SAVED HERE
             // ==================================================
 
             const orderItems =
@@ -1620,12 +1689,21 @@ if (checkoutForm) {
                                 product.quantity,
 
                             price:
-                                product.price
+                                product.price,
+
+                            seller_id:
+                                product.seller_id
 
                         };
 
                     }
                 );
+
+
+            console.log(
+                "Order items to save:",
+                orderItems
+            );
 
 
             // ==================================================
@@ -1642,6 +1720,10 @@ if (checkoutForm) {
                     );
 
 
+            // ==================================================
+            // ORDER ITEMS ERROR
+            // ==================================================
+
             if (itemsError) {
 
                 console.error(
@@ -1651,7 +1733,8 @@ if (checkoutForm) {
 
 
                 checkoutStatus.textContent =
-                    "Order was created, but there was a problem saving the products.";
+                    "Order was created, but there was a problem saving the products: " +
+                    itemsError.message;
 
 
                 return;
@@ -1667,12 +1750,32 @@ if (checkoutForm) {
                 "Order placed successfully! Thank you for your purchase.";
 
 
+            console.log(
+                "Order successfully created:",
+                order
+            );
+
+
+            console.log(
+                "Order items successfully created:",
+                orderItems
+            );
+
+
+            // ==================================================
+            // CLEAR CART
+            // ==================================================
+
             shoppingCart =
                 [];
 
 
             displayCart();
 
+
+            // ==================================================
+            // RESET FORM
+            // ==================================================
 
             checkoutForm.reset();
 
@@ -1806,8 +1909,6 @@ async function checkUserSession() {
         );
 
 
-        // Default to customer
-
         updateRoleLinks(
             "customer"
         );
@@ -1863,7 +1964,7 @@ async function checkUserSession() {
 
 
     // ==================================================
-    // UPDATE MENU BASED ON ROLE
+    // UPDATE ROLE MENU
     // ==================================================
 
     updateRoleLinks(
