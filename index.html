@@ -1,149 +1,139 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
 
-```
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<title>G-ForcePlays</title>
+    <title>G-ForcePlays</title>
 
-<link
-    rel="icon"
-    type="image/png"
-    href="images/G-Force Plays.png"
->
+    <link
+        rel="icon"
+        type="image/png"
+        href="images/G-Force Plays.png"
+    >
 
-<link
-    rel="stylesheet"
-    href="style.css"
->
-```
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 
 </head>
 
+
 <body>
-
-```
-<!-- ==========================
-     HEADER
-=========================== -->
-
-<header>
-
-
-    <!-- LOGO / WEBSITE NAME -->
-
-    <h1>
-        G-ForcePlays
-    </h1>
-
-
-    <!-- NAVIGATION -->
-
-    <nav>
-
-        <a href="#">
-            Home
-        </a>
-
-        <a href="#products">
-            Products
-        </a>
-
-        <a href="#contact">
-            Contact
-        </a>
-
-    </nav>
 
 
     <!-- ==========================
-         ACCOUNT AREA
+         HEADER
     =========================== -->
 
-    <div id="accountArea">
+    <header>
 
 
-        <!-- LOGGED OUT -->
+        <!-- WEBSITE TITLE -->
 
-        <div id="loggedOutMenu">
+        <h1>
+            G-ForcePlays
+        </h1>
 
-            <a href="login.html">
-                Login
+
+        <!-- NAVIGATION -->
+
+        <nav>
+
+            <a href="#">
+                Home
             </a>
 
-            <a href="register.html">
-                Sign Up
+            <a href="#products">
+                Products
             </a>
 
-        </div>
+            <a href="#contact">
+                Contact
+            </a>
+
+        </nav>
 
 
-        <!-- LOGGED IN -->
+        <!-- ==========================
+             ACCOUNT AREA
+        =========================== -->
 
-        <div id="loggedInMenu">
-
-
-            <button
-                id="accountBtn"
-                type="button"
-            >
-
-                👤
-
-                <span id="accountName">
-                    Account
-                </span>
-
-                ▼
-
-            </button>
+        <div id="accountArea">
 
 
-            <!-- ACCOUNT DROPDOWN -->
+            <!-- LOGGED OUT MENU -->
 
-            <div
-                id="accountDropdown"
-                class="account-dropdown"
-            >
+            <div id="loggedOutMenu">
 
-
-                <a href="account.html">
-                    My Account
+                <a href="login.html">
+                    Login
                 </a>
 
-
-                <a href="orders.html">
-                    My Orders
+                <a href="register.html">
+                    Sign Up
                 </a>
 
-
-                <a href="seller-application.html">
-                    Become a Seller
-                </a>
+            </div>
 
 
-                <!-- ADMIN LINK -->
+            <!-- LOGGED IN MENU -->
 
-                <a
-                    href="admin.html"
-                    id="adminLink"
-                    style="display: none;"
-                >
-                    Admin Dashboard
-                </a>
+            <div id="loggedInMenu">
 
+
+                <!-- ACCOUNT BUTTON -->
 
                 <button
-                    id="logoutBtn"
+                    id="accountBtn"
                     type="button"
                 >
-                    Logout
+
+                    👤
+
+                    <span id="accountName">
+                        Account
+                    </span>
+
+                    ▼
+
                 </button>
+
+
+                <!-- ACCOUNT DROPDOWN -->
+
+                <div
+                    id="accountDropdown"
+                    class="account-dropdown"
+                >
+
+                    <a href="account.html">
+                        My Account
+                    </a>
+
+                    <a href="orders.html">
+                        My Orders
+                    </a>
+
+                    <a href="seller-application.html">
+                        Become a Seller
+                    </a>
+
+                    <button
+                        id="logoutBtn"
+                        type="button"
+                    >
+                        Logout
+                    </button>
+
+                </div>
 
 
             </div>
@@ -152,334 +142,156 @@
         </div>
 
 
-    </div>
+        <!-- ==========================
+             CART BUTTON
+        =========================== -->
 
+        <div class="cart-area">
 
-    <!-- ==========================
-         CART BUTTON
-    =========================== -->
-
-    <div class="cart-area">
-
-        <button
-            id="cartBtn"
-            type="button"
-        >
-
-            Cart:
-
-            <span id="cartCount">
-                0
-            </span>
-
-        </button>
-
-    </div>
-
-
-    <!-- ==========================
-         DARK MODE
-    =========================== -->
-
-    <button
-        id="darkModeBtn"
-        type="button"
-    >
-        Dark Mode
-    </button>
-
-
-</header>
-
-
-
-<!-- ==========================
-     HERO / BANNER
-=========================== -->
-
-<section class="hero">
-
-
-    <div class="slides">
-
-
-        <div class="slide active">
-
-            <img
-                src="images/banner 1.png"
-                alt="Computer Store"
+            <button
+                id="cartBtn"
+                type="button"
             >
 
-        </div>
+                Cart:
 
+                <span id="cartCount">
+                    0
+                </span>
 
-        <div class="slide">
-
-            <img
-                src="images/banner 2.png"
-                alt="Gaming PC"
-            >
+            </button>
 
         </div>
-
-
-        <div class="slide">
-
-            <img
-                src="images/banner 3.png"
-                alt="Computer Accessories"
-            >
-
-        </div>
-
-
-    </div>
-
-
-    <!-- HERO CONTENT -->
-
-    <div class="hero-content">
-
-
-        <h2>
-            Your One-Stop Computer Shop
-        </h2>
-
-
-        <p>
-            Find laptops, desktops, gaming accessories,
-            and more at affordable prices.
-        </p>
-
-
-        <button
-            id="shopNowBtn"
-            type="button"
-        >
-            Shop Now
-        </button>
-
-
-    </div>
-
-
-    <!-- PREVIOUS -->
-
-    <button
-        class="prevBtn"
-        type="button"
-    >
-        &#10094;
-    </button>
-
-
-    <!-- NEXT -->
-
-    <button
-        class="nextBtn"
-        type="button"
-    >
-        &#10095;
-    </button>
-
-
-    <!-- DOTS -->
-
-    <div class="dots">
-
-        <span class="dot active"></span>
-
-        <span class="dot"></span>
-
-        <span class="dot"></span>
-
-    </div>
-
-
-</section>
-
-
-
-<!-- ==========================
-     PRODUCTS
-=========================== -->
-
-<section id="products">
-
-
-    <h2>
-        Featured Products
-    </h2>
-
-
-    <!-- SEARCH -->
-
-    <input
-        type="text"
-        id="searchBox"
-        placeholder="Search products..."
-    >
-
-
-    <!-- CATEGORY FILTERS -->
-
-    <div class="category-filters">
-
-
-        <button
-            class="categoryBtn active"
-            data-category="All"
-            type="button"
-        >
-            All
-        </button>
-
-
-        <button
-            class="categoryBtn"
-            data-category="Laptops"
-            type="button"
-        >
-            Laptops
-        </button>
-
-
-        <button
-            class="categoryBtn"
-            data-category="Desktop PCs"
-            type="button"
-        >
-            Desktop PCs
-        </button>
-
-
-        <button
-            class="categoryBtn"
-            data-category="Accessories"
-            type="button"
-        >
-            Accessories
-        </button>
-
-
-    </div>
-
-
-    <!-- PRODUCT GRID -->
-
-    <div
-        class="container"
-        id="productContainer"
-    >
-
-        <p>
-            Loading products...
-        </p>
-
-    </div>
-
-
-
-    <!-- ==========================
-         SHOPPING CART
-    =========================== -->
-
-    <section id="cartSection">
-
-
-        <h2>
-            Your Shopping Cart
-        </h2>
-
-
-        <div id="cartItems">
-
-            <p>
-                Your cart is empty.
-            </p>
-
-        </div>
-
-
-        <h3>
-
-            Total:
-
-            ₱<span id="cartTotal">
-                0
-            </span>
-
-        </h3>
-
-
-        <button
-            id="checkoutBtn"
-            type="button"
-        >
-            Proceed to Checkout
-        </button>
-
 
 
         <!-- ==========================
-             CHECKOUT FORM
+             DARK MODE
         =========================== -->
 
-        <div
-            id="checkoutFormContainer"
-            style="display: none;"
+        <button
+            id="darkModeBtn"
+            type="button"
         >
+            Dark Mode
+        </button>
+
+
+    </header>
+
+
+
+    <!-- ==========================
+         HERO / BANNER
+    =========================== -->
+
+    <section class="hero">
+
+
+        <!-- SLIDES -->
+
+        <div class="slides">
+
+
+            <div class="slide active">
+
+                <img
+                    src="images/banner 1.png"
+                    alt="G-ForcePlays Computer Store"
+                >
+
+            </div>
+
+
+            <div class="slide">
+
+                <img
+                    src="images/banner 2.png"
+                    alt="Gaming PC"
+                >
+
+            </div>
+
+
+            <div class="slide">
+
+                <img
+                    src="images/banner 3.png"
+                    alt="Computer Accessories"
+                >
+
+            </div>
+
+
+        </div>
+
+
+        <!-- HERO CONTENT -->
+
+        <div class="hero-content">
 
 
             <h2>
-                Checkout
+                Your One-Stop Computer Shop
             </h2>
 
 
-            <form id="checkoutForm">
+            <p>
+                Find laptops, desktops, gaming accessories,
+                and more at affordable prices.
+            </p>
 
 
-                <input
-                    type="text"
-                    id="customerName"
-                    placeholder="Full Name"
-                    required
-                >
+            <button
+                id="shopNowBtn"
+                type="button"
+            >
+                Shop Now
+            </button>
 
 
-                <input
-                    type="email"
-                    id="customerEmail"
-                    placeholder="Email Address"
-                    required
-                >
+        </div>
 
 
-                <input
-                    type="tel"
-                    id="customerPhone"
-                    placeholder="Phone Number"
-                    required
-                >
+        <!-- PREVIOUS SLIDE -->
+
+        <button
+            class="prevBtn"
+            type="button"
+            aria-label="Previous Slide"
+        >
+            &#10094;
+        </button>
 
 
-                <textarea
-                    id="customerAddress"
-                    placeholder="Delivery Address"
-                    required
-                ></textarea>
+        <!-- NEXT SLIDE -->
+
+        <button
+            class="nextBtn"
+            type="button"
+            aria-label="Next Slide"
+        >
+            &#10095;
+        </button>
 
 
-                <button type="submit">
-                    Place Order
-                </button>
+        <!-- SLIDER DOTS -->
 
+        <div class="dots">
 
-            </form>
+            <span
+                class="dot active"
+                data-slide="0"
+            ></span>
 
+            <span
+                class="dot"
+                data-slide="1"
+            ></span>
 
-            <p id="checkoutStatus"></p>
-
+            <span
+                class="dot"
+                data-slide="2"
+            ></span>
 
         </div>
 
@@ -487,103 +299,309 @@
     </section>
 
 
-</section>
+
+    <!-- ==========================
+         PRODUCTS SECTION
+    =========================== -->
+
+    <section id="products">
 
 
-
-<!-- ==========================
-     CONTACT
-=========================== -->
-
-<section id="contact">
+        <h2>
+            Featured Products
+        </h2>
 
 
-    <h2>
-        Contact Us
-    </h2>
-
-
-    <p>
-        Email: g-forceplays@gmail.com
-    </p>
-
-
-    <p>
-        Phone: +63 912 345 6789
-    </p>
-
-
-    <p>
-        Address: Bataan, Philippines
-    </p>
-
-
-    <form id="contactForm">
-
+        <!-- SEARCH BOX -->
 
         <input
             type="text"
-            id="contactName"
-            placeholder="Your Name"
-            required
+            id="searchBox"
+            placeholder="Search products..."
+            autocomplete="off"
         >
 
 
-        <input
-            type="email"
-            id="contactEmail"
-            placeholder="Your Email"
-            required
+        <!-- CATEGORY FILTERS -->
+
+        <div class="category-filters">
+
+
+            <button
+                class="categoryBtn active"
+                data-category="All"
+                type="button"
+            >
+                All
+            </button>
+
+
+            <button
+                class="categoryBtn"
+                data-category="Laptops"
+                type="button"
+            >
+                Laptops
+            </button>
+
+
+            <button
+                class="categoryBtn"
+                data-category="Desktop PCs"
+                type="button"
+            >
+                Desktop PCs
+            </button>
+
+
+            <button
+                class="categoryBtn"
+                data-category="Accessories"
+                type="button"
+            >
+                Accessories
+            </button>
+
+
+        </div>
+
+
+        <!-- PRODUCT GRID -->
+
+        <div
+            class="container"
+            id="productContainer"
         >
 
+            <!-- Products will be loaded from Supabase -->
 
-        <textarea
-            id="contactMessage"
-            placeholder="Your Message"
-            required
-        ></textarea>
-
-
-        <button type="submit">
-            Send Message
-        </button>
-
-
-    </form>
-
-
-    <p id="contactStatus"></p>
-
-
-</section>
+        </div>
 
 
 
-<!-- ==========================
-     FOOTER
-=========================== -->
+        <!-- ==========================
+             SHOPPING CART
+        =========================== -->
 
-<footer>
-
-    <p>
-        © 2026 G-ForcePlays. All Rights Reserved.
-    </p>
-
-</footer>
+        <section id="cartSection">
 
 
-
-<!-- ==========================
-     SUPABASE
-=========================== -->
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+            <h2>
+                Your Shopping Cart
+            </h2>
 
 
-<!-- YOUR JAVASCRIPT -->
+            <!-- CART ITEMS -->
 
-<script src="script.js"></script>
-```
+            <div id="cartItems">
+
+                <p>
+                    Your cart is empty.
+                </p>
+
+            </div>
+
+
+            <!-- CART TOTAL -->
+
+            <h3>
+
+                Total:
+
+                ₱<span id="cartTotal">0</span>
+
+            </h3>
+
+
+            <!-- CHECKOUT BUTTON -->
+
+            <button
+                id="checkoutBtn"
+                type="button"
+            >
+                Proceed to Checkout
+            </button>
+
+
+
+            <!-- ==========================
+                 CHECKOUT FORM
+            =========================== -->
+
+            <div
+                id="checkoutFormContainer"
+                style="display: none;"
+            >
+
+
+                <h2>
+                    Checkout
+                </h2>
+
+
+                <form id="checkoutForm">
+
+
+                    <input
+                        type="text"
+                        id="customerName"
+                        placeholder="Full Name"
+                        required
+                    >
+
+
+                    <input
+                        type="email"
+                        id="customerEmail"
+                        placeholder="Email Address"
+                        required
+                    >
+
+
+                    <input
+                        type="tel"
+                        id="customerPhone"
+                        placeholder="Phone Number"
+                        required
+                    >
+
+
+                    <textarea
+                        id="customerAddress"
+                        placeholder="Delivery Address"
+                        required
+                    ></textarea>
+
+
+                    <button
+                        type="submit"
+                    >
+                        Place Order
+                    </button>
+
+
+                </form>
+
+
+                <!-- CHECKOUT STATUS -->
+
+                <p id="checkoutStatus"></p>
+
+
+            </div>
+
+
+        </section>
+
+
+    </section>
+
+
+
+    <!-- ==========================
+         CONTACT SECTION
+    =========================== -->
+
+    <section id="contact">
+
+
+        <h2>
+            Contact Us
+        </h2>
+
+
+        <p>
+            Email: g-forceplays@gmail.com
+        </p>
+
+
+        <p>
+            Phone: +63 912 345 6789
+        </p>
+
+
+        <p>
+            Address: Bataan, Philippines
+        </p>
+
+
+
+        <!-- CONTACT FORM -->
+
+        <form id="contactForm">
+
+
+            <input
+                type="text"
+                id="contactName"
+                placeholder="Your Name"
+                required
+            >
+
+
+            <input
+                type="email"
+                id="contactEmail"
+                placeholder="Your Email"
+                required
+            >
+
+
+            <textarea
+                id="contactMessage"
+                placeholder="Your Message"
+                required
+            ></textarea>
+
+
+            <button
+                type="submit"
+            >
+                Send Message
+            </button>
+
+
+        </form>
+
+
+        <!-- CONTACT STATUS -->
+
+        <p id="contactStatus"></p>
+
+
+    </section>
+
+
+
+    <!-- ==========================
+         FOOTER
+    =========================== -->
+
+    <footer>
+
+
+        <p>
+            © 2026 G-ForcePlays. All Rights Reserved.
+        </p>
+
+
+    </footer>
+
+
+
+    <!-- ==========================
+         SUPABASE JAVASCRIPT
+    =========================== -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ></script>
+
+
+    <!-- YOUR JAVASCRIPT -->
+
+    <script src="script.js"></script>
+
 
 </body>
 
