@@ -2,27 +2,53 @@
    GENERAL
 ========================== */
 
-body {
+* {
+    box-sizing: border-box;
     margin: 0;
-    font-family: Arial, sans-serif;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
     background: #f5f5f5;
-    color: #333;
+    color: #222;
+    min-height: 100vh;
 }
 
 
 /* ==========================
-   HEADER
+   SELLER HEADER
 ========================== */
 
 header {
+    width: 100%;
+    min-height: 70px;
+
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 20px 40px;
-    background: #222;
+    justify-content: space-between;
+
+    padding: 15px 30px;
+
+    background: #111;
     color: white;
+
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
 }
 
+header h1 {
+    font-size: 24px;
+    margin: 0;
+}
+
+
+/* ==========================
+   HEADER NAVIGATION
+========================== */
 
 header nav {
     display: flex;
@@ -30,36 +56,90 @@ header nav {
     gap: 15px;
 }
 
-
-header a {
+header nav a {
     color: white;
     text-decoration: none;
+
+    padding: 10px 15px;
+
+    border-radius: 8px;
+
+    font-weight: bold;
+
+    transition: 0.3s;
 }
 
-
-header button {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 6px;
-    background: #dc3545;
-    color: white;
-    cursor: pointer;
+header nav a:hover {
+    background: #007bff;
 }
 
 
 /* ==========================
-   DASHBOARD
+   LOGOUT BUTTON
 ========================== */
 
-#sellerDashboard {
-    max-width: 1100px;
-    margin: 40px auto;
-    padding: 20px;
+#logoutBtn {
+    padding: 10px 15px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #dc3545;
+    color: white;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+#logoutBtn:hover {
+    background: #b02a37;
 }
 
 
+/* ==========================
+   SELLER DASHBOARD
+========================== */
+
+#sellerDashboard {
+    width: 100%;
+    max-width: 1100px;
+
+    margin: 40px auto;
+
+    padding: 20px;
+}
+
 #sellerDashboard h2 {
+    font-size: 30px;
+
     margin-bottom: 10px;
+}
+
+
+/* ==========================
+   SELLER STATUS
+========================== */
+
+#sellerStatus {
+    margin-top: 10px;
+
+    color: #555;
+
+    font-size: 16px;
+}
+
+
+/* ==========================
+   ORDER LIST
+========================== */
+
+#sellerOrderList {
+    width: 100%;
+
+    margin-top: 25px;
 }
 
 
@@ -68,11 +148,25 @@ header button {
 ========================== */
 
 .seller-order-card {
+    width: 100%;
+
     background: white;
-    margin-top: 25px;
+
+    margin-bottom: 25px;
+
     padding: 25px;
+
     border-radius: 12px;
+
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+
+    transition: 0.3s;
+}
+
+.seller-order-card:hover {
+    transform: translateY(-3px);
+
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 
@@ -82,63 +176,169 @@ header button {
 
 .seller-order-header {
     display: flex;
+
     justify-content: space-between;
-    border-bottom: 1px solid #ddd;
+
+    align-items: center;
+
+    gap: 20px;
+
     padding-bottom: 15px;
+
+    border-bottom: 1px solid #ddd;
+}
+
+.seller-order-header h3 {
+    font-size: 20px;
+}
+
+.seller-order-header p {
+    color: #666;
 }
 
 
 /* ==========================
-   CUSTOMER
+   CUSTOMER INFORMATION
 ========================== */
 
 .seller-customer-info {
     margin-top: 20px;
+
+    padding: 20px;
+
+    background: #f8f9fa;
+
+    border-radius: 8px;
+}
+
+.seller-customer-info h4 {
+    margin-bottom: 15px;
+
+    font-size: 18px;
+}
+
+.seller-customer-info p {
+    margin-bottom: 8px;
+
+    line-height: 1.5;
 }
 
 
 /* ==========================
-   PRODUCTS
+   ORDER PRODUCTS
 ========================== */
 
 .seller-order-products {
-    margin-top: 20px;
+    margin-top: 25px;
 }
 
+.seller-order-products h4 {
+    margin-bottom: 15px;
+
+    font-size: 18px;
+}
+
+
+/* ==========================
+   ORDER ITEM
+========================== */
 
 .seller-order-item {
     display: flex;
+
     justify-content: space-between;
-    padding: 12px;
+
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 12px 15px;
+
     margin-top: 8px;
+
     background: #f5f5f5;
-    border-radius: 6px;
+
+    border-radius: 8px;
+}
+
+.seller-order-item strong {
+    flex: 1;
+}
+
+.seller-order-item span {
+    color: #555;
 }
 
 
 /* ==========================
-   TOTAL
+   ORDER TOTAL
 ========================== */
 
 .seller-order-total {
-    margin-top: 20px;
+    margin-top: 25px;
+
+    padding-top: 20px;
+
+    border-top: 1px solid #ddd;
+
     font-size: 20px;
+
+    color: #007bff;
 }
 
 
 /* ==========================
-   STATUS
+   ORDER STATUS
 ========================== */
 
 .seller-order-status {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
     margin-top: 20px;
 }
 
+.seller-order-status strong {
+    font-size: 16px;
+}
+
+
+/* ==========================
+   STATUS SELECT
+========================== */
 
 .sellerStatusSelect {
-    padding: 8px 12px;
-    margin-left: 10px;
+    padding: 9px 12px;
+
+    border: 1px solid #ccc;
+
     border-radius: 6px;
+
+    background: white;
+
+    color: #222;
+
+    font-size: 14px;
+
+    cursor: pointer;
+
+    outline: none;
+}
+
+.sellerStatusSelect:focus {
+    border-color: #007bff;
+}
+
+
+/* ==========================
+   EMPTY ORDERS
+========================== */
+
+#sellerOrderList:empty {
+    display: none;
 }
 
 
@@ -150,19 +350,94 @@ header button {
 
     header {
         flex-direction: column;
+
+        justify-content: center;
+
         gap: 15px;
+
         text-align: center;
+
+        padding: 20px;
     }
 
+    header h1 {
+        font-size: 22px;
+    }
+
+    header nav {
+        flex-wrap: wrap;
+
+        justify-content: center;
+    }
+
+    #sellerDashboard {
+        margin: 20px auto;
+
+        padding: 15px;
+    }
+
+    #sellerDashboard h2 {
+        font-size: 25px;
+    }
+
+    .seller-order-card {
+        padding: 20px;
+    }
 
     .seller-order-header {
         flex-direction: column;
-    }
 
+        align-items: flex-start;
+
+        gap: 10px;
+    }
 
     .seller-order-item {
         flex-direction: column;
-        gap: 8px;
+
+        align-items: flex-start;
     }
 
+    .seller-order-status {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+    .sellerStatusSelect {
+        width: 100%;
+    }
+}
+
+
+/* ==========================
+   SMALL MOBILE
+========================== */
+
+@media (max-width: 480px) {
+
+    header nav {
+        width: 100%;
+
+        flex-direction: column;
+    }
+
+    header nav a,
+    #logoutBtn {
+        width: 100%;
+
+        text-align: center;
+    }
+
+    .seller-order-card {
+        padding: 15px;
+    }
+
+    .seller-customer-info {
+        padding: 15px;
+    }
+
+    .seller-order-total {
+        font-size: 18px;
+    }
 }

@@ -1,84 +1,136 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
 
-    <meta charset="UTF-8">
+```
+<meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
-    <title>G-ForcePlays Seller Dashboard</title>
+<title>Seller Dashboard - G-ForcePlays</title>
 
-    <link
-        rel="icon"
-        type="image/png"
-        href="images/G-Force Plays.png"
-    >
 
-    <link
-        rel="stylesheet"
-        href="seller.css"
-    >
+<!-- FAVICON -->
+
+<link
+    rel="icon"
+    type="image/png"
+    href="images/G-Force Plays.png"
+>
+
+
+<!-- SELLER CSS -->
+
+<link
+    rel="stylesheet"
+    href="seller.css"
+>
+```
 
 </head>
 
-
 <body>
 
-    <!-- SELLER HEADER -->
+```
+<!-- ==========================
+     SELLER HEADER
+=========================== -->
 
-    <header>
-
-        <h1>
-            G-ForcePlays Seller Dashboard
-        </h1>
-
-        <nav>
-
-            <a href="index.html">
-                Back to Store
-            </a>
-
-            <button id="logoutBtn">
-                Logout
-            </button>
-
-        </nav>
-
-    </header>
+<header>
 
 
-    <!-- SELLER DASHBOARD -->
+    <!-- TITLE -->
 
-    <main id="sellerDashboard">
-
-        <h2>
-            Customer Orders
-        </h2>
+    <h1>
+        G-ForcePlays Seller Dashboard
+    </h1>
 
 
-        <p id="sellerStatus">
-            Loading orders...
-        </p>
+    <!-- NAVIGATION -->
+
+    <nav>
 
 
-        <section id="sellerOrderList">
+        <!-- BACK TO STORE -->
 
-            <!-- Orders will appear here -->
-
-        </section>
-
-    </main>
+        <a href="index.html">
+            Back to Store
+        </a>
 
 
-    <!-- SUPABASE -->
+        <!-- LOGOUT -->
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+        <button
+            id="logoutBtn"
+            type="button"
+        >
+            Logout
+        </button>
 
-    <script src="seller.js"></script>
+
+    </nav>
+
+
+</header>
+
+
+
+<!-- ==========================
+     SELLER DASHBOARD
+=========================== -->
+
+<main id="sellerDashboard">
+
+
+    <!-- PAGE TITLE -->
+
+    <h2>
+        Customer Orders
+    </h2>
+
+
+    <!-- STATUS -->
+
+    <p id="sellerStatus">
+        Loading orders...
+    </p>
+
+
+    <!-- ==========================
+         ORDER LIST
+    =========================== -->
+
+    <section id="sellerOrderList">
+
+        <!-- Customer orders will be loaded here by seller.js -->
+
+    </section>
+
+
+</main>
+
+
+
+<!-- ==========================
+     SUPABASE
+=========================== -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
+
+
+<!-- ==========================
+     SELLER JAVASCRIPT
+=========================== -->
+
+<script src="seller.js"></script>
+```
 
 </body>
 
