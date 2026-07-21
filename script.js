@@ -123,7 +123,7 @@ const becomeSellerLink =
 
 
 // ==================================================
-// DEFAULT ACCOUNT STATE
+// SHOW LOGGED OUT MENU
 // ==================================================
 
 function showLoggedOutMenu() {
@@ -146,7 +146,7 @@ function showLoggedOutMenu() {
 
 
 // ==================================================
-// SHOW LOGGED IN ACCOUNT
+// SHOW LOGGED IN MENU
 // ==================================================
 
 function showLoggedInMenu() {
@@ -174,6 +174,8 @@ function showLoggedInMenu() {
 
 function resetRoleLinks() {
 
+    // Hide Seller Dashboard
+
     if (sellerDashboardLink) {
 
         sellerDashboardLink.style.display =
@@ -181,12 +183,18 @@ function resetRoleLinks() {
 
     }
 
+
+    // Hide Admin Dashboard
+
     if (adminDashboardLink) {
 
         adminDashboardLink.style.display =
             "none";
 
     }
+
+
+    // Show Become a Seller by default
 
     if (becomeSellerLink) {
 
@@ -1242,8 +1250,12 @@ if (contactForm) {
                 ).value.trim();
 
 
-            contactStatus.textContent =
-                "Sending message...";
+            if (contactStatus) {
+
+                contactStatus.textContent =
+                    "Sending message...";
+
+            }
 
 
             const {
@@ -1277,8 +1289,12 @@ if (contactForm) {
                 );
 
 
-                contactStatus.textContent =
-                    "Something went wrong. Please try again.";
+                if (contactStatus) {
+
+                    contactStatus.textContent =
+                        "Something went wrong. Please try again.";
+
+                }
 
 
                 return;
@@ -1286,8 +1302,12 @@ if (contactForm) {
             }
 
 
-            contactStatus.textContent =
-                "Message sent successfully!";
+            if (contactStatus) {
+
+                contactStatus.textContent =
+                    "Message sent successfully!";
+
+            }
 
 
             contactForm.reset();
@@ -1323,16 +1343,20 @@ if (checkoutBtn) {
             }
 
 
-            checkoutFormContainer.style.display =
-                "block";
+            if (checkoutFormContainer) {
+
+                checkoutFormContainer.style.display =
+                    "block";
 
 
-            checkoutFormContainer.scrollIntoView({
+                checkoutFormContainer.scrollIntoView({
 
-                behavior:
-                    "smooth"
+                    behavior:
+                        "smooth"
 
-            });
+                });
+
+            }
 
         }
     );
@@ -1359,8 +1383,12 @@ if (checkoutForm) {
                 0
             ) {
 
-                checkoutStatus.textContent =
-                    "Your cart is empty.";
+                if (checkoutStatus) {
+
+                    checkoutStatus.textContent =
+                        "Your cart is empty.";
+
+                }
 
                 return;
 
@@ -1406,8 +1434,12 @@ if (checkoutForm) {
             );
 
 
-            checkoutStatus.textContent =
-                "Processing your order...";
+            if (checkoutStatus) {
+
+                checkoutStatus.textContent =
+                    "Processing your order...";
+
+            }
 
 
             // SAVE ORDER
@@ -1452,9 +1484,13 @@ if (checkoutForm) {
                 );
 
 
-                checkoutStatus.textContent =
-                    "Order Error: " +
-                    orderError.message;
+                if (checkoutStatus) {
+
+                    checkoutStatus.textContent =
+                        "Order Error: " +
+                        orderError.message;
+
+                }
 
 
                 return;
@@ -1511,8 +1547,12 @@ if (checkoutForm) {
                 );
 
 
-                checkoutStatus.textContent =
-                    "Order was created, but there was a problem saving the products.";
+                if (checkoutStatus) {
+
+                    checkoutStatus.textContent =
+                        "Order was created, but there was a problem saving the products.";
+
+                }
 
 
                 return;
@@ -1522,8 +1562,12 @@ if (checkoutForm) {
 
             // SUCCESS
 
-            checkoutStatus.textContent =
-                "Order placed successfully! Thank you for your purchase.";
+            if (checkoutStatus) {
+
+                checkoutStatus.textContent =
+                    "Order placed successfully! Thank you for your purchase.";
+
+            }
 
 
             shoppingCart =
@@ -1569,6 +1613,7 @@ async function checkUserSession() {
 
         showLoggedOutMenu();
 
+        resetRoleLinks();
 
         return;
 
@@ -1579,9 +1624,9 @@ async function checkUserSession() {
         data.session;
 
 
-    // ==============================================
+    // ==================================================
     // USER IS LOGGED OUT
-    // ==============================================
+    // ==================================================
 
     if (!session) {
 
@@ -1592,18 +1637,16 @@ async function checkUserSession() {
 
         showLoggedOutMenu();
 
-
         resetRoleLinks();
-
 
         return;
 
     }
 
 
-    // ==============================================
+    // ==================================================
     // USER IS LOGGED IN
-    // ==============================================
+    // ==================================================
 
     const user =
         session.user;
@@ -1617,18 +1660,21 @@ async function checkUserSession() {
 
     showLoggedInMenu();
 
-
     resetRoleLinks();
 
 
-    accountName.textContent =
-        user.email ||
-        "Account";
+    if (accountName) {
+
+        accountName.textContent =
+            user.email ||
+            "Account";
+
+    }
 
 
-    // ==============================================
+    // ==================================================
     // GET USER PROFILE
-    // ==============================================
+    // ==================================================
 
     const {
         data: profile,
@@ -1653,22 +1699,20 @@ async function checkUserSession() {
             profileError
         );
 
-
         return;
 
     }
 
 
-    // ==============================================
+    // ==================================================
     // NO PROFILE FOUND
-    // ==============================================
+    // ==================================================
 
     if (!profile) {
 
         console.log(
             "No profile found for user."
         );
-
 
         return;
 
@@ -1681,12 +1725,13 @@ async function checkUserSession() {
     );
 
 
-    // ==============================================
+    // ==================================================
     // DISPLAY USER NAME
-    // ==============================================
+    // ==================================================
 
     if (
-        profile.full_name
+        profile.full_name &&
+        accountName
     ) {
 
         accountName.textContent =
@@ -1695,14 +1740,14 @@ async function checkUserSession() {
     }
 
 
-    // ==============================================
+    // ==================================================
     // GET USER ROLE
-    // ==============================================
+    // ==================================================
 
     const role =
         String(
             profile.role ||
-            "user"
+            "customer"
         )
         .toLowerCase()
         .trim();
@@ -1714,14 +1759,21 @@ async function checkUserSession() {
     );
 
 
-    // ==============================================
+    // ==================================================
     // ADMIN
-    // ==============================================
+    // ==================================================
 
     if (
         role ===
         "admin"
     ) {
+
+        console.log(
+            "Admin access."
+        );
+
+
+        // Show Admin Dashboard
 
         if (adminDashboardLink) {
 
@@ -1731,13 +1783,17 @@ async function checkUserSession() {
         }
 
 
+        // Hide Seller Dashboard
+
         if (sellerDashboardLink) {
 
             sellerDashboardLink.style.display =
-                "block";
+                "none";
 
         }
 
+
+        // Hide Become a Seller
 
         if (becomeSellerLink) {
 
@@ -1749,15 +1805,32 @@ async function checkUserSession() {
     }
 
 
-    // ==============================================
+    // ==================================================
     // SELLER
-    // ==============================================
+    // ==================================================
 
     else if (
         role ===
         "seller"
     ) {
 
+        console.log(
+            "Seller access."
+        );
+
+
+        // Hide Admin Dashboard
+
+        if (adminDashboardLink) {
+
+            adminDashboardLink.style.display =
+                "none";
+
+        }
+
+
+        // Show Seller Dashboard
+
         if (sellerDashboardLink) {
 
             sellerDashboardLink.style.display =
@@ -1765,6 +1838,8 @@ async function checkUserSession() {
 
         }
 
+
+        // Hide Become a Seller
 
         if (becomeSellerLink) {
 
@@ -1776,11 +1851,38 @@ async function checkUserSession() {
     }
 
 
-    // ==============================================
-    // NORMAL USER
-    // ==============================================
+    // ==================================================
+    // CUSTOMER
+    // ==================================================
 
     else {
+
+        console.log(
+            "Customer access."
+        );
+
+
+        // Hide Admin Dashboard
+
+        if (adminDashboardLink) {
+
+            adminDashboardLink.style.display =
+                "none";
+
+        }
+
+
+        // Hide Seller Dashboard
+
+        if (sellerDashboardLink) {
+
+            sellerDashboardLink.style.display =
+                "none";
+
+        }
+
+
+        // Show Become a Seller
 
         if (becomeSellerLink) {
 
@@ -1937,7 +2039,6 @@ supabaseClient.auth.onAuthStateChange(
 
             showLoggedOutMenu();
 
-
             resetRoleLinks();
 
         }
@@ -1947,13 +2048,17 @@ supabaseClient.auth.onAuthStateChange(
 
 
 // ==================================================
-// INITIAL SESSION CHECK
+// INITIAL ACCOUNT STATE
 // ==================================================
 
 showLoggedOutMenu();
 
 resetRoleLinks();
 
+
+// ==================================================
+// INITIAL SESSION CHECK
+// ==================================================
 
 checkUserSession();
 
