@@ -43,13 +43,11 @@
             G-ForcePlays Seller Dashboard
         </h1>
 
-
         <nav>
 
             <a href="index.html">
                 Back to Store
             </a>
-
 
             <button
                 id="logoutBtn"
@@ -63,7 +61,6 @@
     </header>
 
 
-
     <!-- ==========================
          MAIN DASHBOARD
     =========================== -->
@@ -72,17 +69,17 @@
 
 
         <!-- ==========================
-             SELLER INFORMATION
+             SELLER WELCOME
         =========================== -->
 
-        <section class="seller-welcome">
+        <section id="sellerWelcomeSection">
 
             <h2>
-                Seller Dashboard
+                Welcome, Seller!
             </h2>
 
             <p id="sellerWelcomeText">
-                Welcome, Seller!
+                Loading seller information...
             </p>
 
         </section>
@@ -93,15 +90,11 @@
              ADD PRODUCT
         =========================== -->
 
-        <section
-            id="addProductSection"
-            class="seller-section"
-        >
+        <section id="addProductSection">
 
             <h2>
                 Add New Product
             </h2>
-
 
             <form id="addProductForm">
 
@@ -112,6 +105,18 @@
                     type="text"
                     id="productName"
                     placeholder="Product Name"
+                    required
+                >
+
+
+                <!-- PRODUCT PRICE -->
+
+                <input
+                    type="number"
+                    id="productPrice"
+                    placeholder="Product Price"
+                    min="0"
+                    step="0.01"
                     required
                 >
 
@@ -142,24 +147,12 @@
                 </select>
 
 
-                <!-- PRODUCT PRICE -->
-
-                <input
-                    type="number"
-                    id="productPrice"
-                    placeholder="Price"
-                    min="0"
-                    step="0.01"
-                    required
-                >
-
-
                 <!-- PRODUCT STOCK -->
 
                 <input
                     type="number"
                     id="productStock"
-                    placeholder="Stock Quantity"
+                    placeholder="Product Stock"
                     min="0"
                     required
                 >
@@ -175,10 +168,11 @@
                 >
 
 
-                <!-- ADD PRODUCT -->
+                <!-- ADD PRODUCT BUTTON -->
 
                 <button
                     type="submit"
+                    id="addProductBtn"
                 >
                     Add Product
                 </button>
@@ -187,7 +181,7 @@
             </form>
 
 
-            <!-- PRODUCT STATUS -->
+            <!-- ADD PRODUCT STATUS -->
 
             <p id="productStatus"></p>
 
@@ -199,10 +193,7 @@
              MY PRODUCTS
         =========================== -->
 
-        <section
-            id="myProductsSection"
-            class="seller-section"
-        >
+        <section id="myProductsSection">
 
             <h2>
                 My Products
@@ -214,10 +205,9 @@
             </p>
 
 
-            <div
-                id="sellerProductList"
-                class="seller-product-grid"
-            >
+            <div id="sellerProductList">
+
+                <!-- Seller products loaded by seller.js -->
 
             </div>
 
@@ -229,10 +219,7 @@
              CUSTOMER ORDERS
         =========================== -->
 
-        <section
-            id="ordersSection"
-            class="seller-section"
-        >
+        <section id="sellerOrdersSection">
 
             <h2>
                 Customer Orders
@@ -246,7 +233,7 @@
 
             <section id="sellerOrderList">
 
-                <!-- Orders loaded by seller.js -->
+                <!-- Customer orders loaded by seller.js -->
 
             </section>
 

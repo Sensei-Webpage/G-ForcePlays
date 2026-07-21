@@ -876,20 +876,42 @@ document.addEventListener(
             // DELETE PRODUCT
             // ==================================================
 
-            const {
-                error
-            } =
-                await supabaseClient
+            let deleteQuery =
+                supabaseClient
                     .from("products")
                     .delete()
                     .eq(
                         "id",
                         productId
-                    )
-                    .eq(
+                    );
+
+
+            // ==================================================
+            // SELLER CAN DELETE OWN PRODUCTS ONLY
+            // ==================================================
+
+            if (
+                currentUserRole ===
+                "seller"
+            ) {
+
+                deleteQuery =
+                    deleteQuery.eq(
                         "seller_id",
                         currentUser.id
                     );
+
+            }
+
+
+            // ==================================================
+            // EXECUTE DELETE
+            // ==================================================
+
+            const {
+                error
+            } =
+                await deleteQuery;
 
 
             // ==================================================
@@ -962,7 +984,7 @@ document.addEventListener(
 
 
 // ==================================================
-// LOAD CUSTOMER ORDERS
+// LOAD SELLER ORDERS
 // ==================================================
 
 async function loadSellerOrders() {
@@ -991,7 +1013,7 @@ async function loadSellerOrders() {
 
         const {
             data: orders,
-            error
+            error: ordersError
         } =
             await supabaseClient
                 .from("orders")
@@ -1005,14 +1027,14 @@ async function loadSellerOrders() {
 
 
         // ==================================================
-        // CHECK ERROR
+        // CHECK ORDER ERROR
         // ==================================================
 
-        if (error) {
+        if (ordersError) {
 
             console.error(
                 "Order loading error:",
-                error
+                ordersError
             );
 
 
@@ -1020,7 +1042,7 @@ async function loadSellerOrders() {
 
                 sellerStatus.textContent =
                     "Error loading orders: " +
-                    error.message;
+                    ordersError.message;
 
             }
 
@@ -1047,13 +1069,17 @@ async function loadSellerOrders() {
             }
 
 
-            sellerOrderList.innerHTML = `
+            if (sellerOrderList) {
 
-                <p>
-                    There are currently no customer orders.
-                </p>
+                sellerOrderList.innerHTML = `
 
-            `;
+                    <p>
+                        There are currently no customer orders.
+                    </p>
+
+                `;
+
+            }
 
 
             return;
@@ -1062,19 +1088,197 @@ async function loadSellerOrders() {
 
 
         // ==================================================
-        // LOAD ORDERS
+        // ADMIN CAN SEE ALL ORDERS
+        // ==================================================
+
+        if (
+            currentUserRole ===
+            "admin"
+        ) {
+
+            if (sellerStatus) {
+
+                sellerStatus.textContent =
+                    `Found ${orders.length} customer order(s).`;
+
+            }
+
+
+            for (
+                const order of orders
+            ) {
+
+                await createSellerOrderCard(
+                    order
+                );
+
+            }
+
+
+            return;
+
+        }
+
+
+        // ==================================================
+        // SELLER ORDER FILTERING
+        // ==================================================
+
+        const sellerOrders = [];
+
+
+        for (
+            const order of orders
+        ) {
+
+            // ==================================================
+            // GET ORDER ITEMS
+            // ==================================================
+
+            const {
+                data: orderItems,
+                error: itemsError
+            } =
+                await supabaseClient
+                    .from("order_items")
+                    .select("*")
+                    .eq(
+                        "order_id",
+                        order.id
+                    );
+
+
+            // ==================================================
+            // CHECK ORDER ITEMS ERROR
+            // ==================================================
+
+            if (itemsError) {
+
+                console.error(
+                    "Order items error:",
+                    itemsError
+                );
+
+                continue;
+
+            }
+
+
+            // ==================================================
+            // CHECK EACH ORDER ITEM
+            // ==================================================
+
+            for (
+                const item of orderItems || []
+            ) {
+
+                // ==================================================
+                // GET PRODUCT
+                // ==================================================
+
+                const {
+                    data: product,
+                    error: productError
+                } =
+                    await supabaseClient
+                        .from("products")
+                        .select(
+                            "seller_id"
+                        )
+                        .eq(
+                            "id",
+                            item.product_id
+                        )
+                        .maybeSingle();
+
+
+                // ==================================================
+                // CHECK PRODUCT ERROR
+                // ==================================================
+
+                if (productError) {
+
+                    console.error(
+                        "Product lookup error:",
+                        productError
+                    );
+
+                    continue;
+
+                }
+
+
+                // ==================================================
+                // CHECK SELLER ID
+                // ==================================================
+
+                if (
+                    product &&
+                    product.seller_id ===
+                    currentUser.id
+                ) {
+
+                    sellerOrders.push(
+                        order
+                    );
+
+                    break;
+
+                }
+
+            }
+
+        }
+
+
+        // ==================================================
+        // NO SELLER ORDERS
+        // ==================================================
+
+        if (
+            sellerOrders.length === 0
+        ) {
+
+            if (sellerStatus) {
+
+                sellerStatus.textContent =
+                    "You have no customer orders yet.";
+
+            }
+
+
+            if (sellerOrderList) {
+
+                sellerOrderList.innerHTML = `
+
+                    <p>
+                        No customer orders found for your products.
+                    </p>
+
+                `;
+
+            }
+
+
+            return;
+
+        }
+
+
+        // ==================================================
+        // DISPLAY SELLER ORDERS
         // ==================================================
 
         if (sellerStatus) {
 
             sellerStatus.textContent =
-                `Found ${orders.length} customer order(s).`;
+                `Found ${sellerOrders.length} customer order(s).`;
 
         }
 
 
         for (
-            const order of orders
+            const order of sellerOrders
         ) {
 
             await createSellerOrderCard(
@@ -1087,7 +1291,7 @@ async function loadSellerOrders() {
     } catch (error) {
 
         console.error(
-            "Unexpected order error:",
+            "Unexpected seller order error:",
             error
         );
 
@@ -1095,7 +1299,7 @@ async function loadSellerOrders() {
         if (sellerStatus) {
 
             sellerStatus.textContent =
-                "Something went wrong while loading orders.";
+                "Something went wrong while loading seller orders.";
 
         }
 
@@ -1460,9 +1664,13 @@ async function createSellerOrderCard(
     `;
 
 
-    sellerOrderList.appendChild(
-        orderCard
-    );
+    if (sellerOrderList) {
+
+        sellerOrderList.appendChild(
+            orderCard
+        );
+
+    }
 
 }
 
@@ -1531,6 +1739,9 @@ document.addEventListener(
                     error.message
                 );
 
+
+                event.target.disabled =
+                    false;
 
                 return;
 
