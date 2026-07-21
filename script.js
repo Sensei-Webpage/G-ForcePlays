@@ -47,29 +47,19 @@ const cartSection =
     document.getElementById("cartSection");
 
 const checkoutFormContainer =
-    document.getElementById(
-        "checkoutFormContainer"
-    );
+    document.getElementById("checkoutFormContainer");
 
 const checkoutForm =
-    document.getElementById(
-        "checkoutForm"
-    );
+    document.getElementById("checkoutForm");
 
 const checkoutStatus =
-    document.getElementById(
-        "checkoutStatus"
-    );
+    document.getElementById("checkoutStatus");
 
 const contactForm =
-    document.getElementById(
-        "contactForm"
-    );
+    document.getElementById("contactForm");
 
 const contactStatus =
-    document.getElementById(
-        "contactStatus"
-    );
+    document.getElementById("contactStatus");
 
 
 // ==================================================
@@ -77,53 +67,35 @@ const contactStatus =
 // ==================================================
 
 const loggedOutMenu =
-    document.getElementById(
-        "loggedOutMenu"
-    );
+    document.getElementById("loggedOutMenu");
 
 const loggedInMenu =
-    document.getElementById(
-        "loggedInMenu"
-    );
+    document.getElementById("loggedInMenu");
 
 const accountBtn =
-    document.getElementById(
-        "accountBtn"
-    );
+    document.getElementById("accountBtn");
 
 const accountName =
-    document.getElementById(
-        "accountName"
-    );
+    document.getElementById("accountName");
 
 const accountDropdown =
-    document.getElementById(
-        "accountDropdown"
-    );
+    document.getElementById("accountDropdown");
 
 const logoutBtn =
-    document.getElementById(
-        "logoutBtn"
-    );
+    document.getElementById("logoutBtn");
 
 const sellerDashboardLink =
-    document.getElementById(
-        "sellerDashboardLink"
-    );
+    document.getElementById("sellerDashboardLink");
 
 const adminDashboardLink =
-    document.getElementById(
-        "adminDashboardLink"
-    );
+    document.getElementById("adminDashboardLink");
 
 const becomeSellerLink =
-    document.getElementById(
-        "becomeSellerLink"
-    );
+    document.getElementById("becomeSellerLink");
 
 
 // ==================================================
-// SHOW LOGGED OUT MENU
+// DEFAULT ACCOUNT STATE
 // ==================================================
 
 function showLoggedOutMenu() {
@@ -146,7 +118,7 @@ function showLoggedOutMenu() {
 
 
 // ==================================================
-// SHOW LOGGED IN MENU
+// SHOW LOGGED IN ACCOUNT
 // ==================================================
 
 function showLoggedInMenu() {
@@ -174,8 +146,6 @@ function showLoggedInMenu() {
 
 function resetRoleLinks() {
 
-    // Hide Seller Dashboard
-
     if (sellerDashboardLink) {
 
         sellerDashboardLink.style.display =
@@ -183,18 +153,12 @@ function resetRoleLinks() {
 
     }
 
-
-    // Hide Admin Dashboard
-
     if (adminDashboardLink) {
 
         adminDashboardLink.style.display =
             "none";
 
     }
-
-
-    // Show Become a Seller by default
 
     if (becomeSellerLink) {
 
@@ -213,9 +177,7 @@ function resetRoleLinks() {
 async function loadProducts() {
 
     const productContainer =
-        document.getElementById(
-            "productContainer"
-        );
+        document.getElementById("productContainer");
 
 
     if (!productContainer) {
@@ -287,9 +249,7 @@ async function loadProducts() {
         function(product) {
 
             const card =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
 
             card.className =
@@ -297,8 +257,7 @@ async function loadProducts() {
 
 
             card.dataset.category =
-                product.category ||
-                "";
+                product.category || "";
 
 
             card.innerHTML = `
@@ -401,9 +360,7 @@ document.addEventListener(
 
 
         const card =
-            event.target.closest(
-                ".card"
-            );
+            event.target.closest(".card");
 
 
         if (!card) {
@@ -414,25 +371,22 @@ document.addEventListener(
 
 
         const productName =
-            card.querySelector(
-                "h3"
-            ).textContent.trim();
+            card.querySelector("h3")
+                .textContent
+                .trim();
 
 
         const productPriceText =
-            card.querySelector(
-                "p"
-            ).textContent;
+            card.querySelector("p")
+                .textContent;
 
 
         const productPrice =
             Number(
-
                 productPriceText
                     .replace("₱", "")
                     .replace(/,/g, "")
                     .trim()
-
             );
 
 
@@ -450,9 +404,7 @@ document.addEventListener(
             );
 
 
-        if (
-            existingProduct
-        ) {
+        if (existingProduct) {
 
             existingProduct.quantity++;
 
@@ -536,8 +488,7 @@ function displayCart() {
 
 
     if (
-        shoppingCart.length ===
-        0
+        shoppingCart.length === 0
     ) {
 
         cartItems.innerHTML =
@@ -563,16 +514,13 @@ function displayCart() {
             index
         ) {
 
-
             const productTotal =
                 product.price *
                 product.quantity;
 
 
             const item =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
 
             item.className =
@@ -666,7 +614,6 @@ document.addEventListener(
             )
         ) {
 
-
             const index =
                 Number(
                     event.target.dataset.index
@@ -677,9 +624,7 @@ document.addEventListener(
                 event.target.dataset.action;
 
 
-            if (
-                !shoppingCart[index]
-            ) {
+            if (!shoppingCart[index]) {
 
                 return;
 
@@ -687,8 +632,7 @@ document.addEventListener(
 
 
             if (
-                action ===
-                "increase"
+                action === "increase"
             ) {
 
                 shoppingCart[
@@ -699,8 +643,7 @@ document.addEventListener(
 
 
             if (
-                action ===
-                "decrease"
+                action === "decrease"
             ) {
 
                 shoppingCart[
@@ -737,7 +680,6 @@ document.addEventListener(
             )
         ) {
 
-
             const index =
                 Number(
                     event.target.dataset.index
@@ -763,9 +705,7 @@ document.addEventListener(
 // ==================================================
 
 const darkButton =
-    document.getElementById(
-        "darkModeBtn"
-    );
+    document.getElementById("darkModeBtn");
 
 
 if (darkButton) {
@@ -789,15 +729,11 @@ if (darkButton) {
 // ==================================================
 
 const shopButton =
-    document.getElementById(
-        "shopNowBtn"
-    );
+    document.getElementById("shopNowBtn");
 
 
 const productsSection =
-    document.getElementById(
-        "products"
-    );
+    document.getElementById("products");
 
 
 if (
@@ -827,9 +763,7 @@ if (
 // ==================================================
 
 const searchBox =
-    document.getElementById(
-        "searchBox"
-    );
+    document.getElementById("searchBox");
 
 
 const categoryButtons =
@@ -847,7 +781,6 @@ let selectedCategory =
 // ==================================================
 
 function filterProducts() {
-
 
     if (!searchBox) {
 
@@ -871,14 +804,11 @@ function filterProducts() {
     cards.forEach(
         function(card) {
 
-
             const productName =
-                card.querySelector(
-                    "h3"
-                )
-                .textContent
-                .toLowerCase()
-                .trim();
+                card.querySelector("h3")
+                    .textContent
+                    .toLowerCase()
+                    .trim();
 
 
             const productCategory =
@@ -897,13 +827,12 @@ function filterProducts() {
 
             const matchesCategory =
 
-                selectedCategory ===
-                    "All"
+                selectedCategory === "All"
 
                 ||
 
                 productCategory ===
-                    selectedCategory;
+                selectedCategory;
 
 
             if (
@@ -954,11 +883,9 @@ if (searchBox) {
 categoryButtons.forEach(
     function(button) {
 
-
         button.addEventListener(
             "click",
             function() {
-
 
                 selectedCategory =
                     button.dataset.category;
@@ -994,27 +921,19 @@ categoryButtons.forEach(
 // ==================================================
 
 const slides =
-    document.querySelectorAll(
-        ".slide"
-    );
+    document.querySelectorAll(".slide");
 
 
 const dots =
-    document.querySelectorAll(
-        ".dot"
-    );
+    document.querySelectorAll(".dot");
 
 
 const nextButton =
-    document.querySelector(
-        ".nextBtn"
-    );
+    document.querySelector(".nextBtn");
 
 
 const prevButton =
-    document.querySelector(
-        ".prevBtn"
-    );
+    document.querySelector(".prevBtn");
 
 
 let currentSlide =
@@ -1025,14 +944,10 @@ let currentSlide =
 // SHOW SLIDE
 // ==================================================
 
-function showSlide(
-    index
-) {
-
+function showSlide(index) {
 
     if (
-        slides.length ===
-        0
+        slides.length === 0
     ) {
 
         return;
@@ -1062,20 +977,14 @@ function showSlide(
     );
 
 
-    slides[
-        index
-    ].classList.add(
+    slides[index].classList.add(
         "active"
     );
 
 
-    if (
-        dots[index]
-    ) {
+    if (dots[index]) {
 
-        dots[
-            index
-        ].classList.add(
+        dots[index].classList.add(
             "active"
         );
 
@@ -1136,8 +1045,7 @@ if (prevButton) {
             ) {
 
                 currentSlide =
-                    slides.length -
-                    1;
+                    slides.length - 1;
 
             }
 
@@ -1161,7 +1069,6 @@ dots.forEach(
         dot,
         index
     ) {
-
 
         dot.addEventListener(
             "click",
@@ -1228,7 +1135,6 @@ if (contactForm) {
         "submit",
         async function(event) {
 
-
             event.preventDefault();
 
 
@@ -1250,12 +1156,8 @@ if (contactForm) {
                 ).value.trim();
 
 
-            if (contactStatus) {
-
-                contactStatus.textContent =
-                    "Sending message...";
-
-            }
+            contactStatus.textContent =
+                "Sending message...";
 
 
             const {
@@ -1289,12 +1191,8 @@ if (contactForm) {
                 );
 
 
-                if (contactStatus) {
-
-                    contactStatus.textContent =
-                        "Something went wrong. Please try again.";
-
-                }
+                contactStatus.textContent =
+                    "Something went wrong. Please try again.";
 
 
                 return;
@@ -1302,12 +1200,8 @@ if (contactForm) {
             }
 
 
-            if (contactStatus) {
-
-                contactStatus.textContent =
-                    "Message sent successfully!";
-
-            }
+            contactStatus.textContent =
+                "Message sent successfully!";
 
 
             contactForm.reset();
@@ -1328,10 +1222,8 @@ if (checkoutBtn) {
         "click",
         function() {
 
-
             if (
-                shoppingCart.length ===
-                0
+                shoppingCart.length === 0
             ) {
 
                 alert(
@@ -1374,21 +1266,15 @@ if (checkoutForm) {
         "submit",
         async function(event) {
 
-
             event.preventDefault();
 
 
             if (
-                shoppingCart.length ===
-                0
+                shoppingCart.length === 0
             ) {
 
-                if (checkoutStatus) {
-
-                    checkoutStatus.textContent =
-                        "Your cart is empty.";
-
-                }
+                checkoutStatus.textContent =
+                    "Your cart is empty.";
 
                 return;
 
@@ -1434,12 +1320,8 @@ if (checkoutForm) {
             );
 
 
-            if (checkoutStatus) {
-
-                checkoutStatus.textContent =
-                    "Processing your order...";
-
-            }
+            checkoutStatus.textContent =
+                "Processing your order...";
 
 
             // SAVE ORDER
@@ -1484,13 +1366,9 @@ if (checkoutForm) {
                 );
 
 
-                if (checkoutStatus) {
-
-                    checkoutStatus.textContent =
-                        "Order Error: " +
-                        orderError.message;
-
-                }
+                checkoutStatus.textContent =
+                    "Order Error: " +
+                    orderError.message;
 
 
                 return;
@@ -1547,12 +1425,8 @@ if (checkoutForm) {
                 );
 
 
-                if (checkoutStatus) {
-
-                    checkoutStatus.textContent =
-                        "Order was created, but there was a problem saving the products.";
-
-                }
+                checkoutStatus.textContent =
+                    "Order was created, but there was a problem saving the products.";
 
 
                 return;
@@ -1562,12 +1436,8 @@ if (checkoutForm) {
 
             // SUCCESS
 
-            if (checkoutStatus) {
-
-                checkoutStatus.textContent =
-                    "Order placed successfully! Thank you for your purchase.";
-
-            }
+            checkoutStatus.textContent =
+                "Order placed successfully! Thank you for your purchase.";
 
 
             shoppingCart =
@@ -1625,7 +1495,7 @@ async function checkUserSession() {
 
 
     // ==================================================
-    // USER IS LOGGED OUT
+    // USER LOGGED OUT
     // ==================================================
 
     if (!session) {
@@ -1645,7 +1515,7 @@ async function checkUserSession() {
 
 
     // ==================================================
-    // USER IS LOGGED IN
+    // USER LOGGED IN
     // ==================================================
 
     const user =
@@ -1705,7 +1575,7 @@ async function checkUserSession() {
 
 
     // ==================================================
-    // NO PROFILE FOUND
+    // NO PROFILE
     // ==================================================
 
     if (!profile) {
@@ -1741,7 +1611,7 @@ async function checkUserSession() {
 
 
     // ==================================================
-    // GET USER ROLE
+    // GET ROLE
     // ==================================================
 
     const role =
@@ -1761,19 +1631,20 @@ async function checkUserSession() {
 
     // ==================================================
     // ADMIN
+    // ADMIN CAN SEE:
+    // - MY ORDERS
+    // - ADMIN DASHBOARD
+    // - SELLER DASHBOARD
     // ==================================================
 
     if (
-        role ===
-        "admin"
+        role === "admin"
     ) {
 
         console.log(
-            "Admin access."
+            "Admin access granted."
         );
 
-
-        // Show Admin Dashboard
 
         if (adminDashboardLink) {
 
@@ -1783,17 +1654,13 @@ async function checkUserSession() {
         }
 
 
-        // Hide Seller Dashboard
-
         if (sellerDashboardLink) {
 
             sellerDashboardLink.style.display =
-                "none";
+                "block";
 
         }
 
-
-        // Hide Become a Seller
 
         if (becomeSellerLink) {
 
@@ -1807,29 +1674,19 @@ async function checkUserSession() {
 
     // ==================================================
     // SELLER
+    // SELLER CAN SEE:
+    // - MY ORDERS
+    // - SELLER DASHBOARD
     // ==================================================
 
     else if (
-        role ===
-        "seller"
+        role === "seller"
     ) {
 
         console.log(
-            "Seller access."
+            "Seller access granted."
         );
 
-
-        // Hide Admin Dashboard
-
-        if (adminDashboardLink) {
-
-            adminDashboardLink.style.display =
-                "none";
-
-        }
-
-
-        // Show Seller Dashboard
 
         if (sellerDashboardLink) {
 
@@ -1838,8 +1695,6 @@ async function checkUserSession() {
 
         }
 
-
-        // Hide Become a Seller
 
         if (becomeSellerLink) {
 
@@ -1853,6 +1708,9 @@ async function checkUserSession() {
 
     // ==================================================
     // CUSTOMER
+    // CUSTOMER CAN SEE:
+    // - MY ORDERS
+    // - BECOME A SELLER
     // ==================================================
 
     else {
@@ -1861,28 +1719,6 @@ async function checkUserSession() {
             "Customer access."
         );
 
-
-        // Hide Admin Dashboard
-
-        if (adminDashboardLink) {
-
-            adminDashboardLink.style.display =
-                "none";
-
-        }
-
-
-        // Hide Seller Dashboard
-
-        if (sellerDashboardLink) {
-
-            sellerDashboardLink.style.display =
-                "none";
-
-        }
-
-
-        // Show Become a Seller
 
         if (becomeSellerLink) {
 
@@ -1931,7 +1767,6 @@ document.addEventListener(
     "click",
     function(event) {
 
-
         if (
             !event.target.closest(
                 "#accountArea"
@@ -1961,7 +1796,6 @@ if (logoutBtn) {
     logoutBtn.addEventListener(
         "click",
         async function() {
-
 
             const {
                 error
@@ -1994,7 +1828,6 @@ if (logoutBtn) {
 
             showLoggedOutMenu();
 
-
             resetRoleLinks();
 
 
@@ -2022,7 +1855,6 @@ supabaseClient.auth.onAuthStateChange(
         session
     ) {
 
-
         console.log(
             "Auth state changed:",
             event
@@ -2048,17 +1880,12 @@ supabaseClient.auth.onAuthStateChange(
 
 
 // ==================================================
-// INITIAL ACCOUNT STATE
+// INITIAL SESSION CHECK
 // ==================================================
 
 showLoggedOutMenu();
 
 resetRoleLinks();
-
-
-// ==================================================
-// INITIAL SESSION CHECK
-// ==================================================
 
 checkUserSession();
 
