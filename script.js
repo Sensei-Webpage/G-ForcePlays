@@ -1987,6 +1987,57 @@ if (checkoutForm) {
                 // SUCCESS
                 // ==================================================
 
+                // ==================================================
+// UPDATE PRODUCT STOCK
+// ==================================================
+
+for (const item of shoppingCart) {
+
+    // Get latest stock
+    const { data: product, error: stockError } =
+        await supabaseClient
+            .from("products")
+            .select("stock")
+            .eq("id", item.id)
+            .single();
+
+    if (stockError) {
+
+        console.error(
+            "Unable to retrieve stock:",
+            stockError
+        );
+
+        continue;
+    }
+
+    const newStock =
+        Math.max(
+            0,
+            product.stock - item.quantity
+        );
+
+    const { error: updateError } =
+        await supabaseClient
+            .from("products")
+            .update({
+
+                stock: newStock
+
+            })
+            .eq("id", item.id);
+
+    if (updateError) {
+
+        console.error(
+            "Unable to update stock:",
+            updateError
+        );
+
+    }
+
+}
+
                 checkoutStatus.textContent =
                     "Order placed successfully! Thank you for your purchase.";
 
